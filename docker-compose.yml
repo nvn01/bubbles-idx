@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/novn01/bubble-idx:latest
+    container_name: bubble-idx
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@bubble_db:5432/bubble?schema=public
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    networks:
+      - bubble_shared_network
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: bubble_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bubble
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bubble_shared_network
+    restart: unless-stopped
+
+networks:
+  bubble_shared_network:
+    name: bubble_shared_network
+    driver: bridge
+
+volumes:
+  postgres_data:
