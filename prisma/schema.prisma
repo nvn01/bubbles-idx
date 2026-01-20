@@ -9,7 +9,7 @@ datasource db {
 
 // IDX30 Stock list - pre-populated with all 30 stocks
 model Stock {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   symbol    String   @unique
   name      String
   createdAt DateTime @default(now())
@@ -21,21 +21,17 @@ model Stock {
   @@index([symbol])
 }
 
-// OHLCV historical data with timestamp
+// Simplified history: Price and Timestamp only
 model StockHistory {
-  id       String   @id @default(cuid())
-  stockId  String   @map("stock_id")
-  ts       DateTime // Format: 2026-01-19 13:44:00+00
-  open     Float
-  high     Float
-  low      Float
-  close    Float
-  volume   BigInt?
+  id       Int      @id @default(autoincrement())
+  stockId  Int      @map("stock_id")
+  ts       DateTime
+  price    Float
 
   // Relation to Stock
   stock Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@unique([stockId, ts]) // Prevent duplicate entries for same stock/time
+  @@unique([stockId, ts])
   @@index([stockId, ts])
   @@index([ts])
   @@map("stock_history")
