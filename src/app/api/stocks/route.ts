@@ -7,7 +7,7 @@ export async function GET() {
     try {
         const stocks = await prisma.stock.findMany({
             include: {
-                history: {
+                tickers: {
                     orderBy: { ts: 'desc' },
                     take: 1
                 }
@@ -15,20 +15,20 @@ export async function GET() {
         });
 
         const formatted = stocks.map(stock => {
-            const latest = stock.history[0];
+            const latest = stock.tickers[0];
             if (!latest) return null;
 
-            // Calculate Change %
-            const change = latest.open !== 0 ? ((latest.close - latest.open) / latest.open) * 100 : 0;
+            // Use stored daily change (d) or 0
+            const change = latest.d ?? 0;
 
             return {
                 id: stock.id,
-                symbol: stock.symbol,
-                name: stock.name,
-                price: latest.close,
+                symbol: stock.kode_emiten,
+                name: stock.nama_emiten,
+                price: latest.price,
                 change: change,
-                volume: Number(latest.volume),
-                marketCap: Number(latest.volume) * latest.close,
+                volume: 0, // Volume removed from schema
+                marketCap: 1, // Placeholder
                 lastUpdated: latest.ts
             };
         }).filter(s => s !== null);

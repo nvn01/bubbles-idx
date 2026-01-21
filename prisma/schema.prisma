@@ -7,32 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// IDX30 Stock list - pre-populated with all 30 stocks
+// Table Stocks
 model Stock {
-  id        Int      @id @default(autoincrement())
-  symbol    String   @unique
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  kode_emiten String   @unique
+  nama_emiten String
+  created_at  DateTime @default(now())
 
-  // Relation to history
-  history StockHistory[]
+  // Relation to ticker
+  tickers Ticker[]
 
-  @@index([symbol])
+  @@map("stocks")
 }
 
-// Simplified history: Price and Timestamp only
-model StockHistory {
-  id       Int      @id @default(autoincrement())
-  stockId  Int      @map("stock_id")
-  ts       DateTime
-  price    Float
+// Table Ticker (Price History & Performance)
+model Ticker {
+  stocks_id Int
+  price     Float
+  ts        DateTime
+  
+  // Performance Metrics (Percentage Changes)
+  h Float? @default(0) // 1 Hour
+  d Float? @default(0) // 1 Day
+  w Float? @default(0) // 1 Week
+  m Float? @default(0) // 1 Month
+  y Float? @default(0) // 1 Year
 
   // Relation to Stock
-  stock Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stock Stock @relation(fields: [stocks_id], references: [id], onDelete: Cascade)
 
-  @@unique([stockId, ts])
-  @@index([stockId, ts])
+  @@unique([stocks_id, ts]) // Composite Key
   @@index([ts])
-  @@map("stock_history")
+  @@map("ticker")
 }

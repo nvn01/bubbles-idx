@@ -1,0 +1,19 @@
+
+const SYMBOLS = [
+    "AADI","ACES","ADES","ADMR","ADRO","AISA","AKKU","AKRA","ALMI","AMMN",
+    "AMRT","ANJT","ANTM","APII","APIC","APEX","APLN","ARII","ARNA","ARTO",
+    "ASBI","ASDM","ASGR","ASII","ASJT","ASMI","ASRI","AVIA","BAJA","BALI",
+    "BAPA","BATA","BAYU","BBCA","BBHI","BBKP","BBNI","BBRI","BBTN","BFIN",
+    "BJBR","BMRI","BREN","BRMS","BRPT","BSDE","BTPS","BUKA","BUMI","CMRY",
+    "CPIN","CTRA","DNET","DSNG","DSSA","ELSA","EMTK","ENRG","ERAA","ESSA",
+    "EXCL","FILM","GGRM","GOTO","HEAL","HMSP","HRUM","ICBP","INCO","INDF",
+    "INDY","INKP","INTP","IPPE","ISAT","ITMG","JPFA","JRPT","JSMR","KIJA",
+    "KINO","KLBF","KPIG","LPKR","LPPF","LSIP","MAPA","MAPI","MBMA","MDKA",
+    "MEDC","MIKA","MIDI","MNCN","MREI","MTEL","MYOR","NCKL","NETV","NISP",
+    "PANI","PGAS","PGEO","PNBN","PNLF","PSAB","PTBA","PTRO","PWON","RAJA",
+    "RATU","SCMA","SIDO","SILO","SMCB","SMGR","SMRA","SSIA","TAPG","TBIG",
+    "TCID","TINS","TKIM","TLKM","TMAS","TOWR","TPIA","UNTR","UNVR","WIFI",
+    "WIKA","WSKT"
+];
+
+console.log(SYMBOLS.filter(s => s !== "BBCA").join(", "));
