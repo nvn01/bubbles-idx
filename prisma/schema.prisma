@@ -9,16 +9,39 @@ datasource db {
 
 // Table Stocks
 model Stock {
-  id          Int      @id @default(autoincrement())
-  kode_emiten String   @unique
-  nama_emiten String
-  created_at  DateTime @default(now())
+  id                 Int      @id @default(autoincrement())
+  kode_emiten        String   @unique
+  nama_emiten        String
+  is_suspended       Boolean  @default(false)
+  tanggal_pencatatan String?
+  created_at         DateTime @default(now())
 
   // Relation to ticker
-  tickers Ticker[]
+  tickers   Ticker[]
+  notations Notation[]
+  indices   StockIndex[]
 
   @@map("stocks")
 }
+
+model Notation {
+  kode      String @id
+  deskripsi String
+  stocks    Stock[]
+
+  @@map("notations")
+}
+
+model StockIndex {
+  id        Int    @id
+  kode      String @unique
+  nama      String
+  deskripsi String
+  stocks    Stock[]
+
+  @@map("stock_indices")
+}
+
 
 // Table Ticker (Price History & Performance)
 model Ticker {
