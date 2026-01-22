@@ -1,0 +1,466 @@
+[
+    {
+        "symbol": "LEAD",
+        "company": "Logindo Samudramakmur Tbk."
+    },
+    {
+        "symbol": "LUCY",
+        "company": "Lima Dua Lima Tiga Tbk"
+    },
+    {
+        "symbol": "ARKO",
+        "company": "Arkora Hydro Tbk."
+    },
+    {
+        "symbol": "FILM",
+        "company": "MD Entertainment Tbk"
+    },
+    {
+        "symbol": "DPUM",
+        "company": "Dua Putra Utama Makmur Tbk"
+    },
+    {
+        "symbol": "INRU",
+        "company": "Toba Pulp Lestari Tbk."
+    },
+    {
+        "symbol": "BIMA",
+        "company": "Primarindo Asia Infrastructure Tbk."
+    },
+    {
+        "symbol": "MTPS",
+        "company": "Meta Epsi Tbk."
+    },
+    {
+        "symbol": "DPNS",
+        "company": "Duta Pertiwi Nusantara Tbk."
+    },
+    {
+        "symbol": "MENN",
+        "company": "Menn Teknologi Indonesia Tbk."
+    },
+    {
+        "symbol": "GLOB",
+        "company": "Globe Kita Terang Tbk"
+    },
+    {
+        "symbol": "FIMP",
+        "company": "Fimperkasa Utama Tbk"
+    },
+    {
+        "symbol": "KIAS",
+        "company": "Keramika Indonesia Assosiasi Tbk."
+    },
+    {
+        "symbol": "SQMI",
+        "company": "Wilton Makmur Indonesia Tbk."
+    },
+    {
+        "symbol": "SWAT",
+        "company": "Sriwahana Adityakarta Tbk."
+    },
+    {
+        "symbol": "ZBRA",
+        "company": "Dosni Roha Indonesia Tbk."
+    },
+    {
+        "symbol": "ALTO",
+        "company": "Tri Banyan Tirta Tbk."
+    },
+    {
+        "symbol": "PMMP",
+        "company": "Panca Mitra Multiperdana Tbk"
+    },
+    {
+        "symbol": "PTMR",
+        "company": "Master Print Tbk."
+    },
+    {
+        "symbol": "PBSA",
+        "company": "Paramita Bangun Sarana Tbk."
+    },
+    {
+        "symbol": "BELL",
+        "company": "Trisula Textile Industries Tbk"
+    },
+    {
+        "symbol": "ENZO",
+        "company": "Morenzo Abadi Perkasa Tbk"
+    },
+    {
+        "symbol": "MKAP",
+        "company": "Multikarya Asia Pasifik Raya Tbk."
+    },
+    {
+        "symbol": "INDS",
+        "company": "Indospring Tbk."
+    },
+    {
+        "symbol": "MGNA",
+        "company": "Magna Investama Mandiri Tbk"
+    },
+    {
+        "symbol": "RLCO",
+        "company": "Abadi Lestari Indonesia Tbk."
+    },
+    {
+        "symbol": "ROCK",
+        "company": "Rockfields Properti Indonesia Tbk"
+    },
+    {
+        "symbol": "SINI",
+        "company": "Singaraja Putra Tbk."
+    },
+    {
+        "symbol": "SPRE",
+        "company": "Soraya Berjaya Indonesia Tbk."
+    },
+    {
+        "symbol": "KOCI",
+        "company": "Kokoh Exa Nusantara Tbk."
+    },
+    {
+        "symbol": "SOTS",
+        "company": "Satria Mega Kencana Tbk."
+    },
+    {
+        "symbol": "IFSH",
+        "company": "Ifishdeco Tbk."
+    },
+    {
+        "symbol": "SIPD",
+        "company": "Sreeya Sewu Indonesia Tbk."
+    },
+    {
+        "symbol": "ATAP",
+        "company": "Trimitra Prawara Goldland Tbk"
+    },
+    {
+        "symbol": "PADI",
+        "company": "Minna Padi Investama Sekuritas Tbk."
+    },
+    {
+        "symbol": "PPGL",
+        "company": "Prima Globalindo Logistik Tbk."
+    },
+    {
+        "symbol": "TRUE",
+        "company": "Triniti Dinamik Tbk"
+    },
+    {
+        "symbol": "GRPM",
+        "company": "Graha Prima Mentari Tbk."
+    },
+    {
+        "symbol": "TGRA",
+        "company": "PT Terregra Asia Energy Tbk"
+    },
+    {
+        "symbol": "TGUK",
+        "company": "Platinum Wahab Nusantara Tbk."
+    },
+    {
+        "symbol": "SUPR",
+        "company": "Solusi Tunas Pratama Tbk."
+    },
+    {
+        "symbol": "HITS",
+        "company": "Humpuss Intermoda Transportasi Tbk."
+    },
+    {
+        "symbol": "ALMI",
+        "company": "Alumindo Light Metal Industry Tbk."
+    },
+    {
+        "symbol": "ARMY",
+        "company": "PT Armidian Karyatama Tbk"
+    },
+    {
+        "symbol": "ARTI",
+        "company": "Ratu Prabu Energi Tbk"
+    },
+    {
+        "symbol": "BEBS",
+        "company": "Berkah Beton Sadaya Tbk"
+    },
+    {
+        "symbol": "BIKA",
+        "company": "Binakarya Jaya Abadi Tbk."
+    },
+    {
+        "symbol": "BOSS",
+        "company": "Borneo Olah Sarana Sukses Tbk."
+    },
+    {
+        "symbol": "BTEL",
+        "company": "Bakrie Telecom Tbk."
+    },
+    {
+        "symbol": "CBMF",
+        "company": "Cahaya Bintang Medan Tbk."
+    },
+    {
+        "symbol": "CNTB",
+        "company": "Saham Seri B (Centex Tbk)"
+    },
+    {
+        "symbol": "CNTX",
+        "company": "Century Textile Industry Tbk."
+    },
+    {
+        "symbol": "COWL",
+        "company": "Cowell Development Tbk."
+    },
+    {
+        "symbol": "CPRI",
+        "company": "Capri Nusa Satu Properti Tbk."
+    },
+    {
+        "symbol": "DEAL",
+        "company": "Dewata Freightinternational Tbk."
+    },
+    {
+        "symbol": "DUCK",
+        "company": "Jaya Bersama Indo Tbk."
+    },
+    {
+        "symbol": "ENVY",
+        "company": "Envy Technologies Indonesia Tbk."
+    },
+    {
+        "symbol": "ETWA",
+        "company": "Eterindo Wahanatama Tbk"
+    },
+    {
+        "symbol": "FASW",
+        "company": "Fajar Surya Wisesa Tbk."
+    },
+    {
+        "symbol": "FINN",
+        "company": "First Indo American Leasing Tbk"
+    },
+    {
+        "symbol": "GAMA",
+        "company": "Aksara Global Development Tbk."
+    },
+    {
+        "symbol": "GOLL",
+        "company": "Golden Plantation Tbk."
+    },
+    {
+        "symbol": "GREN",
+        "company": "Evergreen Invesco Tbk."
+    },
+    {
+        "symbol": "HKMU",
+        "company": "HK Metals Utama Tbk."
+    },
+    {
+        "symbol": "HOME",
+        "company": "Hotel Mandarine Regency Tbk"
+    },
+    {
+        "symbol": "HOTL",
+        "company": "Saraswati Griya Lestari Tbk"
+    },
+    {
+        "symbol": "IIKP",
+        "company": "Inti Agri Resources Tbk"
+    },
+    {
+        "symbol": "INAF",
+        "company": "Indofarma Tbk"
+    },
+    {
+        "symbol": "IPPE",
+        "company": "Indo Pureco Pratama Tbk."
+    },
+    {
+        "symbol": "JSKY",
+        "company": "Sky Energy Indonesia Tbk."
+    },
+    {
+        "symbol": "KAYU",
+        "company": "Darmi Bersaudara Tbk."
+    },
+    {
+        "symbol": "KBRI",
+        "company": "Kertas Basuki Rachmat Indonesia Tbk."
+    },
+    {
+        "symbol": "LCGP",
+        "company": "Eureka Prima Jakarta tbk."
+    },
+    {
+        "symbol": "LMAS",
+        "company": "Limas Indonesia Makmur Tbk"
+    },
+    {
+        "symbol": "LMSH",
+        "company": "Lionmesh Prima Tbk."
+    },
+    {
+        "symbol": "MABA",
+        "company": "Marga Abhinaya Abadi Tbk"
+    },
+    {
+        "symbol": "MAGP",
+        "company": "Multi Agro Gemilang Plantation Tbk."
+    },
+    {
+        "symbol": "META",
+        "company": "Nusantara Infrastructure Tbk."
+    },
+    {
+        "symbol": "MFMI",
+        "company": "Multifiling Mitra Indonesia Tbk."
+    },
+    {
+        "symbol": "MKNT",
+        "company": "Mitra Komunikasi Nusantara Tbk."
+    },
+    {
+        "symbol": "MTRA",
+        "company": "Mitra Pemuda Tbk."
+    },
+    {
+        "symbol": "MTSM",
+        "company": "Metro Realty Tbk."
+    },
+    {
+        "symbol": "MYTX",
+        "company": "Asia Pacific Investama Tbk"
+    },
+    {
+        "symbol": "NUSA",
+        "company": "Sinergi Megah Internusa Tbk."
+    },
+    {
+        "symbol": "OCAP",
+        "company": "Onix Capital Tbk."
+    },
+    {
+        "symbol": "PLAS",
+        "company": "Polaris Investama Tbk"
+    },
+    {
+        "symbol": "PLIN",
+        "company": "Plaza Indonesia Realty Tbk."
+    },
+    {
+        "symbol": "POLL",
+        "company": "Pollux Properti Indonesia Tbk."
+    },
+    {
+        "symbol": "POOL",
+        "company": "Pool Advista Indonesia Tbk."
+    },
+    {
+        "symbol": "POSA",
+        "company": "Bliss Properti Indonesia Tbk."
+    },
+    {
+        "symbol": "PPRO",
+        "company": "PT PP Property Tbk."
+    },
+    {
+        "symbol": "PURE",
+        "company": "Trinitan Metals and Minerals Tbk."
+    },
+    {
+        "symbol": "RIMO",
+        "company": "Rimo International Lestari Tbk."
+    },
+    {
+        "symbol": "RSGK",
+        "company": "Kedoya Adyaraya Tbk."
+    },
+    {
+        "symbol": "SBAT",
+        "company": "Sejahtera Bintang Abadi Textile Tbk."
+    },
+    {
+        "symbol": "SCPI",
+        "company": "Organon Pharma Indonesia Tbk"
+    },
+    {
+        "symbol": "SIMA",
+        "company": "Siwani Makmur Tbk"
+    },
+    {
+        "symbol": "SKYB",
+        "company": "Northcliff Citranusa Indonesia Tbk."
+    },
+    {
+        "symbol": "SMCB",
+        "company": "Solusi Bangun Indonesia Tbk."
+    },
+    {
+        "symbol": "SMRU",
+        "company": "SMR Utama Tbk."
+    },
+    {
+        "symbol": "SRIL",
+        "company": "Sri Rejeki Isman Tbk."
+    },
+    {
+        "symbol": "SUGI",
+        "company": "Sugih Energy Tbk."
+    },
+    {
+        "symbol": "TDPM",
+        "company": "Tianrong Chemicals Industry Tbk."
+    },
+    {
+        "symbol": "TECH",
+        "company": "Indosterling Technomedia Tbk."
+    },
+    {
+        "symbol": "TELE",
+        "company": "Omni Inovasi Indonesia Tbk."
+    },
+    {
+        "symbol": "TOPS",
+        "company": "Totalindo Eka Persada Tbk"
+    },
+    {
+        "symbol": "TOYS",
+        "company": "Sunindo Adipersada Tbk"
+    },
+    {
+        "symbol": "TRAM",
+        "company": "Trada Alam Minera Tbk."
+    },
+    {
+        "symbol": "TRIL",
+        "company": "Triwira Insanlestari Tbk."
+    },
+    {
+        "symbol": "TRIO",
+        "company": "Trikomsel Oke Tbk."
+    },
+    {
+        "symbol": "TURI",
+        "company": "Tunas Ridean Tbk."
+    },
+    {
+        "symbol": "UNIT",
+        "company": "Nusantara Inti Corpora Tbk"
+    },
+    {
+        "symbol": "WICO",
+        "company": "Wicaksana Overseas International Tbk."
+    },
+    {
+        "symbol": "WIKA",
+        "company": "Wijaya Karya (Persero) Tbk."
+    },
+    {
+        "symbol": "WMPP",
+        "company": "Widodo Makmur Perkasa Tbk."
+    },
+    {
+        "symbol": "WSKT",
+        "company": "Waskita Karya (Persero) Tbk."
+    }
+]

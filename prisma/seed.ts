@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import stockList from "../../scrapper/Daftar_Saham_20260121.json";
-import indexList from "../../scrapper/Daftar_Indeks.json";
-import specialNotations from "../../scrapper/Notasi_Khusus_20260121.json";
-import suspendedList from "../../scrapper/suspended_list.json";
+import stockList from "./data/Daftar_Saham_20260121.json";
+import indexList from "./data/Daftar_Indeks.json";
+import specialNotations from "./data/Notasi_Khusus_20260121.json";
+import suspendedList from "./data/suspended_list.json";
 
 const prisma = new PrismaClient();
 

@@ -1,0 +1,218 @@
+[
+    {
+        "id": 1,
+        "kode": "IHSG",
+        "nama": "Indeks Harga Saham Gabungan",
+        "deskripsi": "Indeks yang mengukur kinerja harga semua saham yang tercatat di Papan Utama dan Papan Pengembangan Bursa Efek Indonesia."
+    },
+    {
+        "id": 2,
+        "kode": "IDX80",
+        "nama": "IDX80",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 80 saham yang memiliki likuiditas tinggi dan kapitalisasi pasar besar serta didukung oleh fundamental perusahaan yang baik."
+    },
+    {
+        "id": 3,
+        "kode": "LQ45",
+        "nama": "LQ45",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 45 saham yang memiliki likuiditas tinggi dan kapitalisasi pasar besar serta didukung oleh fundamental perusahaan yang baik."
+    },
+    {
+        "id": 4,
+        "kode": "IDX30",
+        "nama": "IDX30",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 30 saham yang memiliki likuiditas tinggi dan kapitalisasi pasar besar serta didukung oleh fundamental perusahaan yang baik."
+    },
+    {
+        "id": 5,
+        "kode": "IDXQUALITY30",
+        "nama": "IDX Quality30",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 30 saham yang secara historis memiliki profitabilitas tinggi, solvabilitas baik, dan pertumbuhan laba stabil dengan likuiditas transaksi serta kinerja keuangan yang baik."
+    },
+    {
+        "id": 6,
+        "kode": "IDXVALUE30",
+        "nama": "IDX Value30",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 30 saham yang memiliki valuasi harga yang rendah dengan likuiditas transaksi serta kinerja keuangan yang baik."
+    },
+    {
+        "id": 7,
+        "kode": "IDXGROWTH30",
+        "nama": "IDX Growth30",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 30 saham yang memiliki tren harga relatif terhadap pertumbuhan laba bersih dan pendapatan dengan likuiditas transaksi serta kinerja keuangan yang baik."
+    },
+    {
+        "id": 8,
+        "kode": "IDXESGL",
+        "nama": "IDX ESG Leaders",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari saham-saham dengan penilaian Environmental, Social, dan Governance (ESG) yang baik dan tidak terlibat kontroversi signifikan, serta memiliki likuiditas transaksi dan kinerja keuangan yang baik."
+    },
+    {
+        "id": 9,
+        "kode": "IDXLQ45LCL",
+        "nama": "IDX LQ45 Low Carbon Leaders",
+        "deskripsi": "Indeks yang bertujuan mengurangi eksposur intensitas emisi karbon portofolio minimal 50% dibandingkan Indeks LQ45 sebagai parent index."
+    },
+    {
+        "id": 10,
+        "kode": "IDXHIDIV20",
+        "nama": "IDX High Dividend 20",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 20 saham yang membagikan dividen tunai selama 3 tahun terakhir dan memiliki dividend yield yang tinggi."
+    },
+    {
+        "id": 11,
+        "kode": "IDXBUMN20",
+        "nama": "IDX BUMN20",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 20 saham perusahaan tercatat yang merupakan BUMN, BUMD, dan afiliasinya."
+    },
+    {
+        "id": 12,
+        "kode": "ISSI",
+        "nama": "Indeks Saham Syariah Indonesia",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham yang dinyatakan sebagai saham syariah sesuai Daftar Efek Syariah OJK."
+    },
+    {
+        "id": 13,
+        "kode": "JII70",
+        "nama": "Jakarta Islamic Index 70",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 70 saham syariah dengan kinerja keuangan baik dan likuiditas tinggi."
+    },
+    {
+        "id": 14,
+        "kode": "JII",
+        "nama": "Jakarta Islamic Index",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 30 saham syariah dengan kinerja keuangan baik dan likuiditas tinggi."
+    },
+    {
+        "id": 15,
+        "kode": "IDXMESBUMN17",
+        "nama": "IDX-MES BUMN 17",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 17 saham syariah BUMN dan afiliasinya."
+    },
+    {
+        "id": 16,
+        "kode": "IDXSHAGROW",
+        "nama": "IDX Sharia Growth",
+        "deskripsi": "Indeks yang mengukur kinerja harga 30 saham syariah dengan tren pertumbuhan laba dan pendapatan yang baik."
+    },
+    {
+        "id": 17,
+        "kode": "IDXSMC-COM",
+        "nama": "IDX SMC Composite",
+        "deskripsi": "Indeks yang mengukur kinerja harga saham berkapitalisasi pasar kecil dan menengah."
+    },
+    {
+        "id": 18,
+        "kode": "IDXSMC-LIQ",
+        "nama": "IDX SMC Liquid",
+        "deskripsi": "Indeks yang mengukur kinerja harga saham berkapitalisasi kecil dan menengah dengan likuiditas tinggi."
+    },
+    {
+        "id": 19,
+        "kode": "KOMPAS100",
+        "nama": "KOMPAS100",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 100 saham dengan likuiditas baik dan kapitalisasi pasar besar."
+    },
+    {
+        "id": 20,
+        "kode": "BISNIS-27",
+        "nama": "BISNIS-27",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 27 saham pilihan Komite Indeks Bisnis Indonesia."
+    },
+    {
+        "id": 21,
+        "kode": "MNC36",
+        "nama": "MNC36",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 36 saham terpilih hasil kerja sama BEI dan MNC Group."
+    },
+    {
+        "id": 22,
+        "kode": "INVESTOR33",
+        "nama": "Investor33",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 33 saham terbaik versi Majalah Investor."
+    },
+    {
+        "id": 23,
+        "kode": "INFOBANK15",
+        "nama": "Infobank15",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 15 saham perbankan dengan fundamental baik dan likuiditas tinggi."
+    },
+    {
+        "id": 24,
+        "kode": "SMINFRA18",
+        "nama": "SMinfra18",
+        "deskripsi": "Indeks yang mengukur kinerja harga dari 18 saham sektor infrastruktur dan pendukungnya."
+    },
+    {
+        "id": 25,
+        "kode": "SRI-KEHATI",
+        "nama": "SRI-KEHATI",
+        "deskripsi": "Indeks yang mengukur kinerja harga saham perusahaan berkelanjutan dengan kesadaran ESG."
+    },
+    {
+        "id": 35,
+        "kode": "IDXENERGY",
+        "nama": "IDX Sektor Energi",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 36,
+        "kode": "IDXBASIC",
+        "nama": "IDX Sektor Barang Baku",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 37,
+        "kode": "IDXINDUST",
+        "nama": "IDX Sektor Perindustrian",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 38,
+        "kode": "IDXNONCYC",
+        "nama": "IDX Sektor Barang Konsumen Primer",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 39,
+        "kode": "IDXCYCLIC",
+        "nama": "IDX Sektor Barang Konsumen Non-Primer",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 40,
+        "kode": "IDXHEALTH",
+        "nama": "IDX Sektor Kesehatan",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 41,
+        "kode": "IDXFINANCE",
+        "nama": "IDX Sektor Keuangan",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 42,
+        "kode": "IDXPROPERT",
+        "nama": "IDX Sektor Properti & Real Estat",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 43,
+        "kode": "IDXTECHNO",
+        "nama": "IDX Sektor Teknologi",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 44,
+        "kode": "IDXINFRA",
+        "nama": "IDX Sektor Infrastruktur",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 45,
+        "kode": "IDXTRANS",
+        "nama": "IDX Sektor Transportasi & Logistik",
+        "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    }
+]

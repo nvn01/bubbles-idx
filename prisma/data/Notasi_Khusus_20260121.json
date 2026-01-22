@@ -1,0 +1,1482 @@
+[
+  {
+    "No": 1,
+    "Kode": "SCPI.X",
+    "Nama": "PT Organon Pharma Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 2,
+    "Kode": "RIMO.LYX",
+    "Nama": "PT Rimo International Lestari Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 3,
+    "Kode": "NSSS.X",
+    "Nama": "PT Nusantara Sawit Sejahtera Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 4,
+    "Kode": "LMSH.X",
+    "Nama": "Lionmesh Prima Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 5,
+    "Kode": "RAFI.X",
+    "Nama": "PT Sari Kreasi Boga Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 6,
+    "Kode": "BTEL.EX",
+    "Nama": "Bakrie Telecom Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 7,
+    "Kode": "DUCK.LYX",
+    "Nama": "PT Jaya Bersama Indo Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2020 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 8,
+    "Kode": "PBRX.X",
+    "Nama": "Pan Brothers Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 9,
+    "Kode": "KBRI.LSYX",
+    "Nama": "Kertas Basuki Rachmat Indonesia Tbk",
+    "Notasi": "L,S,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Kuartal III| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2019 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------LS--Y---X"
+  },
+  {
+    "No": 10,
+    "Kode": "OMRE.X",
+    "Nama": "Indonesia Prima Property Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 11,
+    "Kode": "WICO.EX",
+    "Nama": "Wicaksana Overseas International Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 12,
+    "Kode": "CBMF.LYX",
+    "Nama": "PT Cahaya Bintang Medan Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 13,
+    "Kode": "BAUT.X",
+    "Nama": "PT Mitra Angkasa Sejahtera Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 14,
+    "Kode": "KKES.X",
+    "Nama": "PT Kusuma Kemindo Sentosa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 15,
+    "Kode": "SIPD.X",
+    "Nama": "PT Sreeya Sewu Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 16,
+    "Kode": "GOTO.K",
+    "Nama": "PT GoTo Gojek Tokopedia Tbk",
+    "Notasi": "K",
+    "Keterangan Notasi": "K : Perusahaan Tercatat yang menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+    "Remarks": "----------------------------K-"
+  },
+  {
+    "No": 17,
+    "Kode": "PTDU.EX",
+    "Nama": "PT Djasa Ubersakti Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 18,
+    "Kode": "POLA.X",
+    "Nama": "PT Pool Advista Finance Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 19,
+    "Kode": "CNKO.EX",
+    "Nama": "Exploitasi Energi Indonesia Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 20,
+    "Kode": "HOME.ALYX",
+    "Nama": "Hotel Mandarine Regency Tbk",
+    "Notasi": "A,L,Y,X",
+    "Keterangan Notasi": "A : Adanya Opini Tidak Wajar (Adverse) dari Akuntan Publik berdasarkan laporan keuangan 2020 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2020 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------AL---Y---X"
+  },
+  {
+    "No": 21,
+    "Kode": "GIAA.EX",
+    "Nama": "Garuda Indonesia (Persero) Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 22,
+    "Kode": "WMPP.X",
+    "Nama": "PT Widodo Makmur Perkasa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 23,
+    "Kode": "PURA.X",
+    "Nama": "PT Putra Rajawali Kencana Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 24,
+    "Kode": "SRIL.BELYX",
+    "Nama": "PT Sri Rejeki Isman Tbk",
+    "Notasi": "B,E,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2024 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------BE-L---Y---X"
+  },
+  {
+    "No": 25,
+    "Kode": "LMAS.EDLYX",
+    "Nama": "Limas Indonesia Makmur Tbk",
+    "Notasi": "E,D,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2021 Kuartal III| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2021 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------EDL---Y---X"
+  },
+  {
+    "No": 26,
+    "Kode": "NUSA.LYX",
+    "Nama": "PT Sinergi Megah Internusa Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 27,
+    "Kode": "POOL.LYX",
+    "Nama": "Pool Advista Indonesia Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 28,
+    "Kode": "UNIT.LYX",
+    "Nama": "Nusantara Inti Corpora Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2020 Kuartal II| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 29,
+    "Kode": "SOCI.X",
+    "Nama": "PT Soechi Lines Tbk. ",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 30,
+    "Kode": "VIVA.X",
+    "Nama": "PT Visi Media Asia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 31,
+    "Kode": "TFCO.X",
+    "Nama": "Tifico Fiber Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 32,
+    "Kode": "TOPS.LSYX",
+    "Nama": "PT Totalindo Eka Persada Tbk.",
+    "Notasi": "L,S,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------LS--Y---X"
+  },
+  {
+    "No": 33,
+    "Kode": "CNTX.EX",
+    "Nama": "PT Century Textile Industry Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal II| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 34,
+    "Kode": "POLY.EDX",
+    "Nama": "Asia Pacific Fibers Tbk",
+    "Notasi": "E,D,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------ED--------X"
+  },
+  {
+    "No": 35,
+    "Kode": "BHIT.X",
+    "Nama": "PT MNC Asia Holding Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 36,
+    "Kode": "INAF.EX",
+    "Nama": "Indofarma Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 37,
+    "Kode": "ARTI.EX",
+    "Nama": "Ratu Prabu Energi Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 38,
+    "Kode": "POSA.EX",
+    "Nama": "PT Bliss Properti Indonesia Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 39,
+    "Kode": "DEWA.L",
+    "Nama": "Darma Henwa Tbk",
+    "Notasi": "L",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2025 Kuartal II",
+    "Remarks": "---------------------L--------"
+  },
+  {
+    "No": 40,
+    "Kode": "TRAM.LYX",
+    "Nama": "Trada Alam Minera Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2020 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 41,
+    "Kode": "KREN.X",
+    "Nama": "PT Quantum Clovera Investama Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 42,
+    "Kode": "PLAS.LYX",
+    "Nama": "Polaris Investama Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2020 Kuartal II| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 43,
+    "Kode": "PCAR.X",
+    "Nama": "PT Prima Cakrawala Abadi Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 44,
+    "Kode": "SOSS.X",
+    "Nama": "PT Shield On Service Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 45,
+    "Kode": "BIMA.DX",
+    "Nama": "Primarindo Asia Infrastructure Tbk",
+    "Notasi": "D,X",
+    "Keterangan Notasi": "D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------D--------X"
+  },
+  {
+    "No": 46,
+    "Kode": "GAMA.LYX",
+    "Nama": "Aksara Global Development Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 47,
+    "Kode": "BUKA.I",
+    "Nama": "PT Bukalapak.com Tbk",
+    "Notasi": "I",
+    "Keterangan Notasi": "I : Perusahaan Tercatat yang tidak menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+    "Remarks": "----------------------------I-"
+  },
+  {
+    "No": 48,
+    "Kode": "ETWA.MELYX",
+    "Nama": "Eterindo Wahanatama Tbk",
+    "Notasi": "M,E,L,Y,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2023 Kuartal II| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal II| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------ME-L---Y---X"
+  },
+  {
+    "No": 49,
+    "Kode": "ICON.X",
+    "Nama": "Island Concepts Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 50,
+    "Kode": "RICY.EYX",
+    "Nama": "Ricky Putra Globalindo Tbk",
+    "Notasi": "E,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E-----Y---X"
+  },
+  {
+    "No": 51,
+    "Kode": "WMUU.GX",
+    "Nama": "PT Widodo Makmur Unggas Tbk",
+    "Notasi": "G,X",
+    "Keterangan Notasi": "G : Sanksi Administratif dan/atau Perintah Tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat karena pelanggaran peraturan di bidang Pasar Modal dengan kategori Pelanggaran Sedang| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------------G--X"
+  },
+  {
+    "No": 52,
+    "Kode": "PURE.EALYX",
+    "Nama": "PT Trinitan Metals and Minerals Tbk",
+    "Notasi": "E,A,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2024 Kuartal III| A : Adanya Opini Tidak Wajar (Adverse) dari Akuntan Publik berdasarkan laporan keuangan 2024 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------EAL---Y---X"
+  },
+  {
+    "No": 53,
+    "Kode": "BIKA.ELYX",
+    "Nama": "PT Binakarya Jaya Abadi Tbk.",
+    "Notasi": "E,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2024 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E-L---Y---X"
+  },
+  {
+    "No": 54,
+    "Kode": "MARI.EX",
+    "Nama": "PT Mahaka Radio Integra Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 55,
+    "Kode": "FIMP.SX",
+    "Nama": "PT Fimperkasa Utama Tbk",
+    "Notasi": "S,X",
+    "Keterangan Notasi": "S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal II| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "----------------------S------X"
+  },
+  {
+    "No": 56,
+    "Kode": "FASW.X",
+    "Nama": "Fajar Surya Wisesa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 57,
+    "Kode": "PPRO.X",
+    "Nama": "PT PP Properti Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 58,
+    "Kode": "FIRE.X",
+    "Nama": "PT Alfa Energi Investama Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 59,
+    "Kode": "ZBRA.BLYX",
+    "Nama": "PT Dosni Roha Indonesia Tbk",
+    "Notasi": "B,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------B--L---Y---X"
+  },
+  {
+    "No": 60,
+    "Kode": "ENZO.X",
+    "Nama": "PT Morenzo Abadi Perkasa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 61,
+    "Kode": "WSKT.X",
+    "Nama": "PT Waskita Karya (Persero) Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 62,
+    "Kode": "SINI.EX",
+    "Nama": "PT Singaraja Putra Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 63,
+    "Kode": "CMPP.EX",
+    "Nama": "PT AirAsia Indonesia Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 64,
+    "Kode": "BELI.I",
+    "Nama": "PT Global Digital Niaga Tbk",
+    "Notasi": "I",
+    "Keterangan Notasi": "I : Perusahaan Tercatat yang tidak menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+    "Remarks": "----------------------------I-"
+  },
+  {
+    "No": 65,
+    "Kode": "BCIC.F",
+    "Nama": "PT Bank JTrust Indonesia Tbk. ",
+    "Notasi": "F",
+    "Keterangan Notasi": "F : Sanksi Administratif dan/atau Perintah Tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat karena pelanggaran peraturan di bidang Pasar Modal dengan kategori Pelanggaran Ringan",
+    "Remarks": "--------------------------F---"
+  },
+  {
+    "No": 66,
+    "Kode": "PKPK.X",
+    "Nama": "Paragon Karya Perkasa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 67,
+    "Kode": "SUPR.X",
+    "Nama": "Solusi Tunas Pratama Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 68,
+    "Kode": "INCF.X",
+    "Nama": "PT Indo Komoditi Korpora Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 69,
+    "Kode": "DIGI.EX",
+    "Nama": "PT Arkadia Digital Media Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 70,
+    "Kode": "BLTA.X",
+    "Nama": "Berlian Laju Tanker Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 71,
+    "Kode": "KARW.EX",
+    "Nama": "Meratus Jasa Prima Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 72,
+    "Kode": "BKDP.X",
+    "Nama": "Bukit Darmo Property Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 73,
+    "Kode": "ZINC.DSX",
+    "Nama": "PT Kapuas Prima Coal Tbk",
+    "Notasi": "D,S,X",
+    "Keterangan Notasi": "D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------D-S------X"
+  },
+  {
+    "No": 74,
+    "Kode": "IKAI.X",
+    "Nama": "Intikeramik Alamasri Industri Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 75,
+    "Kode": "TAXI.X",
+    "Nama": "Express Transindo Utama Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 76,
+    "Kode": "INRU.Q",
+    "Nama": "Toba Pulp Lestari Tbk",
+    "Notasi": "Q",
+    "Keterangan Notasi": "Q : Pembatasan kegiatan usaha Perusahaan Tercatat dan/atau Anak Perusahaan Tercatat oleh regulator",
+    "Remarks": "------------------------Q-----"
+  },
+  {
+    "No": 77,
+    "Kode": "JSKY.ELYX",
+    "Nama": "PT Sky Energy Indonesia Tbk.",
+    "Notasi": "E,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2022 Tahunan| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E-L---Y---X"
+  },
+  {
+    "No": 78,
+    "Kode": "MTPS.SX",
+    "Nama": "PT Meta Epsi Tbk.",
+    "Notasi": "S,X",
+    "Keterangan Notasi": "S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "----------------------S------X"
+  },
+  {
+    "No": 79,
+    "Kode": "GOTOM.K",
+    "Nama": "-",
+    "Notasi": "K",
+    "Keterangan Notasi": "K : Perusahaan Tercatat yang menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+    "Remarks": "----------------------------K-"
+  },
+  {
+    "No": 80,
+    "Kode": "ARKA.X",
+    "Nama": "PT Arkha Jayanti Persada Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 81,
+    "Kode": "MAGP.LYX",
+    "Nama": "Multi Agro Gemilang Plantation Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Kuartal I| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 82,
+    "Kode": "HUMI.X",
+    "Nama": "PT Humpuss Maritim Internasional Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 83,
+    "Kode": "ARMY.LYX",
+    "Nama": "PT Armidian Karyatama Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2021 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 84,
+    "Kode": "CANI.EX",
+    "Nama": "PT Capitol Nusantara Indonesia Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal I| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 85,
+    "Kode": "IIKP.X",
+    "Nama": "Inti Agri Resources Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 86,
+    "Kode": "ENVY.EX",
+    "Nama": "PT Envy Technologies Indonesia Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 87,
+    "Kode": "SMCB.X",
+    "Nama": "PT Solusi Bangun Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 88,
+    "Kode": "MTFN.EX",
+    "Nama": "Capitalinc Investment Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 89,
+    "Kode": "IPPE.LYX",
+    "Nama": "PT Indo Pureco Pratama Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 90,
+    "Kode": "INPS.EX",
+    "Nama": "PT Indah Prakasa Sentosa Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 91,
+    "Kode": "BIPP.X",
+    "Nama": "Bhuwanatala Indah Permai Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 92,
+    "Kode": "TARA.X",
+    "Nama": "PT Agung Semesta Sejahtera Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 93,
+    "Kode": "IPTV.X",
+    "Nama": "PT MNC Vision Networks Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 94,
+    "Kode": "JGLE.X",
+    "Nama": "PT Graha Andrasentra Propertindo Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 95,
+    "Kode": "TDPM.BLYX",
+    "Nama": "PT Tianrong Chemicals Industry Tbk",
+    "Notasi": "B,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------B--L---Y---X"
+  },
+  {
+    "No": 96,
+    "Kode": "ABBA.EX",
+    "Nama": "Mahaka Media Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 97,
+    "Kode": "ASMI.X",
+    "Nama": "PT Asuransi Maximus Graha Persada Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 98,
+    "Kode": "RMKE.X",
+    "Nama": "PT RMK Energy Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 99,
+    "Kode": "BEKS.X",
+    "Nama": "PT Bank Pembangunan Daerah Banten Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 100,
+    "Kode": "AHAP.X",
+    "Nama": "Asuransi Harta Aman Pratama Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 101,
+    "Kode": "COCO.EX",
+    "Nama": "PT Wahana Interfood Nusantara Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 102,
+    "Kode": "ALTO.MLYX",
+    "Nama": "Tri Banyan Tirta Tbk",
+    "Notasi": "M,L,Y,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------M--L---Y---X"
+  },
+  {
+    "No": 103,
+    "Kode": "UNSP.EX",
+    "Nama": "Bakrie Sumatera Plantations Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 104,
+    "Kode": "RBMS.X",
+    "Nama": "Ristia Bintang Mahkotasejati Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 105,
+    "Kode": "NASA.X",
+    "Nama": "PT Andalan Perkasa Abadi Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 106,
+    "Kode": "PLIN.X",
+    "Nama": "Plaza Indonesia Realty Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 107,
+    "Kode": "GLOB.EX",
+    "Nama": "PT Globe Kita Terang Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 108,
+    "Kode": "FOOD.EX",
+    "Nama": "PT Sentra Food Indonesia Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 109,
+    "Kode": "PTMR.X",
+    "Nama": "PT Master Print Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 110,
+    "Kode": "OCAP.EDSX",
+    "Nama": "ONIX CAPITAL Tbk",
+    "Notasi": "E,D,S,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------ED-S------X"
+  },
+  {
+    "No": 111,
+    "Kode": "MYTX.EX",
+    "Nama": "PT Asia Pacific Investama Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 112,
+    "Kode": "LAND.X",
+    "Nama": "PT Trimitra Propertindo Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 113,
+    "Kode": "WSBP.EX",
+    "Nama": "PT Waskita Beton Precast Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 114,
+    "Kode": "SUGI.LYX",
+    "Nama": "Sugih Energy Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2018 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 115,
+    "Kode": "SQMI.EX",
+    "Nama": "Wilton Makmur Indonesia Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 116,
+    "Kode": "ABDA.X",
+    "Nama": "Asuransi Bina Dana Arta Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 117,
+    "Kode": "ALMI.SX",
+    "Nama": "Alumindo Light Metal Industry Tbk",
+    "Notasi": "S,X",
+    "Keterangan Notasi": "S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "----------------------S------X"
+  },
+  {
+    "No": 118,
+    "Kode": "KIAS.X",
+    "Nama": "Keramika Indonesia Assosiasi Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 119,
+    "Kode": "BLTZ.X",
+    "Nama": "PT Graha Layar Prima Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 120,
+    "Kode": "CNTB.EX",
+    "Nama": "-",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2022 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 121,
+    "Kode": "ALII.X",
+    "Nama": "PT Ancara Logistics Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 122,
+    "Kode": "TRIL.LYX",
+    "Nama": "Triwira Insanlestari Tbk",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2021 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 123,
+    "Kode": "BNBR.X",
+    "Nama": "Bakrie & Brothers Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 124,
+    "Kode": "TAMA.X",
+    "Nama": "PT Lancartama Sejati Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 125,
+    "Kode": "WEGE.M",
+    "Nama": "PT Wijaya Karya Bangunan Gedung Tbk.",
+    "Notasi": "M",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)",
+    "Remarks": "------------------M-----------"
+  },
+  {
+    "No": 126,
+    "Kode": "EPAC.X",
+    "Nama": "PT Megalestari Epack Sentosaraya Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 127,
+    "Kode": "KOTA.X",
+    "Nama": "PT DMS Propertindo Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 128,
+    "Kode": "ELTY.X",
+    "Nama": "Bakrieland Development Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 129,
+    "Kode": "HKMU.MEDLYX",
+    "Nama": "PT HK Metals Utama Tbk",
+    "Notasi": "M,E,D,L,Y,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2023 Kuartal I| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal I| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------MEDL---Y---X"
+  },
+  {
+    "No": 130,
+    "Kode": "TRIO.EX",
+    "Nama": "Trikomsel Oke Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 131,
+    "Kode": "HRME.X",
+    "Nama": "PT Menteng Heritage Realty Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 132,
+    "Kode": "BTEK.X",
+    "Nama": "Bumi Teknokultura Unggul Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 133,
+    "Kode": "BIPI.X",
+    "Nama": "PT Astrindo Nusantara Infrastruktur Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 134,
+    "Kode": "RODA.X",
+    "Nama": "Pikko Land Development Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 135,
+    "Kode": "TECH.LX",
+    "Nama": "PT Indosterling Technomedia Tbk",
+    "Notasi": "L,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal I| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L-------X"
+  },
+  {
+    "No": 136,
+    "Kode": "HADE.X",
+    "Nama": "PT Himalaya Energi Perkasa Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 137,
+    "Kode": "WINR.X",
+    "Nama": "PT Winner Nusantara Jaya Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 138,
+    "Kode": "SMRU.EX",
+    "Nama": "SMR Utama Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 139,
+    "Kode": "META.X",
+    "Nama": "Nusantara Infrastructure Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 140,
+    "Kode": "IBST.X",
+    "Nama": "Inti Bangun Sejahtera Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 141,
+    "Kode": "MKNT.ELYX",
+    "Nama": "PT Mitra Komunikasi Nusantara Tbk.",
+    "Notasi": "E,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2024 Tahunan| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E-L---Y---X"
+  },
+  {
+    "No": 142,
+    "Kode": "MDIA.X",
+    "Nama": "PT Intermedia Capital Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 143,
+    "Kode": "GMFI.EX",
+    "Nama": "PT Garuda Maintenance Facility Aero Asia Tbk.",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal II| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 144,
+    "Kode": "BEBS.LX",
+    "Nama": "PT Berkah Beton Sadaya Tbk",
+    "Notasi": "L,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L-------X"
+  },
+  {
+    "No": 145,
+    "Kode": "BAPI.X",
+    "Nama": "PT Bhakti Agung Propertindo Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 146,
+    "Kode": "AKKU.X",
+    "Nama": "PT Anugerah Kagum Karya Utama Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 147,
+    "Kode": "SAGE.X",
+    "Nama": "PT Saptausaha Gemilangindah Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 148,
+    "Kode": "POLL.LYX",
+    "Nama": "PT Pollux Properties Indonesia Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 149,
+    "Kode": "MABA.DLYFX",
+    "Nama": "PT Marga Abhinaya Abadi Tbk",
+    "Notasi": "D,L,Y,F,X",
+    "Keterangan Notasi": "D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| F : Sanksi Administratif dan/atau Perintah Tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat karena pelanggaran peraturan di bidang Pasar Modal dengan kategori Pelanggaran Ringan| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------DL---YF--X"
+  },
+  {
+    "No": 150,
+    "Kode": "TELE.BEDLX",
+    "Nama": "PT Omni Inovasi Indonesia Tbk",
+    "Notasi": "B,E,D,L,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal II| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2025 Kuartal II| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------BEDL-------X"
+  },
+  {
+    "No": 151,
+    "Kode": "BATA.EX",
+    "Nama": "Sepatu Bata Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 152,
+    "Kode": "RSGK.X",
+    "Nama": "PT Kedoya Adyaraya Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 153,
+    "Kode": "SIMA.ELYX",
+    "Nama": "Siwani Makmur Tbk",
+    "Notasi": "E,L,Y,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2019 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E-L---Y---X"
+  },
+  {
+    "No": 154,
+    "Kode": "TGRA.SX",
+    "Nama": "PT Terregra Asia Energy",
+    "Notasi": "S,X",
+    "Keterangan Notasi": "S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "----------------------S------X"
+  },
+  {
+    "No": 155,
+    "Kode": "ANDI.X",
+    "Nama": "PT Andira Agro Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 156,
+    "Kode": "SBAT.BLSYFX",
+    "Nama": "PT Sejahtera Bintang Abadi Textile Tbk.",
+    "Notasi": "B,L,S,Y,F,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal III| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2023 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| F : Sanksi Administratif dan/atau Perintah Tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat karena pelanggaran peraturan di bidang Pasar Modal dengan kategori Pelanggaran Ringan| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------B--LS--YF--X"
+  },
+  {
+    "No": 157,
+    "Kode": "POLI.X",
+    "Nama": "PT Pollux Hotels Group Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 158,
+    "Kode": "HITS.X",
+    "Nama": "Humpuss Intermoda Transportasi Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 159,
+    "Kode": "DEAL.MELYX",
+    "Nama": "PT Dewata Freightinternational Tbk.",
+    "Notasi": "M,E,L,Y,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2023 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------ME-L---Y---X"
+  },
+  {
+    "No": 160,
+    "Kode": "HOTL.MLYX",
+    "Nama": "Saraswati Griya Lestari Tbk",
+    "Notasi": "M,L,Y,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------M--L---Y---X"
+  },
+  {
+    "No": 161,
+    "Kode": "SKYB.LYX",
+    "Nama": "PT Northcliff Citranusa Indonesia Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 162,
+    "Kode": "KOIN.EX",
+    "Nama": "Kokoh Inti Arebama Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 163,
+    "Kode": "MIRA.X",
+    "Nama": "Mitra International Resources Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 164,
+    "Kode": "MFMI.X",
+    "Nama": "Multifiling Mitra Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 165,
+    "Kode": "CPRI.LYX",
+    "Nama": "PT Capri Nusa Satu Properti Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 166,
+    "Kode": "GOLL.BLYX",
+    "Nama": "PT Golden Plantation Tbk",
+    "Notasi": "B,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2021 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------B--L---Y---X"
+  },
+  {
+    "No": 167,
+    "Kode": "MTRA.BEDLYX",
+    "Nama": "PT Mitra Pemuda Tbk.",
+    "Notasi": "B,E,D,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2022 Kuartal III| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2022 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------BEDL---Y---X"
+  },
+  {
+    "No": 168,
+    "Kode": "PMMP.LYX",
+    "Nama": "PT Panca Mitra Multiperdana Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 169,
+    "Kode": "TAMU.X",
+    "Nama": "PT Pelayaran Tamarin Samudra Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 170,
+    "Kode": "BOSS.BELYX",
+    "Nama": "PT Borneo Olah Sarana Sukses Tbk.",
+    "Notasi": "B,E,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2023 Kuartal III| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------BE-L---Y---X"
+  },
+  {
+    "No": 171,
+    "Kode": "TGUK.X",
+    "Nama": "PT Platinum Wahab Nusantara Tbk.",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 172,
+    "Kode": "KAYU.DLYX",
+    "Nama": "PT Darmi Bersaudara Tbk.",
+    "Notasi": "D,L,Y,X",
+    "Keterangan Notasi": "D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "--------------------DL---Y---X"
+  },
+  {
+    "No": 173,
+    "Kode": "WIKA.MX",
+    "Nama": "PT Wijaya Karya (Persero) Tbk",
+    "Notasi": "M,X",
+    "Keterangan Notasi": "M : Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------M----------X"
+  },
+  {
+    "No": 174,
+    "Kode": "MDRN.EX",
+    "Nama": "Modern Internasional Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 175,
+    "Kode": "TIRT.ESX",
+    "Nama": "Tirta Mahakam Resources Tbk",
+    "Notasi": "E,S,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| S : Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E--S------X"
+  },
+  {
+    "No": 176,
+    "Kode": "TOYS.BLYX",
+    "Nama": "PT Sunindo Adipersada Tbk.",
+    "Notasi": "B,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2023 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------B--L---Y---X"
+  },
+  {
+    "No": 177,
+    "Kode": "SWAT.LYX",
+    "Nama": "PT Sriwahana Adityakarta Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2024 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 178,
+    "Kode": "BVIC.F",
+    "Nama": "Bank Victoria International Tbk",
+    "Notasi": "F",
+    "Keterangan Notasi": "F : Sanksi Administratif dan/atau Perintah Tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat karena pelanggaran peraturan di bidang Pasar Modal dengan kategori Pelanggaran Ringan",
+    "Remarks": "--------------------------F---"
+  },
+  {
+    "No": 179,
+    "Kode": "MTSM.X",
+    "Nama": "Metro Realty Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 180,
+    "Kode": "INTA.EX",
+    "Nama": "Intraco Penta Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 181,
+    "Kode": "BSWD.X",
+    "Nama": "Bank of India Indonesia Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  },
+  {
+    "No": 182,
+    "Kode": "LCGP.LYX",
+    "Nama": "PT Eureka Prima Jakarta Tbk.",
+    "Notasi": "L,Y,X",
+    "Keterangan Notasi": "L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2021 Kuartal III| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "---------------------L---Y---X"
+  },
+  {
+    "No": 183,
+    "Kode": "IBFN.EX",
+    "Nama": "PT Intan Baru Prana Tbk",
+    "Notasi": "E,X",
+    "Keterangan Notasi": "E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2025 Kuartal III| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-------------------E---------X"
+  },
+  {
+    "No": 184,
+    "Kode": "COWL.BEDLYX",
+    "Nama": "COWELL DEVELOPMENT Tbk",
+    "Notasi": "B,E,D,L,Y,X",
+    "Keterangan Notasi": "B : Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit| E : Laporan keuangan terakhir menunjukkan ekuitas negatif berdasarkan laporan keuangan 2019 Tahunan| D : Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik| L : Perusahaan Tercatat terakhir menyampaikan laporan keuangan 2019 Tahunan| Y : Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir| X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "------------------BEDL---Y---X"
+  },
+  {
+    "No": 185,
+    "Kode": "KBAG.X",
+    "Nama": "PT Karya Bersama Anugerah Tbk",
+    "Notasi": "X",
+    "Keterangan Notasi": "X : Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus ",
+    "Remarks": "-----------------------------X"
+  }
+]
