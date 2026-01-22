@@ -2,147 +2,26 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+
 // Corrected Symbol -> Name mapping provided by user
-const STOCKS_DATA = {
-    "AADI": "Adaro Andalan Indonesia Tbk.",
-    "ACES": "Aspirasi Hidup Indonesia Tbk.",
-    "ADES": "Akasha Wira International Tbk.",
-    "ADMR": "Adaro Minerals Indonesia Tbk.",
-    "ADRO": "Alamtri Resources Indonesia Tbk.",
-    "AISA": "FKS Food Sejahtera Tbk.",
-    "AKKU": "Anugerah Kagum Karya Utama Tbk.",
-    "AKRA": "AKR Corporindo Tbk.",
-    "ALMI": "Alumindo Light Metal Industry Tbk.",
-    "AMMN": "Amman Mineral Internasional Tbk.",
-    "AMRT": "Sumber Alfaria Trijaya Tbk.",
-    "ANJT": "Austindo Nusantara Jaya Tbk.",
-    "ANTM": "Aneka Tambang Tbk.",
-    "APII": "Arita Prima Indonesia Tbk.",
-    "APIC": "Pacific Strategic Indonesia Tbk.",
-    "APEX": "Apexindo Pratama Duta Tbk.",
-    "APLN": "Agung Podomoro Land Tbk.",
-    "ARII": "Atlas Resources Tbk.",
-    "ARNA": "Arwana Citramulia Tbk.",
-    "ARTO": "Bank Jago Tbk.",
-    "ASBI": "Asuransi Bintang Tbk.",
-    "ASDM": "Asuransi Dayin Mitra Tbk.",
-    "ASGR": "Astra Graphia Tbk.",
-    "ASII": "Astra International Tbk.",
-    "ASJT": "Asuransi Jasa Tania Tbk.",
-    "ASMI": "Asuransi Maximus Graha Persada Tbk.",
-    "ASRI": "Alam Sutera Realty Tbk.",
-    "AVIA": "Avia Avian Tbk.",
-    "BAJA": "Saranacentral Bajatama Tbk.",
-    "BALI": "Bali Towerindo Sentra Tbk.",
-    "BAPA": "Bekasi Asri Pemula Tbk.",
-    "BATA": "Sepatu Bata Tbk.",
-    "BAYU": "Bayu Buana Tbk.",
-    "BBCA": "Bank Central Asia Tbk.",
-    "BBHI": "Bank Allo Indonesia Tbk.",
-    "BBKP": "Bank KB Bukopin Tbk.",
-    "BBNI": "Bank Negara Indonesia (Persero) Tbk.",
-    "BBRI": "Bank Rakyat Indonesia (Persero) Tbk.",
-    "BBTN": "Bank Tabungan Negara (Persero) Tbk.",
-    "BFIN": "BFI Finance Indonesia Tbk.",
-    "BJBR": "Bank BJB Tbk.",
-    "BMRI": "Bank Mandiri (Persero) Tbk.",
-    "BREN": "Barito Renewables Energy Tbk.",
-    "BRMS": "Bumi Resources Minerals Tbk.",
-    "BRPT": "Barito Pacific Tbk.",
-    "BSDE": "Bumi Serpong Damai Tbk.",
-    "BTPS": "Bank BTPN Syariah Tbk.",
-    "BUKA": "Bukalapak.com Tbk.",
-    "BUMI": "Bumi Resources Tbk.",
-    "CMRY": "Cisarua Mountain Dairy Tbk.",
-    "CPIN": "Charoen Pokphand Indonesia Tbk.",
-    "CTRA": "Ciputra Development Tbk.",
-    "DNET": "Indoritel Makmur Internasional Tbk.",
-    "DSNG": "Dharma Satya Nusantara Tbk.",
-    "DSSA": "Dian Swastatika Sentosa Tbk.",
-    "ELSA": "Elnusa Tbk.",
-    "EMTK": "Elang Mahkota Teknologi Tbk.",
-    "ENRG": "Energi Mega Persada Tbk.",
-    "ERAA": "Erajaya Swasembada Tbk.",
-    "ESSA": "ESSA Industries Indonesia Tbk.",
-    "EXCL": "XL Axiata Tbk.",
-    "FILM": "MD Pictures Tbk.",
-    "GGRM": "Gudang Garam Tbk.",
-    "GOTO": "GoTo Gojek Tokopedia Tbk.",
-    "HEAL": "Medikaloka Hermina Tbk.",
-    "HMSP": "H.M. Sampoerna Tbk.",
-    "HRUM": "Harum Energy Tbk.",
-    "ICBP": "Indofood CBP Sukses Makmur Tbk.",
-    "INCO": "Vale Indonesia Tbk.",
-    "INDF": "Indofood Sukses Makmur Tbk.",
-    "INDY": "Indika Energy Tbk.",
-    "INKP": "Indah Kiat Pulp & Paper Tbk.",
-    "INTP": "Indocement Tunggal Prakarsa Tbk.",
-    "IPPE": "Indo Pureco Pratama Tbk.",
-    "ISAT": "Indosat Ooredoo Hutchison Tbk.",
-    "ITMG": "Indo Tambangraya Megah Tbk.",
-    "JPFA": "Japfa Comfeed Indonesia Tbk.",
-    "JRPT": "Jaya Real Property Tbk.",
-    "JSMR": "Jasa Marga (Persero) Tbk.",
-    "KIJA": "Kawasan Industri Jababeka Tbk.",
-    "KINO": "Kino Indonesia Tbk.",
-    "KLBF": "Kalbe Farma Tbk.",
-    "KPIG": "MNC Land Tbk.",
-    "LPKR": "Lippo Karawaci Tbk.",
-    "LPPF": "Matahari Department Store Tbk.",
-    "LSIP": "PP London Sumatra Indonesia Tbk.",
-    "MAPA": "Map Aktif Adiperkasa Tbk.",
-    "MAPI": "Mitra Adiperkasa Tbk.",
-    "MBMA": "Merdeka Battery Materials Tbk.",
-    "MDKA": "Merdeka Copper Gold Tbk.",
-    "MEDC": "Medco Energi Internasional Tbk.",
-    "MIKA": "Mitra Keluarga Karyasehat Tbk.",
-    "MIDI": "Midi Utama Indonesia Tbk.",
-    "MNCN": "Media Nusantara Citra Tbk.",
-    "MREI": "Maskapai Reasuransi Indonesia Tbk.",
-    "MTEL": "Dayamitra Telekomunikasi Tbk.",
-    "MYOR": "Mayora Indah Tbk.",
-    "NCKL": "Trimegah Bangun Persada Tbk.",
-    "NETV": "Net Visi Media Tbk.",
-    "NISP": "Bank OCBC NISP Tbk.",
-    "PANI": "Pantai Indah Kapuk Dua Tbk.",
-    "PGAS": "Perusahaan Gas Negara Tbk.",
-    "PGEO": "Pertamina Geothermal Energy Tbk.",
-    "PNBN": "Bank Pan Indonesia Tbk.",
-    "PNLF": "Panin Financial Tbk.",
-    "PSAB": "J Resources Asia Pasifik Tbk.",
-    "PTBA": "Bukit Asam Tbk.",
-    "PTRO": "Petrosea Tbk.",
-    "PWON": "Pakuwon Jati Tbk.",
-    "RAJA": "Rukun Raharja Tbk.",
-    "RATU": "Ratu Prabu Energi Tbk.",
-    "SCMA": "Surya Citra Media Tbk.",
-    "SIDO": "Industri Jamu dan Farmasi Sido Muncul Tbk.",
-    "SILO": "Siloam International Hospitals Tbk.",
-    "SMCB": "Solusi Bangun Indonesia Tbk.",
-    "SMGR": "Semen Indonesia (Persero) Tbk.",
-    "SMRA": "Summarecon Agung Tbk.",
-    "SSIA": "Surya Semesta Internusa Tbk.",
-    "TAPG": "Triputra Agro Persada Tbk.",
-    "TBIG": "Tower Bersama Infrastructure Tbk.",
-    "TCID": "Mandom Indonesia Tbk.",
-    "TINS": "Timah Tbk.",
-    "TKIM": "Pabrik Kertas Tjiwi Kimia Tbk.",
-    "TLKM": "Telkom Indonesia (Persero) Tbk.",
-    "TMAS": "Temas Tbk.",
-    "TOWR": "Sarana Menara Nusantara Tbk.",
-    "TPIA": "Chandra Asri Pacific Tbk.",
-    "UNTR": "United Tractors Tbk.",
-    "UNVR": "Unilever Indonesia Tbk.",
-    "WIFI": "Solusi Sinergi Digital Tbk.",
-    "WIKA": "Wijaya Karya (Persero) Tbk.",
-    "WSKT": "Waskita Karya (Persero) Tbk."
-};
+import stockList from "../../scrapper/Daftar_Saham_20260121.json";
+
 
 async function main() {
-    const symbols = Object.keys(STOCKS_DATA);
-    console.log(`🌱 Seeding ${symbols.length} stocks with correct names...`);
+    // 1. Take top 600 stocks
+    const limit = 600;
+    const targets = stockList.slice(0, limit);
 
-    for (const [code, name] of Object.entries(STOCKS_DATA)) {
+    console.log(`🌱 Seeding top ${targets.length} (of ${stockList.length}) stocks from JSON...`);
+
+    // 2. Upsert loop
+    for (const item of targets) {
+        // JSON keys: "Kode", "Nama Perusahaan"
+        const code = item["Kode"]; // e.g. "AALI"
+        const name = item["Nama Perusahaan"];
+
+        if (!code || !name) continue;
+
         await prisma.stock.upsert({
             where: { kode_emiten: code },
             update: { nama_emiten: name },
@@ -153,7 +32,7 @@ async function main() {
         });
     }
 
-    console.log(`🎉 Seeded ${symbols.length} stocks!`);
+    console.log(`🎉 Seeded ${targets.length} stocks!`);
 }
 
 main()
