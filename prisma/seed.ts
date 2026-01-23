@@ -104,9 +104,10 @@ async function main() {
     console.log(`🚫 Found ${suspendedSet.size} suspended stocks.`);
 
     // 5. Seed Stocks (Expanded)
-    const limit = 600;
-    const targets = stockList.slice(0, limit);
-    console.log(`📦 Seeding top ${targets.length} Stocks...`);
+    // 5. Seed Stocks (Expanded)
+    // const limit = 600; // Removed limit
+    const targets = stockList;
+    console.log(`📦 Seeding ALL ${targets.length} Stocks...`);
 
     for (const item of targets) {
         const code = item["Kode"];
