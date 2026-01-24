@@ -1,29 +1,70 @@
-# Bubble Index
+# Bubble IDX
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A real-time bubble chart visualization for IDX30 stocks, powered by the T3 Stack (Next.js, Tailwind, Trpc, Prisma) and a custom Python scraper.
 
-## What's next? How do I make an app with this?
+![Dashboard Preview](https://placehold.co/600x400?text=Bubble+Chart+Preview)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 🚀 Quick Start (Development)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Prerequisites
+*   Node.js 18+
+*   Docker Desktop (for local database)
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### 1. Database Setup
+Start a local PostgreSQL instance:
+```bash
+# In project root
+docker compose up -d postgres
+```
 
-## Learn More
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### 3. Initialize Database
+This will create the schema and populate it with **150 sample historical records** so you can see data immediately properly without needing the scraper.
+```bash
+# Push schema to DB
+npx prisma db push --force-reset
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+# Seed Master Data + Sample History
+npx prisma db seed
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### 4. Run App
+```bash
+npm run dev
+```
+Open `http://localhost:3000`.
 
-## How do I deploy this?
+---
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## 🏗️ Architecture
+
+### 1. Frontend (`/src`)
+*   **Framework**: Next.js 15 (App Router)
+*   **Visuals**: D3.js Force Layout Bubble Chart.
+*   **Data**: Fetched via tRPC from Postgres.
+
+### 2. Scraper (`/scrapper` - *Private Submodule*)
+*   **Tech**: Python + PyAutoGUI.
+*   **Function**:
+    *   Runs on a schedule (Mon-Fri market hours).
+    *   Fetches real-time price & change % from TradingView.
+    *   Updates the `ticker` table in Postgres.
+
+---
+
+## 🤝 Contribution Guidelines
+
+### Schema Updates
+If you change `schema.prisma`:
+1.  Run `npx prisma migrate dev --name <change_description>`.
+2.  Commit the migration folder.
+3.  **DO NOT** manually edit migration SQLs unless necessary.
+
+### Data Sync (Optional)
+If you want **real production data** instead of the sample seed:
+1.  Ask the maintainer for access (VPN required).
+2.  Run `.\sync_db.ps1` (Windows PowerShell) to dump/restore prod data to your localhost.
