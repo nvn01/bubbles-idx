@@ -1,7 +1,6 @@
 # Bubble IDX
 
-A real-time bubble chart visualization for IDX30 stocks, powered by the T3 Stack (Next.js, Tailwind, Trpc, Prisma) and a custom Python scraper.
-
+A real-time bubble chart visualization for IDX stocks.
 
 ## 🚀 Quick Start (Development)
 
@@ -39,21 +38,6 @@ Open `http://localhost:3000`.
 
 ---
 
-## 🏗️ Architecture
-
-### 1. Frontend (`/src`)
-*   **Framework**: Next.js 15 (App Router)
-*   **Visuals**: D3.js Force Layout Bubble Chart.
-*   **Data**: Fetched via tRPC from Postgres.
-
-### 2. Scraper (`/scrapper` - *Private Submodule*)
-*   **Tech**: Python + PyAutoGUI.
-*   **Function**:
-    *   Runs on a schedule (Mon-Fri market hours).
-    *   Fetches real-time price & change % from TradingView.
-    *   Updates the `ticker` table in Postgres.
-
----
 
 ## 🤝 Contribution Guidelines
 
