@@ -21,6 +21,10 @@ export function BubbleCanvas({
         const container = containerRef.current
         if (!canvas || !container) return
 
+        // IMPORTANT: Set canvas dimensions BEFORE creating physics engine
+        canvas.width = container.clientWidth
+        canvas.height = container.clientHeight
+
         // Initialize physics engine only once
         if (!physicsRef.current) {
             physicsRef.current = new BubblePhysics(canvas, timePeriod, theme.bubble)
