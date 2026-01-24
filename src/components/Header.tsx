@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useTheme } from "~/contexts/ThemeContext";
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useTheme } from "~/contexts/ThemeContext"
+import type { TimePeriod } from "~/lib/bubble-physics"
 
-export type TimePeriod = "1H" | "1D" | "1W" | "1M" | "1Y";
-
-interface HeaderProps {
-    timePeriod: TimePeriod;
-    setTimePeriod: (period: TimePeriod) => void;
-}
-
-export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
-    const { theme, nextTheme, prevTheme } = useTheme();
+export function Header({
+    timePeriod,
+    setTimePeriod,
+}: {
+    timePeriod: TimePeriod
+    setTimePeriod: (period: TimePeriod) => void
+}) {
+    const { theme, nextTheme, prevTheme } = useTheme()
 
     return (
         <header
             className="px-3 md:px-6 py-3 md:py-4 flex items-center justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap theme-transition"
             style={{
                 backgroundColor: theme.headerBg,
-                borderBottom: `1px solid ${theme.headerBorder}`,
+                borderBottom: `1px solid ${theme.headerBorder}`
             }}
         >
             {/* Left section - Logo and title */}
@@ -51,10 +51,9 @@ export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
                             <button
                                 key={time}
                                 onClick={() => setTimePeriod(time)}
-                                className="text-xs font-medium transition-colors flex-shrink-0 px-2 py-1 rounded hover:opacity-80"
+                                className="text-xs font-medium transition-colors flex-shrink-0"
                                 style={{
-                                    color: timePeriod === time ? theme.accent : theme.textSecondary,
-                                    backgroundColor: timePeriod === time ? `${theme.accent}20` : "transparent",
+                                    color: timePeriod === time ? theme.accent : theme.textSecondary
                                 }}
                             >
                                 {time}
@@ -71,7 +70,7 @@ export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
                         style={{
                             borderColor: theme.textSecondary,
                             color: theme.textSecondary,
-                            backgroundColor: "transparent",
+                            backgroundColor: 'transparent'
                         }}
                         aria-label="Previous theme"
                     >
@@ -91,7 +90,7 @@ export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
                         style={{
                             borderColor: theme.textSecondary,
                             color: theme.textSecondary,
-                            backgroundColor: "transparent",
+                            backgroundColor: 'transparent'
                         }}
                         aria-label="Next theme"
                     >
@@ -106,10 +105,10 @@ export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
                         className="hidden md:block px-3 md:px-4 py-1 md:py-2 rounded-lg text-sm transition-colors focus:outline-none"
                         style={{
                             backgroundColor: theme.inputBg,
-                            borderWidth: "1px",
-                            borderStyle: "solid",
+                            borderWidth: '1px',
+                            borderStyle: 'solid',
                             borderColor: theme.inputBorder,
-                            color: theme.textPrimary,
+                            color: theme.textPrimary
                         }}
                     />
                     <div
@@ -119,5 +118,5 @@ export function Header({ timePeriod, setTimePeriod }: HeaderProps) {
                 </div>
             </div>
         </header>
-    );
+    )
 }

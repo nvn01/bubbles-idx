@@ -345,7 +345,7 @@ export const themes: Theme[] = [
     },
 ];
 
-// Default theme for fallback
+// Default theme for TypeScript strict mode
 const defaultTheme = themes[0]!;
 
 export function getTheme(id: string): Theme {
@@ -363,4 +363,3 @@ export function getPrevTheme(currentId: string): Theme {
     const prevIndex = currentIndex === 0 ? themes.length - 1 : currentIndex - 1;
     return themes[prevIndex] ?? defaultTheme;
 }
-

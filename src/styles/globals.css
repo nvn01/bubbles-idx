@@ -1,6 +1,5 @@
 /* IDX Stocks Theme System - Global Styles */
 
-/* Base Reset */
 html,
 body {
   padding: 0;
@@ -21,26 +20,32 @@ a {
 
 /* Theme transition for smooth switching */
 .theme-transition {
-  transition: background-color 0.4s ease, 
-              border-color 0.3s ease, 
-              color 0.3s ease,
-              box-shadow 0.3s ease;
+  transition: background-color 0.4s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 /* Bubble Canvas Animations */
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     filter: brightness(1);
   }
+
   50% {
     filter: brightness(1.1);
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -105,9 +110,12 @@ a {
 
 /* Live indicator animation */
 @keyframes live-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -137,31 +145,4 @@ a {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* Loading spinner */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
 }
