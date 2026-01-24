@@ -3,6 +3,7 @@ import stockList from "./data/Daftar_Saham_20260121.json";
 import indexList from "./data/Daftar_Indeks.json";
 import specialNotations from "./data/Notasi_Khusus_20260121.json";
 import suspendedList from "./data/suspended_list.json";
+import sampleHistory from "./data/sample_ticker.json"; // Generated sample data
 
 const prisma = new PrismaClient();
 
@@ -103,9 +104,7 @@ async function main() {
     }
     console.log(`🚫 Found ${suspendedSet.size} suspended stocks.`);
 
-    // 5. Seed Stocks (Expanded)
-    // 5. Seed Stocks (Expanded)
-    // const limit = 600; // Removed limit
+
     const targets = stockList;
     console.log(`📦 Seeding ALL ${targets.length} Stocks...`);
 
@@ -146,14 +145,48 @@ async function main() {
         });
     }
 
+    // 6. Seed Sample History (For Collaborators)
+    const tickerCount = await prisma.ticker.count();
+    if (tickerCount === 0 && sampleHistory.length > 0) {
+        console.log(`📜 Seeding ${sampleHistory.length} sample historical records...`);
+
+        // Need to map Symbol -> ID again because IDs might differ
+        const allStocks = await prisma.stock.findMany();
+        const stockMap = new Map(allStocks.map(s => [s.kode_emiten, s.id]));
+
+        const historyData = [];
+        for (const rec of sampleHistory) {
+            const stockId = stockMap.get(rec.symbol);
+            if (stockId) {
+                historyData.push({
+                    stocks_id: stockId,
+                    price: rec.price,
+                    ts: new Date(rec.time * 1000), // Convert Unix to Date
+                    h: 0, d: 0, w: 0, m: 0, y: 0
+                });
+            }
+        }
+
+        if (historyData.length > 0) {
+            await prisma.ticker.createMany({
+                data: historyData,
+                skipDuplicates: true
+            });
+            console.log("✅ Sample history seeded!");
+        }
+    } else {
+        console.log(`ℹ️ Ticker table has ${tickerCount} records. Skipping sample seeding.`);
+    }
+
     console.log("🎉 Seeding Complete!");
 }
 
 main()
-    .catch((e) => {
-        console.error("❌ Seed error:", e);
-        process.exit(1);
-    })
-    .finally(async () => {
+    .then(async () => {
         await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
     });
