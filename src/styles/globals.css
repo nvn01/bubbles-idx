@@ -1,9 +1,13 @@
+/* IDX Stocks Theme System - Global Styles */
+
+/* Base Reset */
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  overflow: hidden;
 }
 
 a {
@@ -13,4 +17,151 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+/* Theme transition for smooth switching */
+.theme-transition {
+  transition: background-color 0.4s ease, 
+              border-color 0.3s ease, 
+              color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Bubble Canvas Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Theme Switcher Styles */
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.theme-arrow:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.theme-arrow:active {
+  transform: scale(0.95);
+}
+
+.theme-name {
+  min-width: 100px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Custom Scrollbar for Theme */
+.themed-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.themed-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb {
+  background: currentColor;
+  opacity: 0.3;
+  border-radius: 3px;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
+  opacity: 0.5;
+}
+
+/* Live indicator animation */
+@keyframes live-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.live-indicator {
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+/* Bubble hover effect classes */
+.bubble-hover {
+  transition: transform 0.2s ease;
+}
+
+.bubble-hover:hover {
+  transform: scale(1.02);
+}
+
+/* Glass morphism effect for overlays */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
