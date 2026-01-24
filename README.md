@@ -2,7 +2,6 @@
 
 A real-time bubble chart visualization for IDX30 stocks, powered by the T3 Stack (Next.js, Tailwind, Trpc, Prisma) and a custom Python scraper.
 
-![Dashboard Preview](https://placehold.co/600x400?text=Bubble+Chart+Preview)
 
 ## 🚀 Quick Start (Development)
 
