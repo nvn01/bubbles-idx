@@ -587,6 +587,8 @@ export class BubblePhysics {
         const minDimension = Math.min(this.canvasWidth, this.canvasHeight)
         const velocityDamping = minDimension < 600 ? 0.97 : 0.98
 
+        this.calculateAvailableSpace()
+
         this.bubbles.forEach((bubble) => {
             const radiusDifference = bubble.targetRadius - bubble.radius
             if (Math.abs(radiusDifference) > 0.1) {
@@ -765,8 +767,5 @@ export class BubblePhysics {
             bubble.y = newCenterY + (bubble.y - oldCenterY)
             bubble.targetRadius = this.calculateRadius(bubble.change)
         })
-
-        // Recalculate space only on resize, not every frame
-        this.calculateAvailableSpace()
     }
 }
