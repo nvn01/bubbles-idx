@@ -4,6 +4,7 @@ import indexList from "./data/Daftar_Indeks.json";
 import specialNotations from "./data/Notasi_Khusus_20260121.json";
 import suspendedList from "./data/suspended_list.json";
 import sampleHistory from "./data/sample_ticker.json"; // Generated sample data
+import indexMappings from "./data/indicies-list-stocks.json";
 
 const prisma = new PrismaClient();
 
@@ -143,6 +144,90 @@ async function main() {
                 }
             },
         });
+    }
+
+
+
+    // 5. Connect Stocks to Indices
+    console.log("🔗 Connecting Stocks to Indices...");
+
+    // Alias Map (JSON Name -> DB Name) - Sync with compare_indices.py logic
+    const indexAliases: Record<string, string> = {
+        "Investor33": "INVESTOR33",
+        "SMinfra18": "SMINFRA18",
+        "IDXQ30": "IDXQUALITY30",
+        "IDXV30": "IDXVALUE30",
+        "IDXG30": "IDXGROWTH30",
+        "Kompas100": "KOMPAS100" // Just in case
+    };
+
+    for (const mapping of indexMappings) {
+        let dbIndexName = mapping.index_name;
+
+        // Apply mapping if exists
+        if (indexAliases[dbIndexName]) {
+            dbIndexName = indexAliases[dbIndexName]!;
+        } else if (dbIndexName.toUpperCase() !== dbIndexName) {
+            // Try uppercase fallback if standard one fails (though our DB keys are mostly uppercase)
+            // Check if raw uppercase exists in indexList
+            const upper = dbIndexName.toUpperCase();
+            if (indexList.some(i => i.kode === upper)) {
+                dbIndexName = upper;
+            }
+        }
+
+        // Find the index ID or Code
+        const indexDef = indexList.find(i => i.kode === dbIndexName);
+        if (!indexDef) {
+            console.warn(`⚠️  Skipping unknown index: ${mapping.index_name} (Mapped to: ${dbIndexName})`);
+            continue;
+        }
+
+        const stocksInIndex = mapping.stocks;
+        if (stocksInIndex.length > 0) {
+            // We can do a single update for the Index to connect all stocks
+            // Finding stocks that exist in DB first? Prisma connect works on Unique inputs.
+            // Assuming Stock.kode_emiten is unique.
+
+            // Filter stocks that we actually have in our seed list
+            // (Though creating relations to non-existent stocks will throw)
+            // It's safer to connect from the Stock side or Index side?
+            // Index side: update Index, connect Stocks [ {kode_emiten: 'A'}, {kode_emiten: 'B'} ]
+
+            // NEW LOGIC: Pre-filter stocks that actually exist in our DB
+            // Fetch all valid stock codes if not fetched yet (optimization: fetch once outside loop)
+            const existingStocks = await prisma.stock.findMany({ select: { kode_emiten: true } });
+            const validStockSet = new Set(existingStocks.map(s => s.kode_emiten));
+
+            // Only connect stocks that are in our validStockSet
+            const validStocksInIndex = stocksInIndex.filter(s => validStockSet.has(s));
+            const skippedCount = stocksInIndex.length - validStocksInIndex.length;
+
+            if (skippedCount > 0) {
+                console.warn(`       ⚠️  Skipping ${skippedCount} stocks in ${dbIndexName} (Not found in DB).`);
+            }
+
+            const connectList = validStocksInIndex.map(s => ({ kode_emiten: s }));
+
+            if (connectList.length > 0) {
+                try {
+                    await prisma.stockIndex.update({
+                        where: { kode: dbIndexName },
+                        data: {
+                            stocks: {
+                                connect: connectList
+                            }
+                        }
+                    });
+                    console.log(`   ✅ Connected ${connectList.length} stocks to ${dbIndexName}`);
+                } catch (e) {
+                    console.error(`   ❌ Failed to connect stocks for ${dbIndexName}:`, e);
+                }
+            } else {
+                console.log(`   ℹ️  No valid stocks found for ${dbIndexName} (All skipped).`);
+            }
+
+        }
     }
 
     // 6. Seed Sample History (For Collaborators)

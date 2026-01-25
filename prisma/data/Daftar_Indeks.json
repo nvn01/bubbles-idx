@@ -214,5 +214,47 @@
         "kode": "IDXTRANS",
         "nama": "IDX Sektor Transportasi & Logistik",
         "deskripsi": "Indeks yang mengukur kinerja harga seluruh saham di masing-masing Sektor yang mengacu pada klasifikasi IDX Industrial Classification (IDX-IC)."
+    },
+    {
+        "id": 46,
+        "kode": "ABX",
+        "nama": "ABX",
+        "deskripsi": "Indeks harga saham gabungan baru."
+    },
+    {
+        "id": 47,
+        "kode": "DBX",
+        "nama": "DBX",
+        "deskripsi": "Indeks harga saham gabungan baru."
+    },
+    {
+        "id": 48,
+        "kode": "MBX",
+        "nama": "MBX",
+        "deskripsi": "Indeks harga saham gabungan baru."
+    },
+    {
+        "id": 49,
+        "kode": "ESGQKEHATI",
+        "nama": "ESG Quality KEHATI",
+        "deskripsi": "Indeks ESG Quality KEHATI."
+    },
+    {
+        "id": 50,
+        "kode": "ESGSKEHATI",
+        "nama": "ESG Sector KEHATI",
+        "deskripsi": "Indeks ESG Sector KEHATI."
+    },
+    {
+        "id": 51,
+        "kode": "IDXVESTA28",
+        "nama": "IDX Vesta 28",
+        "deskripsi": "Indeks saham pilihan IDX Vesta 28."
+    },
+    {
+        "id": 52,
+        "kode": "ECONOMIC30",
+        "nama": "Economic 30",
+        "deskripsi": "Indeks 30 saham ekonomi pilihan."
     }
 ]
