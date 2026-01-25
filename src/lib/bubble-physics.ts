@@ -444,7 +444,6 @@ export class BubblePhysics {
     private canvasWidth: number
     private canvasHeight: number
     private bubbleStyle: BubbleStyle
-    private frameCount = 0
 
     constructor(
         canvas: HTMLCanvasElement,
@@ -588,12 +587,7 @@ export class BubblePhysics {
         const minDimension = Math.min(this.canvasWidth, this.canvasHeight)
         const velocityDamping = minDimension < 600 ? 0.97 : 0.98
 
-        // Throttle: recalculate space every 30 frames (~0.5 sec at 60fps)
-        this.frameCount++
-        if (this.frameCount >= 30) {
-            this.calculateAvailableSpace()
-            this.frameCount = 0
-        }
+        this.calculateAvailableSpace()
 
         this.bubbles.forEach((bubble) => {
             const radiusDifference = bubble.targetRadius - bubble.radius
