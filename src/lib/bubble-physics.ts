@@ -659,34 +659,37 @@ export class BubblePhysics {
     private collide(b1: Bubble, b2: Bubble) {
         const dx = b2.x - b1.x
         const dy = b2.y - b1.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
         const minDistance = b1.radius + b2.radius + 2
 
-        if (distance < minDistance) {
-            const overlap = minDistance - distance
-            const angle = Math.atan2(dy, dx)
-            const pushX = Math.cos(angle) * overlap * 0.5
-            const pushY = Math.sin(angle) * overlap * 0.5
+        // Early exit with squared distance (avoids sqrt for non-colliding bubbles)
+        const distanceSquared = dx * dx + dy * dy
+        if (distanceSquared >= minDistance * minDistance) return
 
-            if (!b1.isDragging) {
-                b1.x -= pushX
-                b1.y -= pushY
-            }
-            if (!b2.isDragging) {
-                b2.x += pushX
-                b2.y += pushY
-            }
+        // Only calculate sqrt when collision detected
+        const distance = Math.sqrt(distanceSquared)
+        const overlap = minDistance - distance
+        const angle = Math.atan2(dy, dx)
+        const pushX = Math.cos(angle) * overlap * 0.5
+        const pushY = Math.sin(angle) * overlap * 0.5
 
-            const minDim = Math.min(this.canvasWidth, this.canvasHeight)
-            const collisionForce = minDim < 600 ? 1 : 2
+        if (!b1.isDragging) {
+            b1.x -= pushX
+            b1.y -= pushY
+        }
+        if (!b2.isDragging) {
+            b2.x += pushX
+            b2.y += pushY
+        }
 
-            if (b1.isDragging && !b2.isDragging) {
-                b2.vx += (dx / distance) * collisionForce
-                b2.vy += (dy / distance) * collisionForce
-            } else if (!b1.isDragging && b2.isDragging) {
-                b1.vx -= (dx / distance) * collisionForce
-                b1.vy -= (dy / distance) * collisionForce
-            }
+        const minDim = Math.min(this.canvasWidth, this.canvasHeight)
+        const collisionForce = minDim < 600 ? 1 : 2
+
+        if (b1.isDragging && !b2.isDragging) {
+            b2.vx += (dx / distance) * collisionForce
+            b2.vy += (dy / distance) * collisionForce
+        } else if (!b1.isDragging && b2.isDragging) {
+            b1.vx -= (dx / distance) * collisionForce
+            b1.vy -= (dy / distance) * collisionForce
         }
     }
 
