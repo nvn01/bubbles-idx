@@ -10,6 +10,7 @@
     "preview": "next build && next start",
     "typecheck": "tsc --noEmit",
     "db:seed": "npx tsx prisma/seed.ts",
+    "db:seed:sample": "npx tsx prisma/seed-sample.ts",
     "db:studio": "npx prisma studio"
   },
   "dependencies": {
