@@ -21,9 +21,18 @@ export function BubbleCanvas({
         const container = containerRef.current
         if (!canvas || !container) return
 
-        // IMPORTANT: Set canvas dimensions BEFORE creating physics engine
-        canvas.width = container.clientWidth
-        canvas.height = container.clientHeight
+        // IMPORTANT: Set canvas dimensions with devicePixelRatio for sharp Retina display
+        const dpr = window.devicePixelRatio || 1
+        const displayWidth = container.clientWidth
+        const displayHeight = container.clientHeight
+
+        canvas.width = displayWidth * dpr
+        canvas.height = displayHeight * dpr
+        canvas.style.width = `${displayWidth}px`
+        canvas.style.height = `${displayHeight}px`
+
+        const ctx = canvas.getContext('2d')
+        ctx?.scale(dpr, dpr)
 
         // Initialize physics engine only once
         if (!physicsRef.current) {
@@ -45,9 +54,20 @@ export function BubbleCanvas({
         animate()
 
         const resizeObserver = new ResizeObserver(() => {
-            canvas.width = container.clientWidth
-            canvas.height = container.clientHeight
-            physicsRef.current?.updateCanvasBounds(canvas.width, canvas.height)
+            const dpr = window.devicePixelRatio || 1
+            const displayWidth = container.clientWidth
+            const displayHeight = container.clientHeight
+
+            canvas.width = displayWidth * dpr
+            canvas.height = displayHeight * dpr
+            canvas.style.width = `${displayWidth}px`
+            canvas.style.height = `${displayHeight}px`
+
+            const ctx = canvas.getContext('2d')
+            ctx?.scale(dpr, dpr)
+
+            // Pass display dimensions (not scaled) to physics
+            physicsRef.current?.updateCanvasBounds(displayWidth, displayHeight)
         })
         resizeObserver.observe(container)
 
