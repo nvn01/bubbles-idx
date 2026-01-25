@@ -256,5 +256,17 @@
         "kode": "ECONOMIC30",
         "nama": "Economic 30",
         "deskripsi": "Indeks 30 saham ekonomi pilihan."
+    },
+    {
+        "id": 53,
+        "kode": "I-GRADE",
+        "nama": "I-GRADE",
+        "deskripsi": "Indeks I-GRADE."
+    },
+    {
+        "id": 54,
+        "kode": "PRIMBANK10",
+        "nama": "Primary Bank 10",
+        "deskripsi": "Indeks 10 Bank Utama."
     }
 ]
