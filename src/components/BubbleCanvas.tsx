@@ -35,8 +35,11 @@ export function BubbleCanvas({
 
         let animationFrameId: number
         const animate = () => {
-            physicsRef.current?.update()
-            physicsRef.current?.render()
+            // Skip updates when tab is not visible (saves CPU)
+            if (!document.hidden) {
+                physicsRef.current?.update()
+                physicsRef.current?.render()
+            }
             animationFrameId = requestAnimationFrame(animate)
         }
         animate()
