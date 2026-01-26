@@ -7,9 +7,11 @@ import type { TimePeriod } from "~/lib/bubble-physics"
 export function Header({
     timePeriod,
     setTimePeriod,
+    onOpenSearch,
 }: {
     timePeriod: TimePeriod
     setTimePeriod: (period: TimePeriod) => void
+    onOpenSearch?: () => void
 }) {
     const { theme, nextTheme, prevTheme } = useTheme()
 
@@ -86,18 +88,19 @@ export function Header({
                 </div>
 
                 <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="hidden md:block px-3 md:px-4 py-1 md:py-2 rounded-lg text-sm transition-colors focus:outline-none"
+                    <button
+                        onClick={onOpenSearch}
+                        className="hidden md:flex items-center gap-2 px-3 md:px-4 py-1 md:py-2 rounded-lg text-sm transition-colors cursor-pointer hover:opacity-80"
                         style={{
                             backgroundColor: theme.inputBg,
                             borderWidth: '1px',
                             borderStyle: 'solid',
                             borderColor: theme.inputBorder,
-                            color: theme.textPrimary
+                            color: theme.textSecondary
                         }}
-                    />
+                    >
+                        Search...
+                    </button>
                     <div
                         className="w-2 md:w-3 h-2 md:h-3 rounded-full flex-shrink-0 live-indicator"
                         style={{ backgroundColor: "#ef4444" }}

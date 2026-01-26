@@ -129,7 +129,14 @@ function IndexContent() {
     return (
         <div className="flex flex-col h-screen overflow-hidden">
             {/* Header - full width on top */}
-            <Header timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
+            <Header
+                timePeriod={timePeriod}
+                setTimePeriod={setTimePeriod}
+                onOpenSearch={() => {
+                    setSearchInitialQuery("")
+                    setIsSearchOpen(true)
+                }}
+            />
 
             {/* Content area - sidebar + bubble canvas */}
             <div className="flex flex-1 overflow-hidden">
