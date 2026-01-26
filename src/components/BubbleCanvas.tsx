@@ -92,7 +92,7 @@ export function BubbleCanvas({
     return (
         <div
             ref={containerRef}
-            className="flex-1 w-full h-[calc(100vh-73px)] overflow-hidden theme-transition"
+            className="flex-1 w-full overflow-hidden theme-transition"
             style={backgroundStyle}
         >
             <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing block" />
