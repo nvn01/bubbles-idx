@@ -519,50 +519,86 @@ export class BubblePhysics {
     }
 
     private setupEventListeners() {
-        this.canvas.addEventListener("mousemove", (e) => {
+        const handleStart = (x: number, y: number) => {
             const rect = this.canvas.getBoundingClientRect()
-            this.mouseX = e.clientX - rect.left
-            this.mouseY = e.clientY - rect.top
-
-            if (this.draggedBubble) {
-                this.draggedBubble.x = this.mouseX - this.draggedBubble.dragOffsetX
-                this.draggedBubble.y = this.mouseY - this.draggedBubble.dragOffsetY
-            }
-        })
-
-        this.canvas.addEventListener("mousedown", (e) => {
-            const rect = this.canvas.getBoundingClientRect()
-            const x = e.clientX - rect.left
-            const y = e.clientY - rect.top
+            const mouseX = x - rect.left
+            const mouseY = y - rect.top
 
             for (let i = this.bubbles.length - 1; i >= 0; i--) {
                 const bubble = this.bubbles[i]
                 if (!bubble) continue
-                const dx = x - bubble.x
-                const dy = y - bubble.y
+                const dx = mouseX - bubble.x
+                const dy = mouseY - bubble.y
                 if (dx * dx + dy * dy <= bubble.radius * bubble.radius) {
                     this.draggedBubble = bubble
                     bubble.isDragging = true
                     bubble.dragOffsetX = dx
                     bubble.dragOffsetY = dy
+                    // Reset velocity when grabbing
+                    bubble.vx = 0
+                    bubble.vy = 0
                     break
                 }
             }
-        })
+        }
 
-        this.canvas.addEventListener("mouseup", () => {
+        const handleMove = (x: number, y: number) => {
+            const rect = this.canvas.getBoundingClientRect()
+            this.mouseX = x - rect.left
+            this.mouseY = y - rect.top
+
+            if (this.draggedBubble) {
+                const newX = this.mouseX - this.draggedBubble.dragOffsetX
+                const newY = this.mouseY - this.draggedBubble.dragOffsetY
+
+                // Calculate momentum (velocity) based on drag speed
+                // This gives a "throw" effect when released
+                this.draggedBubble.vx = (newX - this.draggedBubble.x) * 0.5
+                this.draggedBubble.vy = (newY - this.draggedBubble.y) * 0.5
+
+                this.draggedBubble.x = newX
+                this.draggedBubble.y = newY
+            }
+        }
+
+        const handleEnd = () => {
             if (this.draggedBubble) {
                 this.draggedBubble.isDragging = false
             }
             this.draggedBubble = null
+        }
+
+        // Mouse Events
+        this.canvas.addEventListener("mousedown", (e) => {
+            handleStart(e.clientX, e.clientY)
         })
 
-        this.canvas.addEventListener("mouseleave", () => {
-            if (this.draggedBubble) {
-                this.draggedBubble.isDragging = false
-            }
-            this.draggedBubble = null
+        this.canvas.addEventListener("mousemove", (e) => {
+            handleMove(e.clientX, e.clientY)
         })
+
+        this.canvas.addEventListener("mouseup", handleEnd)
+        this.canvas.addEventListener("mouseleave", handleEnd)
+
+        // Touch Events (Mobile Support)
+        this.canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault() // Prevent scrolling while tapping canvas
+            const touch = e.touches[0]
+            if (touch) {
+                handleStart(touch.clientX, touch.clientY)
+            }
+        }, { passive: false })
+
+        this.canvas.addEventListener("touchmove", (e) => {
+            e.preventDefault() // Prevent scrolling while dragging
+            const touch = e.touches[0]
+            if (touch) {
+                handleMove(touch.clientX, touch.clientY)
+            }
+        }, { passive: false })
+
+        this.canvas.addEventListener("touchend", handleEnd)
+        this.canvas.addEventListener("touchcancel", handleEnd)
     }
 
     private calculateAvailableSpace() {
