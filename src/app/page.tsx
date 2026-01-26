@@ -1,10 +1,9 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useCallback } from "react"
 import { Header } from "~/components/Header"
 import { BubbleCanvas } from "~/components/BubbleCanvas"
 import { Sidebar } from "~/components/Sidebar"
-import { SearchModal } from "~/components/SearchModal"
 import { StockDetailModal } from "~/components/StockDetailModal"
 import { ThemeProvider } from "~/contexts/ThemeContext"
 import type { TimePeriod } from "~/lib/bubble-physics"
@@ -62,41 +61,9 @@ function IndexContent() {
     const [selectedIndex, setSelectedIndex] = useState<string | null>(null)
     const [selectedWatchlist, setSelectedWatchlist] = useState<number | null>(null)
 
-    // Search modal state
-    const [isSearchOpen, setIsSearchOpen] = useState(false)
-    const [searchInitialQuery, setSearchInitialQuery] = useState("")
-
     // Stock detail modal state  
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false)
-
-    // Global keyboard listener for search
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            // Don't trigger if already in an input or modal is open
-            const target = e.target as HTMLElement
-            if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-                return
-            }
-
-            // Open search on any letter key press
-            if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
-                e.preventDefault()
-                setSearchInitialQuery(e.key.toUpperCase())
-                setIsSearchOpen(true)
-            }
-
-            // Also open on Ctrl+K or Cmd+K
-            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-                e.preventDefault()
-                setSearchInitialQuery("")
-                setIsSearchOpen(true)
-            }
-        }
-
-        window.addEventListener("keydown", handleKeyDown)
-        return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [])
 
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {
@@ -132,10 +99,7 @@ function IndexContent() {
             <Header
                 timePeriod={timePeriod}
                 setTimePeriod={setTimePeriod}
-                onOpenSearch={() => {
-                    setSearchInitialQuery("")
-                    setIsSearchOpen(true)
-                }}
+                onSelectStock={handleSelectStock}
             />
 
             {/* Content area - sidebar + bubble canvas */}
@@ -146,26 +110,11 @@ function IndexContent() {
                     onSelectIndex={setSelectedIndex}
                     selectedWatchlist={selectedWatchlist}
                     onSelectWatchlist={setSelectedWatchlist}
-                    onOpenSearch={() => {
-                        setSearchInitialQuery("")
-                        setIsSearchOpen(true)
-                    }}
                 />
 
                 {/* Bubble Canvas */}
                 <BubbleCanvas timePeriod={timePeriod} selectedSymbols={getSelectedSymbols()} />
             </div>
-
-            {/* Search Modal */}
-            <SearchModal
-                isOpen={isSearchOpen}
-                onClose={() => {
-                    setIsSearchOpen(false)
-                    setSearchInitialQuery("")
-                }}
-                onSelectStock={handleSelectStock}
-                initialQuery={searchInitialQuery}
-            />
 
             {/* Stock Detail Modal */}
             <StockDetailModal
