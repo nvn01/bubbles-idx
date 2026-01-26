@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "~/components/Header"
 import { BubbleCanvas } from "~/components/BubbleCanvas"
 import { Sidebar } from "~/components/Sidebar"
+import { SearchModal } from "~/components/SearchModal"
+import { StockDetailModal } from "~/components/StockDetailModal"
 import { ThemeProvider } from "~/contexts/ThemeContext"
 import type { TimePeriod } from "~/lib/bubble-physics"
 
@@ -18,10 +20,41 @@ const IDX80_STOCKS = [
     "SIDO", "SMGR", "SMRA", "SSIA", "TAPG", "TLKM", "TOWR", "UNTR", "UNVR", "WIFI",
 ]
 
+// Stock name mapping
+const STOCK_NAMES: Record<string, string> = {
+    "BBCA": "Bank Central Asia Tbk.",
+    "BBRI": "Bank Rakyat Indonesia (Persero) Tbk.",
+    "BMRI": "Bank Mandiri (Persero) Tbk.",
+    "BBNI": "Bank Negara Indonesia (Persero) Tbk.",
+    "ASII": "Astra International Tbk.",
+    "TLKM": "Telkom Indonesia (Persero) Tbk.",
+    "UNVR": "Unilever Indonesia Tbk.",
+    "GOTO": "GoTo Gojek Tokopedia Tbk.",
+    "BUKA": "Bukalapak.com Tbk.",
+    "EMTK": "Elang Mahkota Teknologi Tbk.",
+    "ARTO": "Bank Jago Tbk.",
+    "ADRO": "Adaro Energy Indonesia Tbk.",
+    "ANTM": "Aneka Tambang Tbk.",
+}
+
 // Sample watchlist stocks (for demo)
 const SAMPLE_WATCHLIST_STOCKS: Record<number, string[]> = {
     1: ["BBCA", "BBRI", "BMRI", "BBNI"],
     2: ["GOTO", "BUKA", "EMTK", "ARTO"],
+}
+
+interface StockData {
+    symbol: string
+    name: string
+    price: number
+    change: number
+    changes: {
+        h: number
+        d: number
+        w: number
+        m: number
+        y: number
+    }
 }
 
 function IndexContent() {
@@ -29,12 +62,67 @@ function IndexContent() {
     const [selectedIndex, setSelectedIndex] = useState<string | null>(null)
     const [selectedWatchlist, setSelectedWatchlist] = useState<number | null>(null)
 
+    // Search modal state
+    const [isSearchOpen, setIsSearchOpen] = useState(false)
+    const [searchInitialQuery, setSearchInitialQuery] = useState("")
+
+    // Stock detail modal state  
+    const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    // Global keyboard listener for search
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Don't trigger if already in an input or modal is open
+            const target = e.target as HTMLElement
+            if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+                return
+            }
+
+            // Open search on any letter key press
+            if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
+                e.preventDefault()
+                setSearchInitialQuery(e.key.toUpperCase())
+                setIsSearchOpen(true)
+            }
+
+            // Also open on Ctrl+K or Cmd+K
+            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+                e.preventDefault()
+                setSearchInitialQuery("")
+                setIsSearchOpen(true)
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    }, [])
+
+    // Handle stock selection from search
+    const handleSelectStock = useCallback((symbol: string, name: string) => {
+        // Generate mock data (will be replaced with real DB data)
+        const mockChange = (Math.random() - 0.5) * 10
+        setSelectedStock({
+            symbol,
+            name,
+            price: Math.round(1000 + Math.random() * 50000),
+            change: mockChange,
+            changes: {
+                h: (Math.random() - 0.5) * 5,
+                d: mockChange,
+                w: (Math.random() - 0.5) * 20,
+                m: (Math.random() - 0.5) * 30,
+                y: (Math.random() - 0.5) * 100,
+            },
+        })
+        setIsDetailOpen(true)
+    }, [])
+
     // Determine which stocks to display based on filter selection
     const getSelectedSymbols = (): string[] => {
         if (selectedWatchlist && SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]) {
             return SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]
         }
-        // For now, always return IDX80. Later we'll fetch index-specific stocks from DB
         return IDX80_STOCKS
     }
 
@@ -46,6 +134,10 @@ function IndexContent() {
                 onSelectIndex={setSelectedIndex}
                 selectedWatchlist={selectedWatchlist}
                 onSelectWatchlist={setSelectedWatchlist}
+                onOpenSearch={() => {
+                    setSearchInitialQuery("")
+                    setIsSearchOpen(true)
+                }}
             />
 
             {/* Main content */}
@@ -53,6 +145,24 @@ function IndexContent() {
                 <Header timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
                 <BubbleCanvas timePeriod={timePeriod} selectedSymbols={getSelectedSymbols()} />
             </div>
+
+            {/* Search Modal */}
+            <SearchModal
+                isOpen={isSearchOpen}
+                onClose={() => {
+                    setIsSearchOpen(false)
+                    setSearchInitialQuery("")
+                }}
+                onSelectStock={handleSelectStock}
+                initialQuery={searchInitialQuery}
+            />
+
+            {/* Stock Detail Modal */}
+            <StockDetailModal
+                stock={selectedStock}
+                isOpen={isDetailOpen}
+                onClose={() => setIsDetailOpen(false)}
+            />
         </div>
     )
 }
