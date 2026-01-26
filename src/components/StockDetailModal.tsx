@@ -241,7 +241,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                         <h3 className="font-semibold" style={{ color: theme.textPrimary }}>
                             {stock.symbol} Chart
                         </h3>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 mr-8">
                             {chartTimeframes.map((tf) => (
                                 <button
                                     key={tf}
