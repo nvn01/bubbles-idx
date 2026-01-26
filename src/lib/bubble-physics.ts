@@ -534,9 +534,6 @@ export class BubblePhysics {
                     bubble.isDragging = true
                     bubble.dragOffsetX = dx
                     bubble.dragOffsetY = dy
-                    // Reset velocity when grabbing
-                    bubble.vx = 0
-                    bubble.vy = 0
                     break
                 }
             }
@@ -548,16 +545,8 @@ export class BubblePhysics {
             this.mouseY = y - rect.top
 
             if (this.draggedBubble) {
-                const newX = this.mouseX - this.draggedBubble.dragOffsetX
-                const newY = this.mouseY - this.draggedBubble.dragOffsetY
-
-                // Calculate momentum (velocity) based on drag speed
-                // This gives a "throw" effect when released
-                this.draggedBubble.vx = (newX - this.draggedBubble.x) * 0.5
-                this.draggedBubble.vy = (newY - this.draggedBubble.y) * 0.5
-
-                this.draggedBubble.x = newX
-                this.draggedBubble.y = newY
+                this.draggedBubble.x = this.mouseX - this.draggedBubble.dragOffsetX
+                this.draggedBubble.y = this.mouseY - this.draggedBubble.dragOffsetY
             }
         }
 
