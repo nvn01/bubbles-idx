@@ -127,22 +127,25 @@ function IndexContent() {
     }
 
     return (
-        <div className="flex h-screen overflow-hidden">
-            {/* Sidebar */}
-            <Sidebar
-                selectedIndex={selectedIndex}
-                onSelectIndex={setSelectedIndex}
-                selectedWatchlist={selectedWatchlist}
-                onSelectWatchlist={setSelectedWatchlist}
-                onOpenSearch={() => {
-                    setSearchInitialQuery("")
-                    setIsSearchOpen(true)
-                }}
-            />
+        <div className="flex flex-col h-screen overflow-hidden">
+            {/* Header - full width on top */}
+            <Header timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
 
-            {/* Main content */}
-            <div className="flex flex-col flex-1 min-w-0">
-                <Header timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
+            {/* Content area - sidebar + bubble canvas */}
+            <div className="flex flex-1 overflow-hidden">
+                {/* Sidebar */}
+                <Sidebar
+                    selectedIndex={selectedIndex}
+                    onSelectIndex={setSelectedIndex}
+                    selectedWatchlist={selectedWatchlist}
+                    onSelectWatchlist={setSelectedWatchlist}
+                    onOpenSearch={() => {
+                        setSearchInitialQuery("")
+                        setIsSearchOpen(true)
+                    }}
+                />
+
+                {/* Bubble Canvas */}
                 <BubbleCanvas timePeriod={timePeriod} selectedSymbols={getSelectedSymbols()} />
             </div>
 

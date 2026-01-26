@@ -15,25 +15,12 @@ export function Header({
 
     return (
         <header
-            className="px-3 md:px-6 py-3 md:py-4 flex items-center justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap theme-transition"
+            className="px-3 md:px-6 py-3 md:py-4 flex items-center justify-end gap-4 md:gap-6 flex-wrap md:flex-nowrap theme-transition"
             style={{
                 backgroundColor: theme.headerBg,
                 borderBottom: `1px solid ${theme.headerBorder}`
             }}
         >
-            {/* Left section - Logo and title */}
-            <div className="flex items-center gap-2 md:gap-4">
-                <div
-                    className="w-7 md:w-8 h-7 md:h-8 rounded-full flex items-center justify-center font-bold text-xs md:text-sm flex-shrink-0"
-                    style={{ backgroundColor: theme.accent, color: theme.headerBg }}
-                >
-                    IDX
-                </div>
-                <h1 className="font-bold text-sm md:text-base" style={{ color: theme.textPrimary }}>
-                    IDX STOCKS
-                </h1>
-            </div>
-
             {/* Center section - Live status, time filters, and theme switcher */}
             <div className="flex items-center gap-2 md:gap-6 flex-shrink min-w-0">
                 <div className="flex items-center gap-2 md:gap-3">
