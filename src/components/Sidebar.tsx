@@ -209,6 +209,105 @@ export function Sidebar({
             </div>
         )
 
+        const renderSettingsContent = () => (
+            <div className="p-3 space-y-4">
+                {/* Language */}
+                <div>
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: theme.textPrimary }}>
+                        Language
+                    </label>
+                    <select
+                        className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+                        style={{
+                            backgroundColor: theme.inputBg,
+                            border: `1px solid ${theme.inputBorder}`,
+                            color: theme.textPrimary,
+                        }}
+                        defaultValue={typeof navigator !== 'undefined' && navigator.language?.startsWith('id') ? 'id' : 'en'}
+                    >
+                        <option value="en">English</option>
+                        <option value="id">Bahasa Indonesia</option>
+                    </select>
+                    <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
+                        Change the default language
+                    </p>
+                </div>
+
+                {/* Show Icons Toggle */}
+                <div>
+                    <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium" style={{ color: theme.textPrimary }}>
+                            Show Icons
+                        </label>
+                        <button
+                            className="relative w-10 h-5 rounded-full transition-colors"
+                            style={{ backgroundColor: theme.accent }}
+                        >
+                            <div
+                                className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-white transition-transform"
+                            />
+                        </button>
+                    </div>
+                    <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
+                        Show/hide icons on the bubble
+                    </p>
+                </div>
+
+                <div className="border-t pt-3" style={{ borderColor: theme.headerBorder }}>
+                    {/* Report an Issue */}
+                    <div className="flex items-center justify-between mb-3">
+                        <div>
+                            <p className="text-sm font-medium" style={{ color: theme.textPrimary }}>
+                                Report an Issue
+                            </p>
+                            <p className="text-xs" style={{ color: theme.textSecondary }}>
+                                Report a bug or missing symbol
+                            </p>
+                        </div>
+                        <button
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium"
+                            style={{
+                                backgroundColor: `${theme.accent}20`,
+                                color: theme.accent,
+                            }}
+                        >
+                            Report
+                        </button>
+                    </div>
+
+                    {/* Contact Us */}
+                    <div className="flex items-center justify-between mb-3">
+                        <div>
+                            <p className="text-sm font-medium" style={{ color: theme.textPrimary }}>
+                                Contact Us
+                            </p>
+                            <p className="text-xs" style={{ color: theme.textSecondary }}>
+                                Ask information or collaboration
+                            </p>
+                        </div>
+                        <button
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium"
+                            style={{
+                                backgroundColor: `${theme.accent}20`,
+                                color: theme.accent,
+                            }}
+                        >
+                            Contact
+                        </button>
+                    </div>
+
+                    {/* Legal */}
+                    <a
+                        href="/legal"
+                        className="block text-sm hover:opacity-80 transition-opacity"
+                        style={{ color: theme.textSecondary }}
+                    >
+                        Terms of Service & Privacy Policy →
+                    </a>
+                </div>
+            </div>
+        )
+
         switch (type) {
             case "indices":
                 return renderIndicesContent()
@@ -221,7 +320,7 @@ export function Sidebar({
             case "brokers":
                 return renderPlaceholderContent("Top Brokers", "Top broker net buy/sell data coming soon.")
             case "settings":
-                return renderPlaceholderContent("Settings", "App preferences and customization coming soon.")
+                return renderSettingsContent()
             default:
                 return null
         }
