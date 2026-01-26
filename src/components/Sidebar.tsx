@@ -121,24 +121,20 @@ export function Sidebar({
 
         const renderIndicesContent = () => (
             <div className="p-3">
-                {/* Search */}
-                <div
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
+                {/* Search - clicks to open search modal */}
+                <button
+                    onClick={onOpenSearch}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3 w-full text-left cursor-pointer hover:opacity-80 transition-opacity"
                     style={{
                         backgroundColor: theme.inputBg,
                         border: `1px solid ${theme.inputBorder}`,
                     }}
                 >
                     <Search size={14} style={{ color: theme.textSecondary }} />
-                    <input
-                        type="text"
-                        placeholder="Search index..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-transparent text-sm outline-none flex-1"
-                        style={{ color: theme.textPrimary }}
-                    />
-                </div>
+                    <span className="text-sm" style={{ color: theme.textSecondary }}>
+                        Search stocks...
+                    </span>
+                </button>
 
                 {/* Index list */}
                 <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
@@ -242,27 +238,6 @@ export function Sidebar({
                     borderRight: `1px solid ${theme.headerBorder}`,
                 }}
             >
-                {/* Search button at top */}
-                <button
-                    onClick={onOpenSearch}
-                    className="p-2.5 rounded-lg transition-all relative group mb-2"
-                    style={{ color: theme.textSecondary }}
-                    title="Search (type any letter)"
-                >
-                    <Search size={20} />
-                    <div
-                        className="absolute left-full ml-2 px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
-                        style={{
-                            backgroundColor: theme.headerBg,
-                            color: theme.textPrimary,
-                            border: `1px solid ${theme.headerBorder}`,
-                        }}
-                    >
-                        Search
-                    </div>
-                </button>
-
-                <div className="w-8 border-b mb-2" style={{ borderColor: theme.headerBorder }} />
                 {navItems.map((item) => {
                     const isActive = activeDrawer === item.id
                     const hasSelection =
