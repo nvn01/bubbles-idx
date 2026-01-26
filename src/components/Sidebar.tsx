@@ -2,10 +2,6 @@
 
 import { useState } from "react"
 import {
-    ChevronLeft,
-    ChevronRight,
-    ChevronDown,
-    ChevronUp,
     Search,
     Plus,
     Star,
@@ -15,8 +11,8 @@ import {
     Settings,
     X,
     Menu,
-    TrendingUp,
     Layers,
+    ChevronRight,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
@@ -45,6 +41,8 @@ const SAMPLE_WATCHLISTS = [
     { id: 2, name: "Tech & Growth", stocks: ["GOTO", "BUKA", "EMTK", "ARTO"] },
 ]
 
+type DrawerType = "indices" | "watchlist" | "news" | "calendar" | "brokers" | "settings" | null
+
 interface SidebarProps {
     selectedIndex: string | null
     onSelectIndex: (indexKode: string | null) => void
@@ -59,12 +57,9 @@ export function Sidebar({
     onSelectWatchlist,
 }: SidebarProps) {
     const { theme } = useTheme()
-    const [isCollapsed, setIsCollapsed] = useState(false)
+    const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
-    const [showIndices, setShowIndices] = useState(true)
-    const [showWatchlists, setShowWatchlists] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
-    const [activeNav, setActiveNav] = useState<string | null>(null)
 
     const filteredIndices = SAMPLE_INDICES.filter(
         (idx) =>
@@ -74,10 +69,10 @@ export function Sidebar({
 
     const handleIndexSelect = (kode: string) => {
         if (selectedIndex === kode) {
-            onSelectIndex(null) // Deselect
+            onSelectIndex(null)
         } else {
             onSelectIndex(kode)
-            onSelectWatchlist(null) // Clear watchlist selection
+            onSelectWatchlist(null)
         }
     }
 
@@ -86,18 +81,24 @@ export function Sidebar({
             onSelectWatchlist(null)
         } else {
             onSelectWatchlist(id)
-            onSelectIndex(null) // Clear index selection
+            onSelectIndex(null)
         }
     }
 
-    const navItems = [
+    const toggleDrawer = (drawer: DrawerType) => {
+        setActiveDrawer(activeDrawer === drawer ? null : drawer)
+    }
+
+    const navItems: { id: DrawerType; icon: typeof Layers; label: string }[] = [
+        { id: "indices", icon: Layers, label: "Indices" },
+        { id: "watchlist", icon: Star, label: "Watchlist" },
         { id: "news", icon: Newspaper, label: "News" },
         { id: "calendar", icon: Calendar, label: "Calendar" },
         { id: "brokers", icon: BarChart3, label: "Top Brokers" },
         { id: "settings", icon: Settings, label: "Settings" },
     ]
 
-    // Mobile toggle button (fixed position)
+    // Mobile toggle button
     const MobileToggle = () => (
         <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -112,255 +113,210 @@ export function Sidebar({
         </button>
     )
 
-    // Sidebar content
-    const SidebarContent = () => (
-        <div
-            className={`h-full flex flex-col transition-all duration-300 ${isCollapsed ? "w-16" : "w-72"
-                }`}
-            style={{
-                backgroundColor: theme.headerBg,
-                borderRight: `1px solid ${theme.headerBorder}`,
-            }}
-        >
-            {/* Header with collapse toggle */}
-            <div
-                className="flex items-center justify-between p-3 border-b"
-                style={{ borderColor: theme.headerBorder }}
-            >
-                {!isCollapsed && (
-                    <div className="flex items-center gap-2">
-                        <TrendingUp size={20} style={{ color: theme.accent }} />
-                        <span
-                            className="font-bold text-sm"
-                            style={{ color: theme.textPrimary }}
-                        >
-                            FILTERS
-                        </span>
-                    </div>
-                )}
-                <button
-                    onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="p-1.5 rounded-md hover:opacity-80 transition-opacity hidden md:block"
-                    style={{ color: theme.textSecondary }}
-                >
-                    {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-                </button>
-            </div>
+    // Drawer content based on type
+    const DrawerContent = ({ type }: { type: DrawerType }) => {
+        if (!type) return null
 
-            {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
-                {!isCollapsed && (
-                    <>
-                        {/* Search */}
-                        <div className="p-3">
-                            <div
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg"
-                                style={{
-                                    backgroundColor: theme.inputBg,
-                                    border: `1px solid ${theme.inputBorder}`,
-                                }}
-                            >
-                                <Search size={16} style={{ color: theme.textSecondary }} />
-                                <input
-                                    type="text"
-                                    placeholder="Search index..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="bg-transparent text-sm outline-none flex-1"
-                                    style={{ color: theme.textPrimary }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Indices Section */}
-                        <div className="px-3 pb-2">
-                            <button
-                                onClick={() => setShowIndices(!showIndices)}
-                                className="flex items-center justify-between w-full py-2"
-                                style={{ color: theme.textSecondary }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <Layers size={16} />
-                                    <span className="text-xs font-semibold uppercase tracking-wider">
-                                        Indices
-                                    </span>
-                                </div>
-                                {showIndices ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                            </button>
-
-                            {showIndices && (
-                                <div className="space-y-1 mt-1">
-                                    {filteredIndices.map((idx) => (
-                                        <button
-                                            key={idx.id}
-                                            onClick={() => handleIndexSelect(idx.kode)}
-                                            className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${selectedIndex === idx.kode ? "font-medium" : ""
-                                                }`}
-                                            style={{
-                                                backgroundColor:
-                                                    selectedIndex === idx.kode
-                                                        ? `${theme.accent}20`
-                                                        : "transparent",
-                                                color:
-                                                    selectedIndex === idx.kode
-                                                        ? theme.accent
-                                                        : theme.textPrimary,
-                                                border:
-                                                    selectedIndex === idx.kode
-                                                        ? `1px solid ${theme.accent}40`
-                                                        : "1px solid transparent",
-                                            }}
-                                        >
-                                            <div className="font-medium">{idx.kode}</div>
-                                            <div
-                                                className="text-xs truncate"
-                                                style={{ color: theme.textSecondary }}
-                                            >
-                                                {idx.nama}
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Watchlists Section */}
-                        <div className="px-3 pb-2 border-t" style={{ borderColor: theme.headerBorder }}>
-                            <button
-                                onClick={() => setShowWatchlists(!showWatchlists)}
-                                className="flex items-center justify-between w-full py-2 mt-2"
-                                style={{ color: theme.textSecondary }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <Star size={16} />
-                                    <span className="text-xs font-semibold uppercase tracking-wider">
-                                        Watchlists
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <Plus
-                                        size={14}
-                                        className="hover:opacity-80 cursor-pointer"
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            // TODO: Open create watchlist modal
-                                        }}
-                                    />
-                                    {showWatchlists ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                </div>
-                            </button>
-
-                            {showWatchlists && (
-                                <div className="space-y-1 mt-1">
-                                    {SAMPLE_WATCHLISTS.map((wl) => (
-                                        <button
-                                            key={wl.id}
-                                            onClick={() => handleWatchlistSelect(wl.id)}
-                                            className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all`}
-                                            style={{
-                                                backgroundColor:
-                                                    selectedWatchlist === wl.id
-                                                        ? `${theme.accent}20`
-                                                        : "transparent",
-                                                color:
-                                                    selectedWatchlist === wl.id
-                                                        ? theme.accent
-                                                        : theme.textPrimary,
-                                                border:
-                                                    selectedWatchlist === wl.id
-                                                        ? `1px solid ${theme.accent}40`
-                                                        : "1px solid transparent",
-                                            }}
-                                        >
-                                            <div className="font-medium flex items-center gap-2">
-                                                <Star size={14} />
-                                                {wl.name}
-                                            </div>
-                                            <div
-                                                className="text-xs"
-                                                style={{ color: theme.textSecondary }}
-                                            >
-                                                {wl.stocks.length} stocks
-                                            </div>
-                                        </button>
-                                    ))}
-
-                                    {/* Add new watchlist button */}
-                                    <button
-                                        className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center gap-2 hover:opacity-80"
-                                        style={{
-                                            color: theme.textSecondary,
-                                            border: `1px dashed ${theme.headerBorder}`,
-                                        }}
-                                    >
-                                        <Plus size={14} />
-                                        Create Watchlist
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </>
-                )}
-
-                {/* Collapsed state - show icons only */}
-                {isCollapsed && (
-                    <div className="flex flex-col items-center gap-2 p-2 mt-2">
-                        <button
-                            onClick={() => setIsCollapsed(false)}
-                            className="p-2 rounded-lg transition-all"
-                            style={{
-                                backgroundColor: selectedIndex ? `${theme.accent}20` : "transparent",
-                                color: selectedIndex ? theme.accent : theme.textSecondary,
-                            }}
-                            title="Indices"
-                        >
-                            <Layers size={20} />
-                        </button>
-                        <button
-                            onClick={() => setIsCollapsed(false)}
-                            className="p-2 rounded-lg transition-all"
-                            style={{
-                                backgroundColor: selectedWatchlist ? `${theme.accent}20` : "transparent",
-                                color: selectedWatchlist ? theme.accent : theme.textSecondary,
-                            }}
-                            title="Watchlists"
-                        >
-                            <Star size={20} />
-                        </button>
-                    </div>
-                )}
-            </div>
-
-            {/* Bottom navigation */}
-            <div
-                className="border-t p-2"
-                style={{ borderColor: theme.headerBorder }}
-            >
+        const renderIndicesContent = () => (
+            <div className="p-3">
+                {/* Search */}
                 <div
-                    className={`flex ${isCollapsed ? "flex-col items-center gap-2" : "justify-around"
-                        }`}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
+                    style={{
+                        backgroundColor: theme.inputBg,
+                        border: `1px solid ${theme.inputBorder}`,
+                    }}
                 >
-                    {navItems.map((item) => (
+                    <Search size={14} style={{ color: theme.textSecondary }} />
+                    <input
+                        type="text"
+                        placeholder="Search index..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="bg-transparent text-sm outline-none flex-1"
+                        style={{ color: theme.textPrimary }}
+                    />
+                </div>
+
+                {/* Index list */}
+                <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    {filteredIndices.map((idx) => (
                         <button
-                            key={item.id}
-                            onClick={() => setActiveNav(activeNav === item.id ? null : item.id)}
-                            className={`p-2 rounded-lg transition-all ${isCollapsed ? "" : "flex-1"
-                                }`}
+                            key={idx.id}
+                            onClick={() => handleIndexSelect(idx.kode)}
+                            className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
                             style={{
-                                backgroundColor:
-                                    activeNav === item.id ? `${theme.accent}20` : "transparent",
-                                color:
-                                    activeNav === item.id ? theme.accent : theme.textSecondary,
+                                backgroundColor: selectedIndex === idx.kode ? `${theme.accent}20` : "transparent",
+                                color: selectedIndex === idx.kode ? theme.accent : theme.textPrimary,
+                                border: selectedIndex === idx.kode ? `1px solid ${theme.accent}40` : "1px solid transparent",
                             }}
-                            title={item.label}
                         >
-                            <item.icon size={18} className="mx-auto" />
-                            {!isCollapsed && (
-                                <span className="text-xs block mt-1 text-center">{item.label}</span>
-                            )}
+                            <div className="font-medium">{idx.kode}</div>
+                            <div className="text-xs truncate" style={{ color: theme.textSecondary }}>
+                                {idx.nama}
+                            </div>
                         </button>
                     ))}
                 </div>
+            </div>
+        )
+
+        const renderWatchlistContent = () => (
+            <div className="p-3">
+                <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    {SAMPLE_WATCHLISTS.map((wl) => (
+                        <button
+                            key={wl.id}
+                            onClick={() => handleWatchlistSelect(wl.id)}
+                            className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
+                            style={{
+                                backgroundColor: selectedWatchlist === wl.id ? `${theme.accent}20` : "transparent",
+                                color: selectedWatchlist === wl.id ? theme.accent : theme.textPrimary,
+                                border: selectedWatchlist === wl.id ? `1px solid ${theme.accent}40` : "1px solid transparent",
+                            }}
+                        >
+                            <div className="font-medium flex items-center gap-2">
+                                <Star size={14} />
+                                {wl.name}
+                            </div>
+                            <div className="text-xs" style={{ color: theme.textSecondary }}>
+                                {wl.stocks.length} stocks
+                            </div>
+                        </button>
+                    ))}
+
+                    {/* Add new watchlist */}
+                    <button
+                        className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center gap-2 hover:opacity-80 mt-2"
+                        style={{
+                            color: theme.textSecondary,
+                            border: `1px dashed ${theme.headerBorder}`,
+                        }}
+                    >
+                        <Plus size={14} />
+                        Create Watchlist
+                    </button>
+                </div>
+            </div>
+        )
+
+        const renderPlaceholderContent = (title: string, description: string) => (
+            <div className="p-4 text-center">
+                <h3 className="font-semibold mb-2" style={{ color: theme.textPrimary }}>
+                    {title}
+                </h3>
+                <p className="text-sm" style={{ color: theme.textSecondary }}>
+                    {description}
+                </p>
+            </div>
+        )
+
+        switch (type) {
+            case "indices":
+                return renderIndicesContent()
+            case "watchlist":
+                return renderWatchlistContent()
+            case "news":
+                return renderPlaceholderContent("Market News", "Latest stock market news and updates coming soon.")
+            case "calendar":
+                return renderPlaceholderContent("Economic Calendar", "IPO dates, earnings, dividends calendar coming soon.")
+            case "brokers":
+                return renderPlaceholderContent("Top Brokers", "Top broker net buy/sell data coming soon.")
+            case "settings":
+                return renderPlaceholderContent("Settings", "App preferences and customization coming soon.")
+            default:
+                return null
+        }
+    }
+
+    // Icon bar + drawer panel
+    const SidebarContent = () => (
+        <div className="h-full flex">
+            {/* Icon bar */}
+            <div
+                className="w-14 h-full flex flex-col items-center py-3 gap-1"
+                style={{
+                    backgroundColor: theme.headerBg,
+                    borderRight: `1px solid ${theme.headerBorder}`,
+                }}
+            >
+                {navItems.map((item) => {
+                    const isActive = activeDrawer === item.id
+                    const hasSelection =
+                        (item.id === "indices" && selectedIndex) ||
+                        (item.id === "watchlist" && selectedWatchlist)
+
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => toggleDrawer(item.id)}
+                            className="p-2.5 rounded-lg transition-all relative group"
+                            style={{
+                                backgroundColor: isActive ? `${theme.accent}20` : "transparent",
+                                color: isActive ? theme.accent : theme.textSecondary,
+                            }}
+                            title={item.label}
+                        >
+                            <item.icon size={20} />
+
+                            {/* Active indicator dot */}
+                            {hasSelection && !isActive && (
+                                <div
+                                    className="absolute top-1 right-1 w-2 h-2 rounded-full"
+                                    style={{ backgroundColor: theme.accent }}
+                                />
+                            )}
+
+                            {/* Tooltip */}
+                            <div
+                                className="absolute left-full ml-2 px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
+                                style={{
+                                    backgroundColor: theme.headerBg,
+                                    color: theme.textPrimary,
+                                    border: `1px solid ${theme.headerBorder}`,
+                                }}
+                            >
+                                {item.label}
+                            </div>
+                        </button>
+                    )
+                })}
+            </div>
+
+            {/* Drawer panel */}
+            <div
+                className={`h-full overflow-hidden transition-all duration-300 ${activeDrawer ? "w-64" : "w-0"
+                    }`}
+                style={{
+                    backgroundColor: theme.headerBg,
+                    borderRight: activeDrawer ? `1px solid ${theme.headerBorder}` : "none",
+                }}
+            >
+                {activeDrawer && (
+                    <div className="h-full flex flex-col">
+                        {/* Drawer header */}
+                        <div
+                            className="flex items-center justify-between p-3 border-b"
+                            style={{ borderColor: theme.headerBorder }}
+                        >
+                            <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: theme.textPrimary }}>
+                                {navItems.find((n) => n.id === activeDrawer)?.label}
+                            </span>
+                            <button
+                                onClick={() => setActiveDrawer(null)}
+                                className="p-1 rounded hover:opacity-70"
+                                style={{ color: theme.textSecondary }}
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+
+                        {/* Drawer content */}
+                        <div className="flex-1 overflow-hidden">
+                            <DrawerContent type={activeDrawer} />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
@@ -377,7 +333,7 @@ export function Sidebar({
                 />
             )}
 
-            {/* Mobile sidebar (slide-in) */}
+            {/* Mobile sidebar */}
             <div
                 className={`fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
@@ -385,7 +341,7 @@ export function Sidebar({
                 <SidebarContent />
             </div>
 
-            {/* Desktop sidebar (always visible) */}
+            {/* Desktop sidebar */}
             <div className="hidden md:block h-full">
                 <SidebarContent />
             </div>
