@@ -1,6 +1,6 @@
 "use client"
 
-import { X, Star, TrendingUp, TrendingDown } from "lucide-react"
+import { X, Star, TrendingUp, TrendingDown, ExternalLink } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
 interface StockData {
@@ -212,27 +212,22 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
 
                     {/* Footer */}
                     <div
-                        className="p-4 border-t flex gap-2"
+                        className="p-4 border-t"
                         style={{ borderColor: theme.headerBorder }}
                     >
-                        <button
-                            className="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
+                        <a
+                            href={`https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/${stock.symbol}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2.5 px-4 rounded-lg text-sm font-medium transition-opacity hover:opacity-80 flex items-center justify-center gap-2"
                             style={{
                                 backgroundColor: theme.accent,
                                 color: theme.headerBg,
                             }}
                         >
-                            Trade
-                        </button>
-                        <button
-                            className="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
-                            style={{
-                                backgroundColor: `${theme.textSecondary}20`,
-                                color: theme.textPrimary,
-                            }}
-                        >
                             Details
-                        </button>
+                            <ExternalLink size={14} />
+                        </a>
                     </div>
                 </div>
             </div>
