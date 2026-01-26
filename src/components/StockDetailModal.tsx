@@ -260,30 +260,34 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
 
                     {/* Chart */}
                     <div className="flex-1 p-4 min-h-[200px]">
-                        <div
-                            className="w-full h-full rounded-lg p-4 relative"
-                            style={{ backgroundColor: `${theme.textSecondary}08` }}
-                        >
-                            {/* Price labels */}
+                        {/* Price labels - positioned outside chart */}
+                        <div className="flex justify-between items-center mb-2">
                             <div
-                                className="absolute top-2 left-2 text-xs px-2 py-1 rounded"
+                                className="text-xs px-2 py-1 rounded"
                                 style={{
-                                    backgroundColor: `${theme.textSecondary}20`,
-                                    color: theme.textSecondary
+                                    backgroundColor: theme.headerBg,
+                                    color: theme.textSecondary,
+                                    border: `1px solid ${theme.headerBorder}`
                                 }}
                             >
-                                Rp {chart.maxPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
+                                High: Rp {chart.maxPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
                             </div>
                             <div
-                                className="absolute bottom-2 right-2 text-xs px-2 py-1 rounded flex items-center gap-1"
+                                className="text-xs px-2 py-1 rounded flex items-center gap-1"
                                 style={{
-                                    backgroundColor: `${getChangeColor(stock.change)}20`,
-                                    color: getChangeColor(stock.change)
+                                    backgroundColor: theme.headerBg,
+                                    color: getChangeColor(stock.change),
+                                    border: `1px solid ${theme.headerBorder}`
                                 }}
                             >
                                 {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                                 Rp {stock.price.toLocaleString("id-ID")}
                             </div>
+                        </div>
+                        <div
+                            className="w-full h-[calc(100%-32px)] rounded-lg p-2"
+                            style={{ backgroundColor: `${theme.textSecondary}08` }}
+                        >
 
                             <svg
                                 width="100%"
