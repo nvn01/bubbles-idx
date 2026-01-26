@@ -1,21 +1,22 @@
 "use client"
 
-import { X, Star, TrendingUp, TrendingDown, ExternalLink } from "lucide-react"
+import { useState } from "react"
+import { X, Star, ExternalLink, TrendingUp, TrendingDown } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
 interface StockData {
     symbol: string
     name: string
     price: number
-    change: number // current selected timeframe change
+    change: number
     changes: {
-        h: number  // 1 Hour
-        d: number  // 1 Day
-        w: number  // 1 Week
-        m: number  // 1 Month
-        y: number  // 1 Year
+        h: number
+        d: number
+        w: number
+        m: number
+        y: number
     }
-    priceHistory?: number[] // for mini chart
+    priceHistory?: number[]
 }
 
 interface StockDetailModalProps {
@@ -26,16 +27,20 @@ interface StockDetailModalProps {
 
 export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalProps) {
     const { theme } = useTheme()
+    const [chartTimeframe, setChartTimeframe] = useState<string>("1D")
 
     if (!isOpen || !stock) return null
 
     const timeframes = [
-        { key: "h", label: "1H", value: stock.changes.h },
-        { key: "d", label: "1D", value: stock.changes.d },
-        { key: "w", label: "1W", value: stock.changes.w },
-        { key: "m", label: "1M", value: stock.changes.m },
-        { key: "y", label: "1Y", value: stock.changes.y },
+        { key: "1H", value: stock.changes.h },
+        { key: "4H", value: stock.changes.h * 2 }, // Mock 4H
+        { key: "1D", value: stock.changes.d },
+        { key: "1W", value: stock.changes.w },
+        { key: "1M", value: stock.changes.m },
+        { key: "1Y", value: stock.changes.y },
     ]
+
+    const chartTimeframes = ["1H", "4H", "1D", "1W", "1M", "1Y"]
 
     const formatChange = (value: number) => {
         const prefix = value >= 0 ? "+" : ""
@@ -49,136 +54,258 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
     }
 
     const getChangeBg = (value: number) => {
-        if (value > 0) return `${theme.bubble.positiveColor}20`
-        if (value < 0) return `${theme.bubble.negativeColor}20`
-        return `${theme.textSecondary}20`
+        if (value > 0) return `${theme.bubble.positiveColor}15`
+        if (value < 0) return `${theme.bubble.negativeColor}15`
+        return `${theme.textSecondary}15`
     }
 
-    // Generate simple sparkline data from price history or mock it
-    const generateSparkline = () => {
-        const history = stock.priceHistory || Array.from({ length: 20 }, (_, i) =>
-            stock.price * (1 + (Math.random() - 0.5) * 0.1 * (i / 20))
-        )
+    // Generate chart data
+    const generateChartPoints = () => {
+        const points = 50
+        const history = Array.from({ length: points }, (_, i) => {
+            const trend = stock.change >= 0 ? 0.002 : -0.002
+            return stock.price * (0.95 + Math.random() * 0.1 + trend * i)
+        })
 
         const min = Math.min(...history)
         const max = Math.max(...history)
         const range = max - min || 1
 
-        const width = 280
-        const height = 80
-        const points = history.map((price, i) => {
-            const x = (i / (history.length - 1)) * width
-            const y = height - ((price - min) / range) * height
-            return `${x},${y}`
-        }).join(" ")
+        const width = 500
+        const height = 200
 
-        return { points, width, height }
+        return {
+            path: history.map((price, i) => {
+                const x = (i / (points - 1)) * width
+                const y = height - ((price - min) / range) * height
+                return `${i === 0 ? "M" : "L"} ${x},${y}`
+            }).join(" "),
+            width,
+            height,
+            minPrice: min,
+            maxPrice: max,
+        }
     }
 
-    const sparkline = generateSparkline()
+    const chart = generateChartPoints()
     const isPositive = stock.change >= 0
 
+    // Mock news data
+    const mockNews = [
+        { title: `${stock.symbol} reports strong quarterly earnings`, source: "IDX", time: "2 hours ago" },
+        { title: `Analysts upgrade ${stock.symbol} to Buy rating`, source: "Kontan", time: "5 hours ago" },
+    ]
+
     return (
-        <>
-            {/* Backdrop */}
+        <div
+            className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+            onClick={onClose}
+        >
             <div
-                className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
-                onClick={onClose}
+                className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+                style={{
+                    backgroundColor: theme.headerBg,
+                    border: `1px solid ${theme.headerBorder}`,
+                }}
+                onClick={(e) => e.stopPropagation()}
             >
-                {/* Modal */}
-                <div
-                    className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
+                {/* Close button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-3 right-3 z-10 p-2 rounded-full hover:opacity-70 transition-opacity"
                     style={{
-                        backgroundColor: theme.headerBg,
-                        border: `1px solid ${theme.headerBorder}`,
+                        backgroundColor: `${theme.textSecondary}20`,
+                        color: theme.textSecondary
                     }}
-                    onClick={(e) => e.stopPropagation()}
+                >
+                    <X size={18} />
+                </button>
+
+                {/* LEFT COLUMN */}
+                <div
+                    className="w-full md:w-80 flex-shrink-0 overflow-y-auto custom-scrollbar"
+                    style={{ borderRight: `1px solid ${theme.headerBorder}` }}
                 >
                     {/* Header */}
-                    <div
-                        className="flex items-center justify-between p-4 border-b"
-                        style={{ borderColor: theme.headerBorder }}
-                    >
-                        <div className="flex items-center gap-3">
-                            {/* Stock icon placeholder */}
-                            <div
-                                className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
-                                style={{
-                                    backgroundColor: isPositive
-                                        ? `${theme.bubble.positiveColor}20`
-                                        : `${theme.bubble.negativeColor}20`,
-                                    color: isPositive
-                                        ? theme.bubble.positiveColor
-                                        : theme.bubble.negativeColor,
-                                }}
-                            >
-                                {stock.symbol.slice(0, 2)}
+                    <div className="p-4 border-b" style={{ borderColor: theme.headerBorder }}>
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                                <div
+                                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm"
+                                    style={{
+                                        backgroundColor: isPositive
+                                            ? `${theme.bubble.positiveColor}20`
+                                            : `${theme.bubble.negativeColor}20`,
+                                        color: isPositive
+                                            ? theme.bubble.positiveColor
+                                            : theme.bubble.negativeColor,
+                                    }}
+                                >
+                                    {stock.symbol.slice(0, 2)}
+                                </div>
+                                <span className="font-bold text-xl" style={{ color: theme.textPrimary }}>
+                                    {stock.symbol}
+                                </span>
                             </div>
-                            <div>
-                                <h2 className="font-bold text-lg" style={{ color: theme.textPrimary }}>
-                                    ${stock.symbol}
-                                </h2>
-                                <p className="text-xs truncate max-w-[180px]" style={{ color: theme.textSecondary }}>
-                                    {stock.name}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <button
-                                className="p-2 rounded-lg hover:opacity-70 transition-opacity"
-                                style={{ color: theme.textSecondary }}
-                                title="Add to Watchlist"
-                            >
-                                <Star size={18} />
-                            </button>
-                            <button
-                                onClick={onClose}
-                                className="p-2 rounded-lg hover:opacity-70 transition-opacity"
-                                style={{ color: theme.textSecondary }}
-                            >
-                                <X size={18} />
+                            <button style={{ color: theme.textSecondary }} className="hover:opacity-70">
+                                <Star size={20} />
                             </button>
                         </div>
-                    </div>
 
-                    {/* Price section */}
-                    <div className="p-4">
-                        <div className="flex items-baseline justify-between mb-4">
+                        {/* Price */}
+                        <div className="flex items-baseline justify-between">
                             <span className="text-2xl font-bold" style={{ color: getChangeColor(stock.change) }}>
                                 Rp {stock.price.toLocaleString("id-ID")}
                             </span>
-                            <div className="flex items-center gap-1" style={{ color: getChangeColor(stock.change) }}>
-                                {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-                                <span className="font-semibold">{formatChange(stock.change)}</span>
+                            <span className="font-semibold" style={{ color: getChangeColor(stock.change) }}>
+                                {formatChange(stock.change)}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Timeframes grid */}
+                    <div className="p-4 border-b" style={{ borderColor: theme.headerBorder }}>
+                        <div className="grid grid-cols-3 gap-2">
+                            {timeframes.map((tf) => (
+                                <div
+                                    key={tf.key}
+                                    className="rounded-lg p-2.5 text-center"
+                                    style={{
+                                        backgroundColor: getChangeBg(tf.value),
+                                        border: `1px solid ${getChangeColor(tf.value)}30`
+                                    }}
+                                >
+                                    <div className="text-xs font-medium mb-1" style={{ color: theme.textSecondary }}>
+                                        {tf.key}
+                                    </div>
+                                    <div className="text-sm font-bold" style={{ color: getChangeColor(tf.value) }}>
+                                        {formatChange(tf.value)}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Stock Details */}
+                    <div className="p-4">
+                        <h3 className="font-semibold text-sm mb-3" style={{ color: theme.textPrimary }}>
+                            Stock Details
+                        </h3>
+                        <div className="space-y-2.5">
+                            <div className="flex justify-between text-sm">
+                                <span style={{ color: theme.textSecondary }}>Company</span>
+                                <span className="font-medium text-right max-w-[160px] truncate" style={{ color: theme.textPrimary }}>
+                                    {stock.name}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span style={{ color: theme.textSecondary }}>Sector</span>
+                                <span className="font-medium" style={{ color: theme.textPrimary }}>-</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span style={{ color: theme.textSecondary }}>Market Status</span>
+                                <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>Open</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span style={{ color: theme.textSecondary }}>Previous Close</span>
+                                <span className="font-medium" style={{ color: theme.textPrimary }}>
+                                    Rp {Math.round(stock.price * (1 - stock.change / 100)).toLocaleString("id-ID")}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Mini Chart */}
-                        <div
-                            className="rounded-lg p-3 mb-4"
-                            style={{ backgroundColor: `${theme.textSecondary}10` }}
+                        {/* IDX Link */}
+                        <a
+                            href={`https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/${stock.symbol}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 w-full py-2.5 rounded-lg text-sm font-medium transition-opacity hover:opacity-80 flex items-center justify-center gap-2"
+                            style={{
+                                backgroundColor: theme.accent,
+                                color: theme.headerBg,
+                            }}
                         >
+                            View on IDX
+                            <ExternalLink size={14} />
+                        </a>
+                    </div>
+                </div>
+
+                {/* RIGHT COLUMN */}
+                <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                    {/* Chart header */}
+                    <div
+                        className="p-4 border-b flex items-center justify-between flex-wrap gap-2"
+                        style={{ borderColor: theme.headerBorder }}
+                    >
+                        <h3 className="font-semibold" style={{ color: theme.textPrimary }}>
+                            {stock.symbol} Chart
+                        </h3>
+                        <div className="flex items-center gap-1">
+                            {chartTimeframes.map((tf) => (
+                                <button
+                                    key={tf}
+                                    onClick={() => setChartTimeframe(tf)}
+                                    className="px-3 py-1.5 rounded text-xs font-medium transition-all"
+                                    style={{
+                                        backgroundColor: chartTimeframe === tf ? theme.accent : "transparent",
+                                        color: chartTimeframe === tf ? theme.headerBg : theme.textSecondary,
+                                    }}
+                                >
+                                    {tf}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Chart */}
+                    <div className="flex-1 p-4 min-h-[200px]">
+                        <div
+                            className="w-full h-full rounded-lg p-4 relative"
+                            style={{ backgroundColor: `${theme.textSecondary}08` }}
+                        >
+                            {/* Price labels */}
+                            <div
+                                className="absolute top-2 left-2 text-xs px-2 py-1 rounded"
+                                style={{
+                                    backgroundColor: `${theme.textSecondary}20`,
+                                    color: theme.textSecondary
+                                }}
+                            >
+                                Rp {chart.maxPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
+                            </div>
+                            <div
+                                className="absolute bottom-2 right-2 text-xs px-2 py-1 rounded flex items-center gap-1"
+                                style={{
+                                    backgroundColor: `${getChangeColor(stock.change)}20`,
+                                    color: getChangeColor(stock.change)
+                                }}
+                            >
+                                {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                                Rp {stock.price.toLocaleString("id-ID")}
+                            </div>
+
                             <svg
                                 width="100%"
-                                height="80"
-                                viewBox={`0 0 ${sparkline.width} ${sparkline.height}`}
+                                height="100%"
+                                viewBox={`0 0 ${chart.width} ${chart.height}`}
                                 preserveAspectRatio="none"
+                                className="overflow-visible"
                             >
                                 <defs>
-                                    <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" stopColor={getChangeColor(stock.change)} stopOpacity="0.3" />
                                         <stop offset="100%" stopColor={getChangeColor(stock.change)} stopOpacity="0" />
                                     </linearGradient>
                                 </defs>
-                                {/* Area fill */}
-                                <polygon
-                                    points={`0,${sparkline.height} ${sparkline.points} ${sparkline.width},${sparkline.height}`}
-                                    fill="url(#chartGradient)"
+                                {/* Area */}
+                                <path
+                                    d={`${chart.path} L ${chart.width},${chart.height} L 0,${chart.height} Z`}
+                                    fill="url(#areaGradient)"
                                 />
                                 {/* Line */}
-                                <polyline
-                                    points={sparkline.points}
+                                <path
+                                    d={chart.path}
                                     fill="none"
                                     stroke={getChangeColor(stock.change)}
                                     strokeWidth="2"
@@ -187,50 +314,40 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                 />
                             </svg>
                         </div>
+                    </div>
 
-                        {/* Timeframe grid */}
-                        <div className="grid grid-cols-5 gap-2">
-                            {timeframes.map((tf) => (
-                                <div
-                                    key={tf.key}
-                                    className="rounded-lg p-2 text-center transition-all"
-                                    style={{ backgroundColor: getChangeBg(tf.value) }}
-                                >
-                                    <div className="text-xs font-medium mb-1" style={{ color: theme.textSecondary }}>
-                                        {tf.label}
-                                    </div>
+                    {/* Latest News */}
+                    <div
+                        className="p-4 border-t"
+                        style={{ borderColor: theme.headerBorder }}
+                    >
+                        <h3 className="font-semibold text-sm mb-3" style={{ color: theme.textPrimary }}>
+                            Latest News
+                        </h3>
+                        <div className="space-y-3">
+                            {mockNews.map((news, i) => (
+                                <div key={i} className="flex gap-3">
                                     <div
-                                        className="text-sm font-bold"
-                                        style={{ color: getChangeColor(tf.value) }}
-                                    >
-                                        {formatChange(tf.value)}
+                                        className="w-16 h-12 rounded flex-shrink-0"
+                                        style={{ backgroundColor: `${theme.textSecondary}20` }}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <p
+                                            className="text-sm font-medium line-clamp-2 mb-1"
+                                            style={{ color: theme.textPrimary }}
+                                        >
+                                            {news.title}
+                                        </p>
+                                        <p className="text-xs" style={{ color: theme.textSecondary }}>
+                                            {news.source} · {news.time}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
-
-                    {/* Footer */}
-                    <div
-                        className="p-4 border-t"
-                        style={{ borderColor: theme.headerBorder }}
-                    >
-                        <a
-                            href={`https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/${stock.symbol}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full py-2.5 px-4 rounded-lg text-sm font-medium transition-opacity hover:opacity-80 flex items-center justify-center gap-2"
-                            style={{
-                                backgroundColor: theme.accent,
-                                color: theme.headerBg,
-                            }}
-                        >
-                            Details
-                            <ExternalLink size={14} />
-                        </a>
-                    </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
