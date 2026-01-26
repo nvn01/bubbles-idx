@@ -169,10 +169,17 @@ export function Header({
                             {filteredStocks.length > 0 ? (
                                 <div className="space-y-1">
                                     {filteredStocks.slice(0, 5).map((stock) => (
-                                        <button
+                                        <div
                                             key={stock.symbol}
                                             onClick={() => handleStockClick(stock.symbol, stock.name)}
-                                            className="w-full flex items-center justify-between px-2 py-2 rounded-lg hover:opacity-80 transition-all"
+                                            className="w-full flex items-center justify-between px-2 py-2 rounded-lg hover:opacity-80 transition-all cursor-pointer"
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ") {
+                                                    handleStockClick(stock.symbol, stock.name)
+                                                }
+                                            }}
                                             style={{ backgroundColor: `${theme.textSecondary}10` }}
                                         >
                                             <div className="flex items-center gap-3">
@@ -198,7 +205,7 @@ export function Header({
                                                 <span className="text-sm font-medium" style={{ color: getChangeColor(stock.change) }}>
                                                     {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
                                                 </span>
-                                                <button
+                                                <span
                                                     className="px-3 py-1 rounded text-xs font-medium"
                                                     style={{
                                                         backgroundColor: theme.accent,
@@ -206,9 +213,9 @@ export function Header({
                                                     }}
                                                 >
                                                     OPEN
-                                                </button>
+                                                </span>
                                             </div>
-                                        </button>
+                                        </div>
                                     ))}
                                 </div>
                             ) : (
