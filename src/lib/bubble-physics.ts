@@ -1,6 +1,6 @@
 import { type BubbleStyle } from "~/styles/themes"
 
-interface Bubble {
+export interface Bubble {
     x: number
     y: number
     vx: number
@@ -444,11 +444,15 @@ export class BubblePhysics {
     private canvasWidth: number
     private canvasHeight: number
     private bubbleStyle: BubbleStyle
+    private onBubbleDoubleClick?: (bubble: Bubble) => void
+    private lastClickTime = 0
+    private lastClickedBubble: Bubble | null = null
 
     constructor(
         canvas: HTMLCanvasElement,
         timePeriod: TimePeriod = "1D",
-        bubbleStyle: BubbleStyle
+        bubbleStyle: BubbleStyle,
+        onBubbleDoubleClick?: (bubble: Bubble) => void
     ) {
         this.canvas = canvas
         this.ctx = canvas.getContext("2d")!
@@ -456,6 +460,7 @@ export class BubblePhysics {
         this.canvasWidth = canvas.width
         this.canvasHeight = canvas.height
         this.bubbleStyle = bubbleStyle
+        this.onBubbleDoubleClick = onBubbleDoubleClick
         this.initializeBubbles()
         this.setupEventListeners()
     }
@@ -530,6 +535,18 @@ export class BubblePhysics {
                 const dx = mouseX - bubble.x
                 const dy = mouseY - bubble.y
                 if (dx * dx + dy * dy <= bubble.radius * bubble.radius) {
+                    // Double-click/tap detection
+                    const now = Date.now()
+                    if (this.lastClickedBubble === bubble && now - this.lastClickTime < 300) {
+                        // Double-click detected!
+                        this.onBubbleDoubleClick?.(bubble)
+                        this.lastClickTime = 0
+                        this.lastClickedBubble = null
+                        return // Don't start dragging on double-click
+                    }
+                    this.lastClickTime = now
+                    this.lastClickedBubble = bubble
+
                     this.draggedBubble = bubble
                     bubble.isDragging = true
                     bubble.dragOffsetX = dx
