@@ -65,6 +65,9 @@ function IndexContent() {
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false)
 
+    // Search open state - shared between Header and Sidebar for mobile UX
+    const [isSearchOpen, setIsSearchOpen] = useState(false)
+
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {
         // Generate mock data (will be replaced with real DB data)
@@ -100,6 +103,8 @@ function IndexContent() {
                 timePeriod={timePeriod}
                 setTimePeriod={setTimePeriod}
                 onSelectStock={handleSelectStock}
+                isSearchOpen={isSearchOpen}
+                setIsSearchOpen={setIsSearchOpen}
             />
 
             {/* Content area - sidebar + bubble canvas */}
@@ -110,6 +115,7 @@ function IndexContent() {
                     onSelectIndex={setSelectedIndex}
                     selectedWatchlist={selectedWatchlist}
                     onSelectWatchlist={setSelectedWatchlist}
+                    isSearchOpen={isSearchOpen}
                 />
 
                 {/* Bubble Canvas */}

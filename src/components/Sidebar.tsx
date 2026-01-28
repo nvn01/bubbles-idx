@@ -49,6 +49,7 @@ interface SidebarProps {
     selectedWatchlist: number | null
     onSelectWatchlist: (watchlistId: number | null) => void
     onOpenSearch?: () => void
+    isSearchOpen?: boolean
 }
 
 export function Sidebar({
@@ -57,6 +58,7 @@ export function Sidebar({
     selectedWatchlist,
     onSelectWatchlist,
     onOpenSearch,
+    isSearchOpen,
 }: SidebarProps) {
     const { theme } = useTheme()
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
@@ -101,19 +103,24 @@ export function Sidebar({
     ]
 
     // Mobile toggle button - positioned below header on mobile
-    const MobileToggle = () => (
-        <button
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="fixed top-[3.75rem] left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
-            style={{
-                backgroundColor: theme.headerBg,
-                border: `1px solid ${theme.headerBorder}`,
-                color: theme.textPrimary,
-            }}
-        >
-            {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-    )
+    // Hidden when search dropdown is open to prevent overlap
+    const MobileToggle = () => {
+        if (isSearchOpen) return null
+
+        return (
+            <button
+                onClick={() => setIsMobileOpen(!isMobileOpen)}
+                className="fixed top-[3.75rem] left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
+                style={{
+                    backgroundColor: theme.headerBg,
+                    border: `1px solid ${theme.headerBorder}`,
+                    color: theme.textPrimary,
+                }}
+            >
+                {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+        )
+    }
 
     // Drawer content based on type
     const DrawerContent = ({ type }: { type: DrawerType }) => {

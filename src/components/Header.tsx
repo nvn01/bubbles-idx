@@ -22,14 +22,24 @@ export function Header({
     timePeriod,
     setTimePeriod,
     onSelectStock,
+    isSearchOpen,
+    setIsSearchOpen,
 }: {
     timePeriod: TimePeriod
     setTimePeriod: (period: TimePeriod) => void
     onSelectStock?: (symbol: string, name: string) => void
+    isSearchOpen?: boolean
+    setIsSearchOpen?: (open: boolean) => void
 }) {
     const { theme, nextTheme, prevTheme } = useTheme()
     const [searchQuery, setSearchQuery] = useState("")
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
+
+    // Sync dropdown state with parent
+    const setIsDropdownOpen = (open: boolean) => {
+        setIsDropdownOpenInternal(open)
+        setIsSearchOpen?.(open)
+    }
     const searchRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
