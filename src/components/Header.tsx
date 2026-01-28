@@ -94,17 +94,24 @@ export function Header({
             }}
         >
             {/* Left section - Logo, Live status and time filters */}
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
                 <Logo showMonogram={true} />
 
-                <div className="h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
+                <div className="hidden md:block h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
 
-                <button
-                    className="font-bold text-xs md:text-sm live-indicator flex-shrink-0"
-                    style={{ color: "#ef4444" }}
-                >
-                    LIVE •
-                </button>
+                {/* LIVE text on desktop, just blinking dot on mobile */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                    <div
+                        className="w-2 h-2 rounded-full live-indicator"
+                        style={{ backgroundColor: "#ef4444" }}
+                    />
+                    <span
+                        className="hidden md:inline font-bold text-sm"
+                        style={{ color: "#ef4444" }}
+                    >
+                        LIVE
+                    </span>
+                </div>
                 <div className="flex gap-1 md:gap-2">
                     {(["1H", "1D", "1W", "1M", "1Y"] as const).map((time) => (
                         <button
@@ -121,8 +128,8 @@ export function Header({
                 </div>
             </div>
 
-            {/* Center section - Search Input */}
-            <div ref={searchRef} className="relative flex-1 max-w-md">
+            {/* Center section - Search Input - smaller on mobile */}
+            <div ref={searchRef} className="relative flex-1 max-w-[140px] md:max-w-md">
                 <div
                     className="flex items-center gap-2 px-4 py-2 rounded-lg"
                     style={{
