@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { ChevronLeft, ChevronRight, X, Search } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
+import { Logo } from "~/components/Logo"
 import type { TimePeriod } from "~/lib/bubble-physics"
 
 // Sample stock data for search results
@@ -92,8 +93,12 @@ export function Header({
                 borderBottom: `1px solid ${theme.headerBorder}`
             }}
         >
-            {/* Left section - Live status and time filters */}
-            <div className="flex items-center gap-2 md:gap-3">
+            {/* Left section - Logo, Live status and time filters */}
+            <div className="flex items-center gap-3 md:gap-4">
+                <Logo showMonogram={true} />
+
+                <div className="h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
+
                 <button
                     className="font-bold text-xs md:text-sm live-indicator flex-shrink-0"
                     style={{ color: "#ef4444" }}

@@ -166,3 +166,8 @@ a {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Logo font utility */
+.font-logo {
+  font-family: var(--font-logo), system-ui, sans-serif;
+}
