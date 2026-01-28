@@ -147,7 +147,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                     {stock.symbol}
                                 </span>
                             </div>
-                            <button style={{ color: theme.textSecondary }} className="hover:opacity-70">
+                            <button style={{ color: theme.textSecondary }} className="hover:opacity-70 mr-8 md:mr-0">
                                 <Star size={20} />
                             </button>
                         </div>
