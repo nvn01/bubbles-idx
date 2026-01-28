@@ -136,9 +136,16 @@ export function BubbleCanvas({
         }
     }, [theme])
 
-    const backgroundStyle = theme.backgroundGradient
+    // Build background style with optional grid pattern
+    const backgroundStyle: React.CSSProperties = theme.backgroundGradient
         ? { background: theme.backgroundGradient }
         : { backgroundColor: theme.background }
+
+    // Add grid pattern overlay if available (for Bubbles Light theme)
+    if (theme.backgroundPattern) {
+        backgroundStyle.backgroundImage = `${theme.backgroundPattern}${theme.backgroundGradient ? `, ${theme.backgroundGradient}` : ''}`
+        backgroundStyle.backgroundSize = '60px 60px, 60px 60px, 100% 100%'
+    }
 
     return (
         <>

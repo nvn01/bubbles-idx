@@ -15,6 +15,7 @@ export interface Theme {
     // Background colors
     background: string;
     backgroundGradient?: string;
+    backgroundPattern?: string; // CSS pattern for grid/dots etc
     // Header/Sidebar colors
     headerBg: string;
     headerBorder: string;
@@ -377,7 +378,8 @@ export const themes: Theme[] = [
         id: "bubbles-light",
         name: "Bubbles Light",
         background: "#FFFFFF",
-        backgroundGradient: "linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%)",
+        backgroundGradient: "linear-gradient(180deg, #FFFFFF 0%, #F8F8F8 100%)",
+        backgroundPattern: "linear-gradient(#E0E0E0 1px, transparent 1px), linear-gradient(90deg, #E0E0E0 1px, transparent 1px)",
         headerBg: "#FFFFFF",
         headerBorder: "#E5E5E5",
         sidebarBg: "#FAFAFA",
