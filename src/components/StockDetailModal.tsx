@@ -109,21 +109,9 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-3 right-3 z-10 p-2 rounded-full hover:opacity-70 transition-opacity"
-                    style={{
-                        backgroundColor: `${theme.textSecondary}20`,
-                        color: theme.textSecondary
-                    }}
-                >
-                    <X size={18} />
-                </button>
-
                 {/* LEFT COLUMN */}
                 <div
-                    className="w-full md:w-80 flex-shrink-0 overflow-y-auto custom-scrollbar"
+                    className="w-full md:w-80 flex-shrink-0 md:overflow-y-auto custom-scrollbar"
                     style={{ borderRight: `1px solid ${theme.headerBorder}` }}
                 >
                     {/* Header */}
@@ -147,9 +135,22 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                     {stock.symbol}
                                 </span>
                             </div>
-                            <button style={{ color: theme.textSecondary }} className="hover:opacity-70 mr-8 md:mr-0">
-                                <Star size={20} />
-                            </button>
+                            {/* Star and Close buttons aligned in the same row */}
+                            <div className="flex items-center gap-2">
+                                <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
+                                    <Star size={20} />
+                                </button>
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 rounded-full hover:opacity-70 transition-opacity"
+                                    style={{
+                                        backgroundColor: `${theme.textSecondary}20`,
+                                        color: theme.textSecondary
+                                    }}
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Price */}
