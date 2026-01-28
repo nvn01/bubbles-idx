@@ -87,14 +87,14 @@ export function Header({
 
     return (
         <header
-            className="h-14 md:h-16 px-3 md:px-6 flex items-center justify-between gap-4 md:gap-6 theme-transition"
+            className="h-14 md:h-16 px-2 md:px-6 flex items-center justify-between gap-2 md:gap-6 theme-transition overflow-hidden"
             style={{
                 backgroundColor: theme.headerBg,
                 borderBottom: `1px solid ${theme.headerBorder}`
             }}
         >
             {/* Left section - Logo, Live status and time filters */}
-            <div className="flex items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0">
                 <Logo showMonogram={true} />
 
                 <div className="hidden md:block h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
@@ -129,7 +129,7 @@ export function Header({
             </div>
 
             {/* Center section - Search Input - smaller on mobile */}
-            <div ref={searchRef} className="relative flex-1 max-w-[140px] md:max-w-md">
+            <div ref={searchRef} className="relative flex-1 min-w-0 max-w-[100px] sm:max-w-[140px] md:max-w-md">
                 <div
                     className="flex items-center gap-2 px-4 py-2 rounded-lg"
                     style={{
@@ -141,7 +141,7 @@ export function Header({
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder="Search stocks..."
+                        placeholder="Search"
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value)
@@ -250,12 +250,12 @@ export function Header({
                 )}
             </div>
 
-            {/* Right section - Theme Switcher and Status */}
-            <div className="flex items-center gap-2 md:gap-4">
+            {/* Right section - Theme Switcher */}
+            <div className="flex items-center flex-shrink-0">
                 <div className="theme-switcher">
                     <button
                         onClick={prevTheme}
-                        className="theme-arrow"
+                        className="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded border transition-opacity hover:opacity-80"
                         style={{
                             borderColor: theme.textSecondary,
                             color: theme.textSecondary,
@@ -263,7 +263,7 @@ export function Header({
                         }}
                         aria-label="Previous theme"
                     >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={14} className="md:w-4 md:h-4" />
                     </button>
 
                     <span
@@ -275,7 +275,7 @@ export function Header({
 
                     <button
                         onClick={nextTheme}
-                        className="theme-arrow"
+                        className="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded border transition-opacity hover:opacity-80"
                         style={{
                             borderColor: theme.textSecondary,
                             color: theme.textSecondary,
@@ -283,7 +283,7 @@ export function Header({
                         }}
                         aria-label="Next theme"
                     >
-                        <ChevronRight size={16} />
+                        <ChevronRight size={14} className="md:w-4 md:h-4" />
                     </button>
                 </div>
             </div>
