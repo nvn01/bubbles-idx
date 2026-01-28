@@ -167,7 +167,7 @@ export function Header({
                 {/* Dropdown Results Panel */}
                 {isDropdownOpen && searchQuery && (
                     <div
-                        className="fixed left-4 right-4 top-16 md:absolute md:top-full md:left-0 md:right-0 md:mt-2 rounded-xl overflow-hidden shadow-2xl z-50"
+                        className="fixed left-4 right-4 top-16 md:absolute md:top-full md:left-0 md:right-0 md:mt-2 rounded-xl overflow-hidden shadow-2xl z-[60]"
                         style={{
                             backgroundColor: theme.headerBg,
                             border: `1px solid ${theme.headerBorder}`,
