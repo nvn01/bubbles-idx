@@ -41,8 +41,9 @@ export function Logo({ showMonogram = true, className = "" }: LogoProps) {
                     className="flex-shrink-0"
                 />
             )}
+            {/* Hide text on mobile, show on md+ */}
             <span
-                className="font-logo font-bold text-lg tracking-tight"
+                className="hidden md:inline font-logo font-bold text-lg tracking-tight"
                 style={{ color: textColor }}
             >
                 Bubbles Idx

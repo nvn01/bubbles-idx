@@ -122,7 +122,7 @@ export function Header({
             </div>
 
             {/* Center section - Search Input */}
-            <div ref={searchRef} className="relative flex-1 max-w-md hidden md:block">
+            <div ref={searchRef} className="relative flex-1 max-w-md">
                 <div
                     className="flex items-center gap-2 px-4 py-2 rounded-lg"
                     style={{
