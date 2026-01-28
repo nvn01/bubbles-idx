@@ -87,7 +87,7 @@ export function Header({
 
     return (
         <header
-            className="px-3 md:px-6 py-3 md:py-4 flex items-center justify-between gap-4 md:gap-6 theme-transition"
+            className="h-14 md:h-16 px-3 md:px-6 flex items-center justify-between gap-4 md:gap-6 theme-transition"
             style={{
                 backgroundColor: theme.headerBg,
                 borderBottom: `1px solid ${theme.headerBorder}`

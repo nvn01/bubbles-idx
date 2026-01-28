@@ -104,7 +104,7 @@ export function Sidebar({
     const MobileToggle = () => (
         <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="fixed top-16 left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
+            className="fixed top-[3.75rem] left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
             style={{
                 backgroundColor: theme.headerBg,
                 border: `1px solid ${theme.headerBorder}`,
@@ -430,9 +430,9 @@ export function Sidebar({
                 />
             )}
 
-            {/* Mobile sidebar */}
+            {/* Mobile sidebar - positioned exactly below header (h-14 = 3.5rem) */}
             <div
-                className={`fixed top-14 left-0 h-[calc(100%-3.5rem)] z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-14 left-0 h-[calc(100vh-3.5rem)] z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 <SidebarContent />
