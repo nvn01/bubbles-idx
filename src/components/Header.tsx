@@ -141,13 +141,13 @@ export function Header({
             {/* Center section - Search Input - smaller on mobile */}
             <div ref={searchRef} className="relative flex-1 min-w-0 max-w-[100px] sm:max-w-[140px] md:max-w-md">
                 <div
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg"
+                    className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 rounded-lg"
                     style={{
                         backgroundColor: theme.inputBg,
                         border: `1px solid ${theme.inputBorder}`,
                     }}
                 >
-                    <Search size={16} style={{ color: theme.textSecondary }} />
+                    <Search size={16} className="flex-shrink-0" style={{ color: theme.textSecondary }} />
                     <input
                         ref={inputRef}
                         type="text"
@@ -158,7 +158,7 @@ export function Header({
                             setIsDropdownOpen(true)
                         }}
                         onFocus={() => searchQuery && setIsDropdownOpen(true)}
-                        className="flex-1 bg-transparent text-sm outline-none"
+                        className="flex-1 bg-transparent text-sm outline-none min-w-0"
                         style={{ color: theme.textPrimary }}
                     />
                     {searchQuery && (
@@ -167,6 +167,7 @@ export function Header({
                                 setSearchQuery("")
                                 setIsDropdownOpen(false)
                             }}
+                            className="flex-shrink-0"
                             style={{ color: theme.textSecondary }}
                         >
                             <X size={16} />
