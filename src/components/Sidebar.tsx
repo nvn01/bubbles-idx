@@ -100,11 +100,11 @@ export function Sidebar({
         { id: "settings", icon: Settings, label: "Settings" },
     ]
 
-    // Mobile toggle button
+    // Mobile toggle button - positioned below header on mobile
     const MobileToggle = () => (
         <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="fixed top-4 left-4 z-50 md:hidden p-2 rounded-lg transition-all"
+            className="fixed top-16 left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
             style={{
                 backgroundColor: theme.headerBg,
                 border: `1px solid ${theme.headerBorder}`,
@@ -331,7 +331,7 @@ export function Sidebar({
         <div className="h-full flex">
             {/* Icon bar */}
             <div
-                className="w-14 h-full flex flex-col items-center py-3 gap-1"
+                className="w-14 h-full flex flex-col items-center pt-14 md:pt-3 pb-3 gap-1"
                 style={{
                     backgroundColor: theme.headerBg,
                     borderRight: `1px solid ${theme.headerBorder}`,
@@ -432,7 +432,7 @@ export function Sidebar({
 
             {/* Mobile sidebar */}
             <div
-                className={`fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-14 left-0 h-[calc(100%-3.5rem)] z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 <SidebarContent />
