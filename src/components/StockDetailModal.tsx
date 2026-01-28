@@ -102,7 +102,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+                className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-y-auto md:overflow-hidden shadow-2xl flex flex-col md:flex-row custom-scrollbar"
                 style={{
                     backgroundColor: theme.headerBg,
                     border: `1px solid ${theme.headerBorder}`,
