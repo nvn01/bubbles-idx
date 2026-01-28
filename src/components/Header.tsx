@@ -279,11 +279,6 @@ export function Header({
                         <ChevronRight size={16} />
                     </button>
                 </div>
-
-                <div
-                    className="w-2 md:w-3 h-2 md:h-3 rounded-full flex-shrink-0 live-indicator"
-                    style={{ backgroundColor: "#ef4444" }}
-                />
             </div>
         </header>
     )
