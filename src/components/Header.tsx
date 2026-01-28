@@ -87,7 +87,7 @@ export function Header({
 
     return (
         <header
-            className="h-14 md:h-16 px-2 md:px-6 flex items-center justify-between gap-2 md:gap-6 theme-transition overflow-hidden"
+            className="h-14 md:h-16 px-2 md:px-6 flex items-center justify-between gap-2 md:gap-6 theme-transition relative z-50"
             style={{
                 backgroundColor: theme.headerBg,
                 borderBottom: `1px solid ${theme.headerBorder}`
@@ -251,7 +251,7 @@ export function Header({
             </div>
 
             {/* Right section - Theme Switcher */}
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex items-center flex-shrink-0 relative z-20">
                 <div className="theme-switcher">
                     <button
                         onClick={prevTheme}
