@@ -64,13 +64,13 @@ export const themes: Theme[] = [
         inputBorder: "#374151",
         inputFocus: "#f97316",
     },
-    // BUBBLES LIGHT - Second theme (branded)
+    // BUBBLES LIGHT - Branded light theme
     {
         id: "bubbles-light",
         name: "Bubbles Light",
-        background: "#FAFAFA",
-        backgroundGradient: "linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)",
-        backgroundPattern: "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
+        background: "#FFFFFF",
+        backgroundGradient: "linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%)",
+        backgroundPattern: "linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
         headerBg: "#FFFFFF",
         headerBorder: "#E8E8E8",
         sidebarBg: "#FFFFFF",
@@ -81,14 +81,14 @@ export const themes: Theme[] = [
         accent: "#FF4136",
         accentHover: "#E53A30",
         bubble: {
-            positiveColor: "#16a34a",
+            positiveColor: "#228B22",  // Forest green
             negativeColor: "#dc2626",
-            positiveGlow: "rgba(22, 163, 74, 0.15)",
-            negativeGlow: "rgba(220, 38, 38, 0.15)",
+            positiveGlow: "rgba(34, 139, 34, 0.08)",
+            negativeGlow: "rgba(220, 38, 38, 0.08)",
             fillColor: "#FFFFFF",
             textColor: "#1a1a1a",
             borderWidth: 2,
-            glowIntensity: 0.15,
+            glowIntensity: 0.08,
         },
         inputBg: "#FFFFFF",
         inputBorder: "#E0E0E0",
