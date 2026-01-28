@@ -557,12 +557,20 @@ export function getTheme(id: string): Theme {
 
 export function getNextTheme(currentId: string): Theme {
     const currentIndex = themes.findIndex((t) => t.id === currentId);
+    // If theme not found, start from beginning
+    if (currentIndex === -1) {
+        return themes[0] ?? defaultTheme;
+    }
     const nextIndex = (currentIndex + 1) % themes.length;
     return themes[nextIndex] ?? defaultTheme;
 }
 
 export function getPrevTheme(currentId: string): Theme {
     const currentIndex = themes.findIndex((t) => t.id === currentId);
+    // If theme not found, start from beginning
+    if (currentIndex === -1) {
+        return themes[0] ?? defaultTheme;
+    }
     const prevIndex = currentIndex === 0 ? themes.length - 1 : currentIndex - 1;
     return themes[prevIndex] ?? defaultTheme;
 }
