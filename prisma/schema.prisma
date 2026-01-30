@@ -20,6 +20,7 @@ model Stock {
   tickers   Ticker[]
   notations Notation[]
   indices   StockIndex[]
+  market_news MarketNews[]
 
   @@map("stocks")
 }
@@ -62,4 +63,51 @@ model Ticker {
   @@unique([stocks_id, ts]) // Composite Key
   @@index([ts])
   @@map("ticker")
+}
+
+// Table Market News
+model MarketNews {
+  id           Int      @id @default(autoincrement())
+  title        String
+  url          String   @unique
+  source       String
+  published_at DateTime
+  image_url    String?
+  
+  // Optional relation to Stock
+  stock_id     Int?
+  stock        Stock?   @relation(fields: [stock_id], references: [id])
+  
+  created_at   DateTime @default(now())
+
+  @@map("market_news")
+}
+
+// Table Top Brokerage (Broker Summary)
+model BrokerSummary {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @db.Date
+  kode      String   // Broker Code
+  nama      String   // Broker Name
+  volume    BigInt
+  value     BigInt
+  frequency Int
+  
+  created_at DateTime @default(now())
+
+  @@unique([date, kode])
+  @@map("broker_summary")
+}
+
+// Table Corporate Calendar
+model CorporateCalendar {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  kode_emiten String   // Stock Code
+  description String
+  location    String?
+  
+  created_at  DateTime @default(now())
+
+  @@map("corporate_calendar")
 }
