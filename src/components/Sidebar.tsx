@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
     Search,
     Plus,
@@ -16,24 +16,11 @@ import {
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
-// Sample indices data (will be replaced with DB data later)
-const SAMPLE_INDICES = [
-    { id: 1, kode: "IHSG", nama: "Indeks Harga Saham Gabungan" },
-    { id: 2, kode: "IDX80", nama: "IDX80" },
-    { id: 3, kode: "LQ45", nama: "LQ45" },
-    { id: 4, kode: "IDX30", nama: "IDX30" },
-    { id: 5, kode: "IDXQUALITY30", nama: "IDX Quality30" },
-    { id: 6, kode: "IDXVALUE30", nama: "IDX Value30" },
-    { id: 7, kode: "IDXGROWTH30", nama: "IDX Growth30" },
-    { id: 8, kode: "IDXESGL", nama: "IDX ESG Leaders" },
-    { id: 10, kode: "IDXHIDIV20", nama: "IDX High Dividend 20" },
-    { id: 11, kode: "IDXBUMN20", nama: "IDX BUMN20" },
-    { id: 12, kode: "ISSI", nama: "Indeks Saham Syariah Indonesia" },
-    { id: 13, kode: "JII70", nama: "Jakarta Islamic Index 70" },
-    { id: 14, kode: "JII", nama: "Jakarta Islamic Index" },
-    { id: 19, kode: "KOMPAS100", nama: "KOMPAS100" },
-    { id: 25, kode: "SRI-KEHATI", nama: "SRI-KEHATI" },
-]
+interface IndexData {
+    id: number
+    kode: string
+    nama: string
+}
 
 // Sample watchlists
 const SAMPLE_WATCHLISTS = [
@@ -64,8 +51,24 @@ export function Sidebar({
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
+    const [indices, setIndices] = useState<IndexData[]>([])
+    const [isLoadingIndices, setIsLoadingIndices] = useState(true)
 
-    const filteredIndices = SAMPLE_INDICES.filter(
+    // Fetch indices from API on mount
+    useEffect(() => {
+        fetch("/api/indices")
+            .then(res => res.json())
+            .then(data => {
+                setIndices(data)
+                setIsLoadingIndices(false)
+            })
+            .catch(err => {
+                console.error("Error fetching indices:", err)
+                setIsLoadingIndices(false)
+            })
+    }, [])
+
+    const filteredIndices = indices.filter(
         (idx) =>
             idx.kode.toLowerCase().includes(searchQuery.toLowerCase()) ||
             idx.nama.toLowerCase().includes(searchQuery.toLowerCase())
@@ -128,40 +131,54 @@ export function Sidebar({
 
         const renderIndicesContent = () => (
             <div className="p-3">
-                {/* Search - clicks to open search modal */}
-                <button
-                    onClick={onOpenSearch}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3 w-full text-left cursor-pointer hover:opacity-80 transition-opacity"
+                {/* Search */}
+                <div
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
                     style={{
                         backgroundColor: theme.inputBg,
                         border: `1px solid ${theme.inputBorder}`,
                     }}
                 >
                     <Search size={14} style={{ color: theme.textSecondary }} />
-                    <span className="text-sm" style={{ color: theme.textSecondary }}>
-                        Search stocks...
-                    </span>
-                </button>
+                    <input
+                        type="text"
+                        placeholder="Search indices..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="bg-transparent text-sm outline-none flex-1"
+                        style={{ color: theme.textPrimary }}
+                    />
+                </div>
 
                 {/* Index list */}
                 <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                    {filteredIndices.map((idx) => (
-                        <button
-                            key={idx.id}
-                            onClick={() => handleIndexSelect(idx.kode)}
-                            className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
-                            style={{
-                                backgroundColor: selectedIndex === idx.kode ? `${theme.accent}20` : "transparent",
-                                color: selectedIndex === idx.kode ? theme.accent : theme.textPrimary,
-                                border: selectedIndex === idx.kode ? `1px solid ${theme.accent}40` : "1px solid transparent",
-                            }}
-                        >
-                            <div className="font-medium">{idx.kode}</div>
-                            <div className="text-xs truncate" style={{ color: theme.textSecondary }}>
-                                {idx.nama}
-                            </div>
-                        </button>
-                    ))}
+                    {isLoadingIndices ? (
+                        <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
+                            Loading indices...
+                        </div>
+                    ) : filteredIndices.length === 0 ? (
+                        <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
+                            No indices found
+                        </div>
+                    ) : (
+                        filteredIndices.map((idx) => (
+                            <button
+                                key={idx.id}
+                                onClick={() => handleIndexSelect(idx.kode)}
+                                className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
+                                style={{
+                                    backgroundColor: selectedIndex === idx.kode ? `${theme.accent}20` : "transparent",
+                                    color: selectedIndex === idx.kode ? theme.accent : theme.textPrimary,
+                                    border: selectedIndex === idx.kode ? `1px solid ${theme.accent}40` : "1px solid transparent",
+                                }}
+                            >
+                                <div className="font-medium">{idx.kode}</div>
+                                <div className="text-xs truncate" style={{ color: theme.textSecondary }}>
+                                    {idx.nama}
+                                </div>
+                            </button>
+                        ))
+                    )}
                 </div>
             </div>
         )

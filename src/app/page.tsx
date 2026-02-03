@@ -1,46 +1,12 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "~/components/Header"
 import { BubbleCanvas } from "~/components/BubbleCanvas"
 import { Sidebar } from "~/components/Sidebar"
 import { StockDetailModal } from "~/components/StockDetailModal"
 import { ThemeProvider } from "~/contexts/ThemeContext"
 import type { TimePeriod } from "~/lib/bubble-physics"
-
-const IDX80_STOCKS = [
-    "AADI", "ACES", "ADMR", "ADRO", "AKRA", "AMMN", "AMRT", "ANTM", "ARTO", "ASII",
-    "AVIA", "BBCA", "BBNI", "BBRI", "BBTN", "BMRI", "BRMS", "BRPT", "BSDE", "BTPS",
-    "BUKA", "BUMI", "CMRY", "CPIN", "CTRA", "DSNG", "DSSA", "ELSA", "EMTK", "ENRG",
-    "ERAA", "ESSA", "EXCL", "GOTO", "HEAL", "HRUM", "ICBP", "INCO", "INDF", "INDY",
-    "INKP", "INTP", "ISAT", "ITMG", "JPFA", "JSMR", "KIJA", "KLBF", "KPIG", "LSIP",
-    "MAPA", "MAPI", "MBMA", "MDKA", "MEDC", "MIKA", "MTEL", "MYOR", "NCKL", "PANI",
-    "PGAS", "PGEO", "PNBN", "PNLF", "PTBA", "PTRO", "PWON", "RAJA", "RATU", "SCMA",
-    "SIDO", "SMGR", "SMRA", "SSIA", "TAPG", "TLKM", "TOWR", "UNTR", "UNVR", "WIFI",
-]
-
-// Stock name mapping
-const STOCK_NAMES: Record<string, string> = {
-    "BBCA": "Bank Central Asia Tbk.",
-    "BBRI": "Bank Rakyat Indonesia (Persero) Tbk.",
-    "BMRI": "Bank Mandiri (Persero) Tbk.",
-    "BBNI": "Bank Negara Indonesia (Persero) Tbk.",
-    "ASII": "Astra International Tbk.",
-    "TLKM": "Telkom Indonesia (Persero) Tbk.",
-    "UNVR": "Unilever Indonesia Tbk.",
-    "GOTO": "GoTo Gojek Tokopedia Tbk.",
-    "BUKA": "Bukalapak.com Tbk.",
-    "EMTK": "Elang Mahkota Teknologi Tbk.",
-    "ARTO": "Bank Jago Tbk.",
-    "ADRO": "Adaro Energy Indonesia Tbk.",
-    "ANTM": "Aneka Tambang Tbk.",
-}
-
-// Sample watchlist stocks (for demo)
-const SAMPLE_WATCHLIST_STOCKS: Record<number, string[]> = {
-    1: ["BBCA", "BBRI", "BMRI", "BBNI"],
-    2: ["GOTO", "BUKA", "EMTK", "ARTO"],
-}
 
 interface StockData {
     symbol: string
@@ -56,10 +22,18 @@ interface StockData {
     }
 }
 
+// Sample watchlist stocks (for demo) - will be DB later
+const SAMPLE_WATCHLIST_STOCKS: Record<number, string[]> = {
+    1: ["BBCA", "BBRI", "BMRI", "BBNI"],
+    2: ["GOTO", "BUKA", "EMTK", "ARTO"],
+}
+
 function IndexContent() {
     const [timePeriod, setTimePeriod] = useState<TimePeriod>("1D")
-    const [selectedIndex, setSelectedIndex] = useState<string | null>(null)
+    const [selectedIndex, setSelectedIndex] = useState<string>("IDX80") // Default to IDX80
     const [selectedWatchlist, setSelectedWatchlist] = useState<number | null>(null)
+    const [indexSymbols, setIndexSymbols] = useState<string[]>([])
+    const [isLoadingIndex, setIsLoadingIndex] = useState(true)
 
     // Stock detail modal state  
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
@@ -67,6 +41,31 @@ function IndexContent() {
 
     // Search open state - shared between Header and Sidebar for mobile UX
     const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+    // Fetch symbols for the selected index
+    useEffect(() => {
+        if (!selectedIndex) {
+            setIndexSymbols([])
+            setIsLoadingIndex(false)
+            return
+        }
+
+        setIsLoadingIndex(true)
+        fetch(`/api/indices/${selectedIndex}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch")
+                return res.json()
+            })
+            .then(data => {
+                setIndexSymbols(data.symbols || [])
+                setIsLoadingIndex(false)
+            })
+            .catch(err => {
+                console.error("Error fetching index symbols:", err)
+                setIndexSymbols([])
+                setIsLoadingIndex(false)
+            })
+    }, [selectedIndex])
 
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {
@@ -88,12 +87,28 @@ function IndexContent() {
         setIsDetailOpen(true)
     }, [])
 
+    // Handle index selection - also clears watchlist
+    const handleSelectIndex = useCallback((indexKode: string | null) => {
+        setSelectedIndex(indexKode || "IDX80") // Default back to IDX80 if null
+        setSelectedWatchlist(null)
+    }, [])
+
+    // Handle watchlist selection - also clears index
+    const handleSelectWatchlist = useCallback((watchlistId: number | null) => {
+        setSelectedWatchlist(watchlistId)
+        if (watchlistId) {
+            setSelectedIndex("") // Clear index when watchlist selected
+        } else {
+            setSelectedIndex("IDX80") // Default back to IDX80
+        }
+    }, [])
+
     // Determine which stocks to display based on filter selection
     const getSelectedSymbols = (): string[] => {
         if (selectedWatchlist && SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]) {
             return SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]
         }
-        return IDX80_STOCKS
+        return indexSymbols
     }
 
     return (
@@ -112,14 +127,18 @@ function IndexContent() {
                 {/* Sidebar */}
                 <Sidebar
                     selectedIndex={selectedIndex}
-                    onSelectIndex={setSelectedIndex}
+                    onSelectIndex={handleSelectIndex}
                     selectedWatchlist={selectedWatchlist}
-                    onSelectWatchlist={setSelectedWatchlist}
+                    onSelectWatchlist={handleSelectWatchlist}
                     isSearchOpen={isSearchOpen}
                 />
 
                 {/* Bubble Canvas */}
-                <BubbleCanvas timePeriod={timePeriod} selectedSymbols={getSelectedSymbols()} />
+                <BubbleCanvas
+                    timePeriod={timePeriod}
+                    selectedSymbols={getSelectedSymbols()}
+                    isLoading={isLoadingIndex}
+                />
             </div>
 
             {/* Stock Detail Modal */}

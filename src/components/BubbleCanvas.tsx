@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { BubblePhysics, type TimePeriod, type Bubble, type TickerData } from "~/lib/bubble-physics"
 import { useTheme } from "~/contexts/ThemeContext"
 import { StockDetailModal } from "./StockDetailModal"
@@ -22,9 +22,11 @@ interface StockData {
 export function BubbleCanvas({
     timePeriod,
     selectedSymbols,
+    isLoading: externalLoading = false,
 }: {
     timePeriod: TimePeriod
     selectedSymbols: string[]
+    isLoading?: boolean
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -34,8 +36,17 @@ export function BubbleCanvas({
 
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [tickerData, setTickerData] = useState<TickerData[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [allTickerData, setAllTickerData] = useState<TickerData[]>([])
+    const [isDataLoading, setIsDataLoading] = useState(true)
+
+    // Filter ticker data by selected symbols
+    const filteredTickerData = useMemo(() => {
+        if (selectedSymbols.length === 0) {
+            return allTickerData
+        }
+        const symbolSet = new Set(selectedSymbols.map(s => s.toUpperCase()))
+        return allTickerData.filter(t => symbolSet.has(t.symbol.toUpperCase()))
+    }, [allTickerData, selectedSymbols])
 
     const handleBubbleDoubleClick = useCallback((bubble: Bubble) => {
         setSelectedStock({
@@ -57,13 +68,8 @@ export function BubbleCanvas({
         eventSource.onmessage = (event) => {
             try {
                 const data: TickerData[] = JSON.parse(event.data)
-                setTickerData(data)
-                setIsLoading(false)
-
-                // Update physics engine with new data
-                if (physicsRef.current) {
-                    physicsRef.current.updateTickerData(data)
-                }
+                setAllTickerData(data)
+                setIsDataLoading(false)
             } catch (error) {
                 console.error("Error parsing SSE data:", error)
             }
@@ -75,15 +81,12 @@ export function BubbleCanvas({
             fetch("/api/ticker")
                 .then(res => res.json())
                 .then((data: TickerData[]) => {
-                    setTickerData(data)
-                    setIsLoading(false)
-                    if (physicsRef.current) {
-                        physicsRef.current.updateTickerData(data)
-                    }
+                    setAllTickerData(data)
+                    setIsDataLoading(false)
                 })
                 .catch(err => {
                     console.error("REST API fallback failed:", err)
-                    setIsLoading(false) // Show fallback hardcoded data
+                    setIsDataLoading(false) // Show fallback hardcoded data
                 })
         }
 
@@ -93,6 +96,7 @@ export function BubbleCanvas({
         }
     }, [])
 
+    // Reinitialize physics when filtered data or selectedSymbols change
     useEffect(() => {
         const canvas = canvasRef.current
         const container = containerRef.current
@@ -110,17 +114,14 @@ export function BubbleCanvas({
         const ctx = canvas.getContext('2d')
         ctx?.scale(dpr, dpr)
 
-        if (!physicsRef.current) {
-            physicsRef.current = new BubblePhysics(
-                canvas,
-                timePeriod,
-                theme.bubble,
-                handleBubbleDoubleClick,
-                tickerData.length > 0 ? tickerData : undefined
-            )
-        } else {
-            physicsRef.current.updateTimePeriod(timePeriod)
-        }
+        // Recreate physics engine when symbols change
+        physicsRef.current = new BubblePhysics(
+            canvas,
+            timePeriod,
+            theme.bubble,
+            handleBubbleDoubleClick,
+            filteredTickerData.length > 0 ? filteredTickerData : undefined
+        )
 
         let animationFrameId: number
         const animate = () => {
@@ -153,7 +154,14 @@ export function BubbleCanvas({
             cancelAnimationFrame(animationFrameId)
             resizeObserver.disconnect()
         }
-    }, [timePeriod, selectedSymbols, theme.bubble, tickerData, handleBubbleDoubleClick])
+    }, [timePeriod, filteredTickerData, theme.bubble, handleBubbleDoubleClick])
+
+    // Update ticker data in physics when new data arrives (without recreating)
+    useEffect(() => {
+        if (physicsRef.current && filteredTickerData.length > 0) {
+            physicsRef.current.updateTickerData(filteredTickerData)
+        }
+    }, [filteredTickerData])
 
     useEffect(() => {
         if (physicsRef.current) {
@@ -172,6 +180,8 @@ export function BubbleCanvas({
         backgroundStyle.backgroundSize = '60px 60px, 60px 60px, 100% 100%'
     }
 
+    const isLoading = isDataLoading || externalLoading
+
     return (
         <>
             <div
@@ -182,7 +192,7 @@ export function BubbleCanvas({
                 <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing block" />
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                        <div className="text-white text-lg animate-pulse">Loading ticker data...</div>
+                        <div className="text-white text-lg animate-pulse">Loading...</div>
                     </div>
                 )}
             </div>
