@@ -138,22 +138,10 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                         {stock.symbol}
                                     </span>
                                 </div>
-                                {/* Star and Close buttons aligned in the same row */}
-                                <div className="flex items-center gap-2">
-                                    <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
-                                        <Star size={20} />
-                                    </button>
-                                    <button
-                                        onClick={onClose}
-                                        className="p-2 rounded-full hover:opacity-70 transition-opacity"
-                                        style={{
-                                            backgroundColor: `${theme.textSecondary}20`,
-                                            color: theme.textSecondary
-                                        }}
-                                    >
-                                        <X size={18} />
-                                    </button>
-                                </div>
+                                {/* Star button */}
+                                <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
+                                    <Star size={20} />
+                                </button>
                             </div>
 
                             {/* Price */}
@@ -245,7 +233,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                             <h3 className="font-semibold" style={{ color: theme.textPrimary }}>
                                 {stock.symbol} Chart
                             </h3>
-                            <div className="flex items-center gap-1 mr-8">
+                            <div className="flex items-center gap-1">
                                 {chartTimeframes.map((tf) => (
                                     <button
                                         key={tf}
@@ -259,6 +247,17 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                         {tf}
                                     </button>
                                 ))}
+                                {/* Close button */}
+                                <button
+                                    onClick={onClose}
+                                    className="ml-2 p-2 rounded-full hover:opacity-70 transition-opacity"
+                                    style={{
+                                        backgroundColor: `${theme.textSecondary}20`,
+                                        color: theme.textSecondary
+                                    }}
+                                >
+                                    <X size={18} />
+                                </button>
                             </div>
                         </div>
 
