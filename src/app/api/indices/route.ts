@@ -12,25 +12,25 @@ export async function GET() {
         // Fetch all indices from database, excluding IHSG
         const indices = await prisma.stockIndex.findMany({
             where: {
-                kode_index: {
+                kode: {
                     not: "IHSG"
                 }
             },
             orderBy: {
-                kode_index: "asc"
+                kode: "asc"
             },
             select: {
                 id: true,
-                kode_index: true,
-                nama_index: true,
+                kode: true,
+                nama: true,
             }
         });
 
         // Transform to frontend format
         const data: IndexData[] = indices.map(idx => ({
             id: idx.id,
-            kode: idx.kode_index,
-            nama: idx.nama_index,
+            kode: idx.kode,
+            nama: idx.nama,
         }));
 
         return NextResponse.json(data);

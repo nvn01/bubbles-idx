@@ -10,20 +10,16 @@ export async function GET(request: Request, { params }: RouteParams) {
         const { kode } = await params;
         const indexKode = kode.toUpperCase();
 
-        // Find the index by kode
+        // Find the index by kode and include its stocks (many-to-many relation)
         const stockIndex = await prisma.stockIndex.findFirst({
             where: {
-                kode_index: indexKode
+                kode: indexKode
             },
             include: {
-                members: {
-                    include: {
-                        stock: {
-                            select: {
-                                kode_emiten: true,
-                                nama_emiten: true,
-                            }
-                        }
+                stocks: {
+                    select: {
+                        kode_emiten: true,
+                        nama_emiten: true,
                     }
                 }
             }
@@ -36,15 +32,15 @@ export async function GET(request: Request, { params }: RouteParams) {
             );
         }
 
-        // Extract stock symbols from the members
-        const symbols = stockIndex.members
-            .map(m => m.stock.kode_emiten)
+        // Extract stock symbols from the stocks relation
+        const symbols = stockIndex.stocks
+            .map(s => s.kode_emiten)
             .filter(Boolean)
             .sort();
 
         return NextResponse.json({
-            kode: stockIndex.kode_index,
-            nama: stockIndex.nama_index,
+            kode: stockIndex.kode,
+            nama: stockIndex.nama,
             symbols: symbols,
         });
     } catch (error) {

@@ -59,7 +59,13 @@ export function Sidebar({
         fetch("/api/indices")
             .then(res => res.json())
             .then(data => {
-                setIndices(data)
+                // Ensure data is an array before setting
+                if (Array.isArray(data)) {
+                    setIndices(data)
+                } else {
+                    console.error("Indices API returned non-array:", data)
+                    setIndices([])
+                }
                 setIsLoadingIndices(false)
             })
             .catch(err => {
