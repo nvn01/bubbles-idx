@@ -151,6 +151,7 @@ export function Sidebar({
                         placeholder="Search indices..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
                         className="bg-transparent text-sm outline-none flex-1"
                         style={{ color: theme.textPrimary }}
                     />

@@ -48,6 +48,9 @@ export function BubbleCanvas({
         return allTickerData.filter(t => symbolSet.has(t.symbol.toUpperCase()))
     }, [allTickerData, selectedSymbols])
 
+    // Create a stable key from selectedSymbols to trigger physics recreation
+    const selectedSymbolsKey = useMemo(() => selectedSymbols.sort().join(','), [selectedSymbols])
+
     const handleBubbleDoubleClick = useCallback((bubble: Bubble) => {
         setSelectedStock({
             symbol: bubble.symbol,
@@ -155,7 +158,7 @@ export function BubbleCanvas({
             resizeObserver.disconnect()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [timePeriod, filteredTickerData, handleBubbleDoubleClick]) // Removed theme.bubble - handled by separate useEffect
+    }, [timePeriod, filteredTickerData, selectedSymbolsKey, handleBubbleDoubleClick]) // selectedSymbolsKey ensures recreation on index change
 
     // Update ticker data in physics when new data arrives (without recreating)
     useEffect(() => {
