@@ -114,7 +114,7 @@ export function BubbleCanvas({
         const ctx = canvas.getContext('2d')
         ctx?.scale(dpr, dpr)
 
-        // Recreate physics engine when symbols change
+        // Recreate physics engine when symbols change (not on theme change)
         physicsRef.current = new BubblePhysics(
             canvas,
             timePeriod,
@@ -154,7 +154,8 @@ export function BubbleCanvas({
             cancelAnimationFrame(animationFrameId)
             resizeObserver.disconnect()
         }
-    }, [timePeriod, filteredTickerData, theme.bubble, handleBubbleDoubleClick])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timePeriod, filteredTickerData, handleBubbleDoubleClick]) // Removed theme.bubble - handled by separate useEffect
 
     // Update ticker data in physics when new data arrives (without recreating)
     useEffect(() => {

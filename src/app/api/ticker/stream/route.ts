@@ -37,6 +37,8 @@ async function getLatestTickers(): Promise<TickerRow[]> {
 
 export async function GET() {
     const encoder = new TextEncoder();
+    let isClosed = false;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     const stream = new ReadableStream({
         async start(controller) {
@@ -53,13 +55,19 @@ export async function GET() {
                     m: row.m ?? 0,
                     y: row.y ?? 0,
                 }));
-                controller.enqueue(encoder.encode(`data: ${JSON.stringify(formatted)}\n\n`));
+                if (!isClosed) {
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(formatted)}\n\n`));
+                }
             } catch (error) {
                 console.error("SSE initial data error:", error);
             }
 
             // Poll for updates every 60 seconds (matching scraper frequency)
-            const interval = setInterval(async () => {
+            intervalId = setInterval(async () => {
+                if (isClosed) {
+                    if (intervalId) clearInterval(intervalId);
+                    return;
+                }
                 try {
                     const data = await getLatestTickers();
                     const formatted = data.map(row => ({
@@ -72,18 +80,25 @@ export async function GET() {
                         m: row.m ?? 0,
                         y: row.y ?? 0,
                     }));
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(formatted)}\n\n`));
+                    if (!isClosed) {
+                        controller.enqueue(encoder.encode(`data: ${JSON.stringify(formatted)}\n\n`));
+                    }
                 } catch (error) {
-                    console.error("SSE poll error:", error);
+                    // Only log if not a "controller closed" error
+                    if (!isClosed) {
+                        console.error("SSE poll error:", error);
+                    }
                 }
             }, 60000); // 60 seconds
-
-            // Cleanup on close
-            // Note: This won't fire in all cases, but is a best-effort cleanup
-            return () => {
-                clearInterval(interval);
-            };
         },
+        cancel() {
+            // Called when the client disconnects
+            isClosed = true;
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
     });
 
     return new Response(stream, {
