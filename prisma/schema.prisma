@@ -68,19 +68,27 @@ model Ticker {
 // Table Market News
 model MarketNews {
   id           Int      @id @default(autoincrement())
+  hash         String   @unique
   title        String
-  url          String   @unique
+  url          String
   source       String
   published_at DateTime
+  summary      String?
   image_url    String?
   
-  // Optional relation to Stock
+  // Scraper uses this (array of stock codes)
+  stock_symbols String[] @map("stock_symbols")
+  
+  // Legacy/Optional relation (kept for compatibility)
   stock_id     Int?
   stock        Stock?   @relation(fields: [stock_id], references: [id])
   
   created_at   DateTime @default(now())
+  scraped_at   DateTime @default(now())
 
   @@map("market_news")
+  @@index([published_at(sort: Desc)])
+  @@index([source])
 }
 
 // Table Top Brokerage (Broker Summary)
