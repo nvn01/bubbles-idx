@@ -8,13 +8,27 @@ export interface Bubble {
     radius: number
     targetRadius: number
     symbol: string
+    name: string
     change: number
+    price: number
+    changes: { h: number; d: number; w: number; m: number; y: number }
     isDragging: boolean
     dragOffsetX: number
     dragOffsetY: number
     directionChangeTimer: number
     targetVx: number
     targetVy: number
+}
+
+export interface TickerData {
+    symbol: string
+    name: string
+    price: number
+    h: number
+    d: number
+    w: number
+    m: number
+    y: number
 }
 
 // IDX Indonesian Stocks
@@ -447,12 +461,14 @@ export class BubblePhysics {
     private onBubbleDoubleClick?: (bubble: Bubble) => void
     private lastClickTime = 0
     private lastClickedBubble: Bubble | null = null
+    private tickerData: TickerData[] = []
 
     constructor(
         canvas: HTMLCanvasElement,
         timePeriod: TimePeriod = "1D",
         bubbleStyle: BubbleStyle,
-        onBubbleDoubleClick?: (bubble: Bubble) => void
+        onBubbleDoubleClick?: (bubble: Bubble) => void,
+        initialData?: TickerData[]
     ) {
         this.canvas = canvas
         this.ctx = canvas.getContext("2d")!
@@ -461,6 +477,9 @@ export class BubblePhysics {
         this.canvasHeight = canvas.height
         this.bubbleStyle = bubbleStyle
         this.onBubbleDoubleClick = onBubbleDoubleClick
+        if (initialData && initialData.length > 0) {
+            this.tickerData = initialData
+        }
         this.initializeBubbles()
         this.setupEventListeners()
     }
@@ -493,7 +512,28 @@ export class BubblePhysics {
         const centerX = this.canvas.width / 2
         const centerY = this.canvas.height / 2
 
-        const data = IDX_DATA[this.timePeriod]
+        // Use live data if available, otherwise fallback to hardcoded data
+        let data: Array<{ symbol: string; name: string; price: number; change: number; changes: { h: number; d: number; w: number; m: number; y: number } }>
+
+        if (this.tickerData.length > 0) {
+            data = this.tickerData.map(t => ({
+                symbol: t.symbol,
+                name: t.name,
+                price: t.price,
+                change: this.getChangeForPeriod(t),
+                changes: { h: t.h, d: t.d, w: t.w, m: t.m, y: t.y }
+            }))
+        } else {
+            // Fallback to hardcoded data
+            const fallbackData = IDX_DATA[this.timePeriod]
+            data = fallbackData.map(item => ({
+                symbol: item.symbol,
+                name: item.symbol + " Company",
+                price: 0,
+                change: item.change,
+                changes: { h: item.change, d: item.change, w: item.change, m: item.change, y: item.change }
+            }))
+        }
 
         data.forEach((item, index) => {
             const angle = (index / data.length) * Math.PI * 2
@@ -512,7 +552,10 @@ export class BubblePhysics {
                 radius: radius,
                 targetRadius: radius,
                 symbol: item.symbol,
+                name: item.name,
+                price: item.price,
                 change: item.change,
+                changes: item.changes,
                 isDragging: false,
                 dragOffsetX: 0,
                 dragOffsetY: 0,
@@ -520,6 +563,71 @@ export class BubblePhysics {
                 targetVx: Math.cos(initialAngle) * initialSpeed,
                 targetVy: Math.sin(initialAngle) * initialSpeed,
             })
+        })
+    }
+
+    private getChangeForPeriod(ticker: TickerData): number {
+        switch (this.timePeriod) {
+            case "1H": return ticker.h
+            case "1D": return ticker.d
+            case "1W": return ticker.w
+            case "1M": return ticker.m
+            case "1Y": return ticker.y
+            default: return ticker.d
+        }
+    }
+
+    updateTickerData(newData: TickerData[]) {
+        this.tickerData = newData
+
+        // Update existing bubbles with new data
+        newData.forEach(ticker => {
+            const bubble = this.bubbles.find(b => b.symbol === ticker.symbol)
+            if (bubble) {
+                const newChange = this.getChangeForPeriod(ticker)
+                bubble.change = newChange
+                bubble.price = ticker.price
+                bubble.name = ticker.name
+                bubble.changes = { h: ticker.h, d: ticker.d, w: ticker.w, m: ticker.m, y: ticker.y }
+                bubble.targetRadius = this.calculateRadius(newChange)
+            }
+        })
+
+        // Add new bubbles for stocks that don't exist yet
+        const existingSymbols = new Set(this.bubbles.map(b => b.symbol))
+        const centerX = this.canvas.width / 2
+        const centerY = this.canvas.height / 2
+
+        newData.forEach((ticker, index) => {
+            if (!existingSymbols.has(ticker.symbol)) {
+                const change = this.getChangeForPeriod(ticker)
+                const radius = this.calculateRadius(change)
+                const angle = Math.random() * Math.PI * 2
+                const distance = 250 + Math.random() * 450
+                const velocityScale = 1.5 / (1 + radius / 30)
+                const initialAngle = Math.random() * Math.PI * 2
+                const initialSpeed = (Math.random() * 1.5 + 0.5) * velocityScale
+
+                this.bubbles.push({
+                    x: centerX + Math.cos(angle) * distance,
+                    y: centerY + Math.sin(angle) * distance,
+                    vx: Math.cos(initialAngle) * initialSpeed,
+                    vy: Math.sin(initialAngle) * initialSpeed,
+                    radius: radius,
+                    targetRadius: radius,
+                    symbol: ticker.symbol,
+                    name: ticker.name,
+                    price: ticker.price,
+                    change: change,
+                    changes: { h: ticker.h, d: ticker.d, w: ticker.w, m: ticker.m, y: ticker.y },
+                    isDragging: false,
+                    dragOffsetX: 0,
+                    dragOffsetY: 0,
+                    directionChangeTimer: Math.random() * 60 + 60,
+                    targetVx: Math.cos(initialAngle) * initialSpeed,
+                    targetVy: Math.sin(initialAngle) * initialSpeed,
+                })
+            }
         })
     }
 
@@ -787,15 +895,28 @@ export class BubblePhysics {
 
     updateTimePeriod(newTimePeriod: TimePeriod) {
         this.timePeriod = newTimePeriod
-        const newData = IDX_DATA[newTimePeriod]
 
-        newData.forEach((item) => {
-            const bubble = this.bubbles.find((b) => b.symbol === item.symbol)
-            if (bubble) {
-                bubble.change = item.change
-                bubble.targetRadius = this.calculateRadius(item.change)
-            }
-        })
+        // If we have live data, use it
+        if (this.tickerData.length > 0) {
+            this.bubbles.forEach((bubble) => {
+                const ticker = this.tickerData.find(t => t.symbol === bubble.symbol)
+                if (ticker) {
+                    const newChange = this.getChangeForPeriod(ticker)
+                    bubble.change = newChange
+                    bubble.targetRadius = this.calculateRadius(newChange)
+                }
+            })
+        } else {
+            // Fallback to hardcoded data
+            const newData = IDX_DATA[newTimePeriod]
+            newData.forEach((item) => {
+                const bubble = this.bubbles.find((b) => b.symbol === item.symbol)
+                if (bubble) {
+                    bubble.change = item.change
+                    bubble.targetRadius = this.calculateRadius(item.change)
+                }
+            })
+        }
     }
 
     updateCanvasBounds(width: number, height: number) {

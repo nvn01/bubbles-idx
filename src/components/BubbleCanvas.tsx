@@ -1,24 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { BubblePhysics, type TimePeriod, type Bubble } from "~/lib/bubble-physics"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { BubblePhysics, type TimePeriod, type Bubble, type TickerData } from "~/lib/bubble-physics"
 import { useTheme } from "~/contexts/ThemeContext"
 import { StockDetailModal } from "./StockDetailModal"
-
-// Map stock symbols to company names (will be replaced with DB data)
-const STOCK_NAMES: Record<string, string> = {
-    "BBCA": "Bank Central Asia Tbk.",
-    "BBRI": "Bank Rakyat Indonesia (Persero) Tbk.",
-    "BMRI": "Bank Mandiri (Persero) Tbk.",
-    "BBNI": "Bank Negara Indonesia (Persero) Tbk.",
-    "ASII": "Astra International Tbk.",
-    "TLKM": "Telkom Indonesia (Persero) Tbk.",
-    "UNVR": "Unilever Indonesia Tbk.",
-    "GOTO": "GoTo Gojek Tokopedia Tbk.",
-    "BUKA": "Bukalapak.com Tbk.",
-    "EMTK": "Elang Mahkota Teknologi Tbk.",
-    // Add more as needed, or fetch from DB
-}
 
 interface StockData {
     symbol: string
@@ -44,30 +29,69 @@ export function BubbleCanvas({
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const physicsRef = useRef<BubblePhysics | null>(null)
+    const eventSourceRef = useRef<EventSource | null>(null)
     const { theme } = useTheme()
 
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [tickerData, setTickerData] = useState<TickerData[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    const handleBubbleDoubleClick = (bubble: Bubble) => {
-        // Generate mock timeframe data (will be replaced with real DB data)
-        const mockChanges = {
-            h: (Math.random() - 0.5) * 5,
-            d: bubble.change,
-            w: (Math.random() - 0.5) * 20,
-            m: (Math.random() - 0.5) * 30,
-            y: (Math.random() - 0.5) * 100,
-        }
-
+    const handleBubbleDoubleClick = useCallback((bubble: Bubble) => {
         setSelectedStock({
             symbol: bubble.symbol,
-            name: STOCK_NAMES[bubble.symbol] || `${bubble.symbol} Company`,
-            price: Math.round(1000 + Math.random() * 50000),
+            name: bubble.name,
+            price: bubble.price,
             change: bubble.change,
-            changes: mockChanges,
+            changes: bubble.changes,
         })
         setIsModalOpen(true)
-    }
+    }, [])
+
+    // Connect to SSE stream for real-time updates
+    useEffect(() => {
+        // Connect to SSE stream
+        const eventSource = new EventSource("/api/ticker/stream")
+        eventSourceRef.current = eventSource
+
+        eventSource.onmessage = (event) => {
+            try {
+                const data: TickerData[] = JSON.parse(event.data)
+                setTickerData(data)
+                setIsLoading(false)
+
+                // Update physics engine with new data
+                if (physicsRef.current) {
+                    physicsRef.current.updateTickerData(data)
+                }
+            } catch (error) {
+                console.error("Error parsing SSE data:", error)
+            }
+        }
+
+        eventSource.onerror = (error) => {
+            console.error("SSE connection error:", error)
+            // Fallback: try REST API if SSE fails
+            fetch("/api/ticker")
+                .then(res => res.json())
+                .then((data: TickerData[]) => {
+                    setTickerData(data)
+                    setIsLoading(false)
+                    if (physicsRef.current) {
+                        physicsRef.current.updateTickerData(data)
+                    }
+                })
+                .catch(err => {
+                    console.error("REST API fallback failed:", err)
+                    setIsLoading(false) // Show fallback hardcoded data
+                })
+        }
+
+        return () => {
+            eventSource.close()
+            eventSourceRef.current = null
+        }
+    }, [])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -91,7 +115,8 @@ export function BubbleCanvas({
                 canvas,
                 timePeriod,
                 theme.bubble,
-                handleBubbleDoubleClick
+                handleBubbleDoubleClick,
+                tickerData.length > 0 ? tickerData : undefined
             )
         } else {
             physicsRef.current.updateTimePeriod(timePeriod)
@@ -128,7 +153,7 @@ export function BubbleCanvas({
             cancelAnimationFrame(animationFrameId)
             resizeObserver.disconnect()
         }
-    }, [timePeriod, selectedSymbols, theme.bubble])
+    }, [timePeriod, selectedSymbols, theme.bubble, tickerData, handleBubbleDoubleClick])
 
     useEffect(() => {
         if (physicsRef.current) {
@@ -151,10 +176,15 @@ export function BubbleCanvas({
         <>
             <div
                 ref={containerRef}
-                className="flex-1 w-full overflow-hidden theme-transition"
+                className="flex-1 w-full overflow-hidden theme-transition relative"
                 style={backgroundStyle}
             >
                 <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing block" />
+                {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <div className="text-white text-lg animate-pulse">Loading ticker data...</div>
+                    </div>
+                )}
             </div>
 
             <StockDetailModal
