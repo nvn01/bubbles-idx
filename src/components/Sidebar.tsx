@@ -153,7 +153,6 @@ export function Sidebar({
             onSelectWatchlist(null)
         } else {
             onSelectWatchlist(id)
-            onSelectIndex(null)
         }
     }
 
