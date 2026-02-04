@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
     Plus,
     Star,
@@ -49,6 +49,7 @@ export function Sidebar({
     const { theme } = useTheme()
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
+    const indicesScrollRef = useRef<HTMLDivElement>(null)
 
     const [indices, setIndices] = useState<IndexData[]>([])
     const [isLoadingIndices, setIsLoadingIndices] = useState(true)
@@ -134,7 +135,7 @@ export function Sidebar({
             <div className="p-3">
 
                 {/* Index list */}
-                <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                <div ref={indicesScrollRef} className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
                     {isLoadingIndices ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             Loading indices...
