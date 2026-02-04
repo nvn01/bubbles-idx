@@ -535,41 +535,18 @@ export class BubblePhysics {
             }))
         }
 
-        // Calculate grid dimensions to distribute bubbles evenly across canvas
+        // Spawn bubbles at completely random positions across the entire canvas
         const dpr = window.devicePixelRatio || 1
         const canvasWidth = this.canvas.width / dpr
         const canvasHeight = this.canvas.height / dpr
-        const padding = 60 // Edge padding
-        const availableWidth = canvasWidth - padding * 2
-        const availableHeight = canvasHeight - padding * 2
+        const padding = 50 // Small edge padding to keep bubbles visible
 
-        // Create grid positions and shuffle them for natural distribution
-        const cols = Math.ceil(Math.sqrt(data.length * (canvasWidth / canvasHeight)))
-        const rows = Math.ceil(data.length / cols)
-        const cellWidth = availableWidth / cols
-        const cellHeight = availableHeight / rows
-
-        // Generate shuffled indices for random placement
-        const indices: number[] = Array.from({ length: data.length }, (_, i) => i)
-        for (let i = indices.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1))
-            const temp = indices[i]!
-            indices[i] = indices[j]!
-            indices[j] = temp
-        }
-
-        data.forEach((item, dataIndex) => {
-            const gridIndex = indices[dataIndex]!
-            const col = gridIndex % cols
-            const row = Math.floor(gridIndex / cols)
-
-            // Position with random jitter within the cell
-            const jitterX = (Math.random() - 0.5) * cellWidth * 0.6
-            const jitterY = (Math.random() - 0.5) * cellHeight * 0.6
-            const x = padding + col * cellWidth + cellWidth / 2 + jitterX
-            const y = padding + row * cellHeight + cellHeight / 2 + jitterY
-
+        data.forEach((item) => {
             const radius = this.calculateRadius(item.change)
+
+            // Random position anywhere on canvas (with padding for edge)
+            const x = padding + Math.random() * (canvasWidth - padding * 2)
+            const y = padding + Math.random() * (canvasHeight - padding * 2)
 
             const velocityScale = 1.5 / (1 + radius / 30)
             const initialAngle = Math.random() * Math.PI * 2
@@ -626,22 +603,27 @@ export class BubblePhysics {
 
         // Add new bubbles for stocks that don't exist yet
         const existingSymbols = new Set(this.bubbles.map(b => b.symbol))
-        const centerX = this.canvas.width / 2
-        const centerY = this.canvas.height / 2
 
         newData.forEach((ticker, index) => {
             if (!existingSymbols.has(ticker.symbol)) {
                 const change = this.getChangeForPeriod(ticker)
                 const radius = this.calculateRadius(change)
-                const angle = Math.random() * Math.PI * 2
-                const distance = 250 + Math.random() * 450
+
+                // Random position anywhere on canvas
+                const dpr = window.devicePixelRatio || 1
+                const canvasWidth = this.canvas.width / dpr
+                const canvasHeight = this.canvas.height / dpr
+                const padding = 50
+                const x = padding + Math.random() * (canvasWidth - padding * 2)
+                const y = padding + Math.random() * (canvasHeight - padding * 2)
+
                 const velocityScale = 1.5 / (1 + radius / 30)
                 const initialAngle = Math.random() * Math.PI * 2
                 const initialSpeed = (Math.random() * 1.5 + 0.5) * velocityScale
 
                 this.bubbles.push({
-                    x: centerX + Math.cos(angle) * distance,
-                    y: centerY + Math.sin(angle) * distance,
+                    x: x,
+                    y: y,
                     vx: Math.cos(initialAngle) * initialSpeed,
                     vy: Math.sin(initialAngle) * initialSpeed,
                     radius: radius,
