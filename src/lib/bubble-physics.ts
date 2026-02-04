@@ -535,35 +535,18 @@ export class BubblePhysics {
             }))
         }
 
-        // Spawn bubbles at completely random positions across the entire canvas
-        const dpr = window.devicePixelRatio || 1
-        // Use actual canvas display dimensions (accounting for DPR)
-        // Fallback to window size if canvas dimensions aren't set yet
-        let canvasWidth = this.canvas.width / dpr
-        let canvasHeight = this.canvas.height / dpr
-
-        // Fallback if canvas isn't properly sized yet
-        if (canvasWidth < 100 || canvasHeight < 100) {
-            canvasWidth = window.innerWidth || 1200
-            canvasHeight = window.innerHeight || 800
-        }
-
-        const padding = 50 // Small edge padding to keep bubbles visible
-
-        data.forEach((item) => {
+        data.forEach((item, index) => {
+            const angle = (index / data.length) * Math.PI * 2
+            const distance = 250 + Math.random() * 450
             const radius = this.calculateRadius(item.change)
-
-            // Random position anywhere on canvas (with padding for edge)
-            const x = padding + Math.random() * (canvasWidth - padding * 2)
-            const y = padding + Math.random() * (canvasHeight - padding * 2)
 
             const velocityScale = 1.5 / (1 + radius / 30)
             const initialAngle = Math.random() * Math.PI * 2
             const initialSpeed = (Math.random() * 1.5 + 0.5) * velocityScale
 
             this.bubbles.push({
-                x: x,
-                y: y,
+                x: centerX + Math.cos(angle) * distance,
+                y: centerY + Math.sin(angle) * distance,
                 vx: Math.cos(initialAngle) * initialSpeed,
                 vy: Math.sin(initialAngle) * initialSpeed,
                 radius: radius,
@@ -612,27 +595,22 @@ export class BubblePhysics {
 
         // Add new bubbles for stocks that don't exist yet
         const existingSymbols = new Set(this.bubbles.map(b => b.symbol))
+        const centerX = this.canvas.width / 2
+        const centerY = this.canvas.height / 2
 
         newData.forEach((ticker, index) => {
             if (!existingSymbols.has(ticker.symbol)) {
                 const change = this.getChangeForPeriod(ticker)
                 const radius = this.calculateRadius(change)
-
-                // Random position anywhere on canvas
-                const dpr = window.devicePixelRatio || 1
-                const canvasWidth = this.canvas.width / dpr
-                const canvasHeight = this.canvas.height / dpr
-                const padding = 50
-                const x = padding + Math.random() * (canvasWidth - padding * 2)
-                const y = padding + Math.random() * (canvasHeight - padding * 2)
-
+                const angle = Math.random() * Math.PI * 2
+                const distance = 250 + Math.random() * 450
                 const velocityScale = 1.5 / (1 + radius / 30)
                 const initialAngle = Math.random() * Math.PI * 2
                 const initialSpeed = (Math.random() * 1.5 + 0.5) * velocityScale
 
                 this.bubbles.push({
-                    x: x,
-                    y: y,
+                    x: centerX + Math.cos(angle) * distance,
+                    y: centerY + Math.sin(angle) * distance,
                     vx: Math.cos(initialAngle) * initialSpeed,
                     vy: Math.sin(initialAngle) * initialSpeed,
                     radius: radius,
