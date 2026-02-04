@@ -151,6 +151,7 @@ export function BubbleCanvas({
             ctx?.scale(dpr, dpr)
 
             physicsRef.current?.updateCanvasBounds(displayWidth, displayHeight)
+            physicsRef.current?.render()
         })
         resizeObserver.observe(container)
 
