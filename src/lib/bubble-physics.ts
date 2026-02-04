@@ -537,8 +537,17 @@ export class BubblePhysics {
 
         // Spawn bubbles at completely random positions across the entire canvas
         const dpr = window.devicePixelRatio || 1
-        const canvasWidth = this.canvas.width / dpr
-        const canvasHeight = this.canvas.height / dpr
+        // Use actual canvas display dimensions (accounting for DPR)
+        // Fallback to window size if canvas dimensions aren't set yet
+        let canvasWidth = this.canvas.width / dpr
+        let canvasHeight = this.canvas.height / dpr
+
+        // Fallback if canvas isn't properly sized yet
+        if (canvasWidth < 100 || canvasHeight < 100) {
+            canvasWidth = window.innerWidth || 1200
+            canvasHeight = window.innerHeight || 800
+        }
+
         const padding = 50 // Small edge padding to keep bubbles visible
 
         data.forEach((item) => {
