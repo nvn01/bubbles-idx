@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import {
-    Search,
     Plus,
     Star,
     Newspaper,
@@ -50,7 +49,7 @@ export function Sidebar({
     const { theme } = useTheme()
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
-    const [searchQuery, setSearchQuery] = useState("")
+
     const [indices, setIndices] = useState<IndexData[]>([])
     const [isLoadingIndices, setIsLoadingIndices] = useState(true)
 
@@ -74,11 +73,6 @@ export function Sidebar({
             })
     }, [])
 
-    const filteredIndices = indices.filter(
-        (idx) =>
-            idx.kode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            idx.nama.toLowerCase().includes(searchQuery.toLowerCase())
-    )
 
     const handleIndexSelect = (kode: string) => {
         console.log("[Sidebar] handleIndexSelect called with:", kode, "current selectedIndex:", selectedIndex)
@@ -132,31 +126,12 @@ export function Sidebar({
         )
     }
 
-    // Drawer content based on type
-    const DrawerContent = ({ type }: { type: DrawerType }) => {
+    // Render drawer content based on type (NOT a component - render function to preserve focus)
+    const renderDrawerContent = (type: DrawerType) => {
         if (!type) return null
 
         const renderIndicesContent = () => (
             <div className="p-3">
-                {/* Search */}
-                <div
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
-                    style={{
-                        backgroundColor: theme.inputBg,
-                        border: `1px solid ${theme.inputBorder}`,
-                    }}
-                >
-                    <Search size={14} style={{ color: theme.textSecondary }} />
-                    <input
-                        type="text"
-                        placeholder="Search indices..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        className="bg-transparent text-sm outline-none flex-1"
-                        style={{ color: theme.textPrimary }}
-                    />
-                </div>
 
                 {/* Index list */}
                 <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
@@ -164,12 +139,12 @@ export function Sidebar({
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             Loading indices...
                         </div>
-                    ) : filteredIndices.length === 0 ? (
+                    ) : indices.length === 0 ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             No indices found
                         </div>
                     ) : (
-                        filteredIndices.map((idx) => (
+                        indices.map((idx) => (
                             <button
                                 key={idx.id}
                                 onClick={(e) => {
@@ -445,7 +420,7 @@ export function Sidebar({
 
                         {/* Drawer content */}
                         <div className="flex-1 overflow-hidden">
-                            <DrawerContent type={activeDrawer} />
+                            {renderDrawerContent(activeDrawer)}
                         </div>
                     </div>
                 )}
