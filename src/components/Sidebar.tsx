@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react"
 import {
     Plus,
     Star,
@@ -50,6 +50,21 @@ export function Sidebar({
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
     const indicesScrollRef = useRef<HTMLDivElement>(null)
+    const scrollPositionRef = useRef<number>(0)
+
+    // Save scroll position before re-render
+    const saveScrollPosition = useCallback(() => {
+        if (indicesScrollRef.current) {
+            scrollPositionRef.current = indicesScrollRef.current.scrollTop
+        }
+    }, [])
+
+    // Restore scroll position after re-render
+    useLayoutEffect(() => {
+        if (indicesScrollRef.current && scrollPositionRef.current > 0) {
+            indicesScrollRef.current.scrollTop = scrollPositionRef.current
+        }
+    })
 
     const [indices, setIndices] = useState<IndexData[]>([])
     const [isLoadingIndices, setIsLoadingIndices] = useState(true)
@@ -77,6 +92,8 @@ export function Sidebar({
 
     const handleIndexSelect = (kode: string) => {
         console.log("[Sidebar] handleIndexSelect called with:", kode, "current selectedIndex:", selectedIndex)
+        // Save scroll position before state change triggers re-render
+        saveScrollPosition()
         if (selectedIndex === kode) {
             onSelectIndex(null)
         } else {
