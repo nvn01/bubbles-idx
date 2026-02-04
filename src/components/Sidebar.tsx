@@ -590,8 +590,9 @@ export function Sidebar({
         }
     }
 
-    // Icon bar + drawer panel
-    const SidebarContent = () => (
+    // Helper to render the main layout content
+    // We use a function call instead of a component to avoid remounting issues
+    const renderSidebarLayout = () => (
         <div className="h-full flex">
             {/* Icon bar */}
             <div
@@ -655,22 +656,24 @@ export function Sidebar({
             >
                 {activeDrawer && (
                     <div className="h-full flex flex-col">
-                        {/* Drawer header */}
-                        <div
-                            className="flex items-center justify-between p-3 border-b"
-                            style={{ borderColor: theme.headerBorder }}
-                        >
-                            <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: theme.textPrimary }}>
-                                {navItems.find((n) => n.id === activeDrawer)?.label}
-                            </span>
-                            <button
-                                onClick={() => setActiveDrawer(null)}
-                                className="p-1 rounded hover:opacity-70"
-                                style={{ color: theme.textSecondary }}
+                        {/* Drawer header - ONLY show if NOT editing (Edit view has its own header) */}
+                        {!editingWatchlist && (
+                            <div
+                                className="flex items-center justify-between p-3 border-b"
+                                style={{ borderColor: theme.headerBorder }}
                             >
-                                <ChevronRight size={16} />
-                            </button>
-                        </div>
+                                <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: theme.textPrimary }}>
+                                    {navItems.find((n) => n.id === activeDrawer)?.label}
+                                </span>
+                                <button
+                                    onClick={() => setActiveDrawer(null)}
+                                    className="p-1 rounded hover:opacity-70"
+                                    style={{ color: theme.textSecondary }}
+                                >
+                                    <ChevronRight size={16} />
+                                </button>
+                            </div>
+                        )}
 
                         {/* Drawer content */}
                         <div className="flex-1 overflow-hidden">
@@ -699,12 +702,12 @@ export function Sidebar({
                 className={`fixed top-14 left-0 h-[calc(100vh-3.5rem)] z-40 transform transition-transform duration-300 md:hidden ${isMobileOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
-                <SidebarContent />
+                {renderSidebarLayout()}
             </div>
 
             {/* Desktop sidebar */}
             <div className="hidden md:block h-full">
-                <SidebarContent />
+                {renderSidebarLayout()}
             </div>
         </>
     )
