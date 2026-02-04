@@ -12,6 +12,12 @@ import {
     Menu,
     Layers,
     ChevronRight,
+    Edit2,
+    Check,
+    ArrowLeft,
+    Trash2,
+    Save,
+    Search,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
@@ -21,11 +27,11 @@ interface IndexData {
     nama: string
 }
 
-// Sample watchlists
-const SAMPLE_WATCHLISTS = [
-    { id: 1, name: "Banking Favorites", stocks: ["BBCA", "BBRI", "BMRI", "BBNI"] },
-    { id: 2, name: "Tech & Growth", stocks: ["GOTO", "BUKA", "EMTK", "ARTO"] },
-]
+interface Watchlist {
+    id: number
+    name: string
+    stocks: string[]
+}
 
 type DrawerType = "indices" | "watchlist" | "news" | "calendar" | "brokers" | "settings" | null
 
@@ -34,8 +40,11 @@ interface SidebarProps {
     onSelectIndex: (indexKode: string | null) => void
     selectedWatchlist: number | null
     onSelectWatchlist: (watchlistId: number | null) => void
-    onOpenSearch?: () => void
     isSearchOpen?: boolean
+    watchlists: Watchlist[]
+    onCreateWatchlist: (name: string, stocks: string[]) => void
+    onUpdateWatchlist: (id: number, name: string, stocks: string[]) => void
+    onDeleteWatchlist: (id: number) => void
 }
 
 export function Sidebar({
@@ -43,14 +52,42 @@ export function Sidebar({
     onSelectIndex,
     selectedWatchlist,
     onSelectWatchlist,
-    onOpenSearch,
     isSearchOpen,
+    watchlists,
+    onCreateWatchlist,
+    onUpdateWatchlist,
+    onDeleteWatchlist,
 }: SidebarProps) {
     const { theme } = useTheme()
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
     const indicesScrollRef = useRef<HTMLDivElement>(null)
     const scrollPositionRef = useRef<number>(0)
+
+    // Edit Mode State
+    const [editingWatchlist, setEditingWatchlist] = useState<Watchlist | null>(null)
+    const [editName, setEditName] = useState("")
+    const [editSearch, setEditSearch] = useState("")
+    const [editSelectedStocks, setEditSelectedStocks] = useState<string[]>([])
+
+    // Available stocks for adding (mock for now, ideally fetch from API)
+    const [allStocks, setAllStocks] = useState<IndexData[]>([])
+
+    // Fetch all stocks for the "Available" list in edit mode
+    useEffect(() => {
+        if (editingWatchlist) {
+            // Using indices API as a source of stocks for now
+            fetch("/api/indices/IDX80") // Just fetching one index to get some stocks
+                .then(res => res.json())
+                .then(data => {
+                    if (data.symbols) {
+                        // Map simply to { code, nama } format if possible, or just use strings
+                        setAllStocks(data.symbols.map((s: string) => ({ id: 0, kode: s, nama: "" })))
+                    }
+                })
+                .catch(e => console.error("Error fetching stocks for edit:", e))
+        }
+    }, [editingWatchlist])
 
     // Save scroll position before re-render
     const saveScrollPosition = useCallback(() => {
@@ -111,8 +148,45 @@ export function Sidebar({
         }
     }
 
+    const startEditingKey = (watchlist: Watchlist | null) => {
+        if (watchlist) {
+            setEditingWatchlist(watchlist)
+            setEditName(watchlist.name)
+            setEditSelectedStocks([...watchlist.stocks])
+        } else {
+            // Creating new
+            setEditingWatchlist({ id: 0, name: "", stocks: [] })
+            setEditName("")
+            setEditSelectedStocks([])
+        }
+        setEditSearch("")
+    }
+
+    const saveEditing = () => {
+        if (!editingWatchlist) return
+
+        const finalName = editName.trim() || "Untitled Watchlist"
+
+        if (editingWatchlist.id === 0) {
+            onCreateWatchlist(finalName, editSelectedStocks)
+        } else {
+            onUpdateWatchlist(editingWatchlist.id, finalName, editSelectedStocks)
+        }
+        setEditingWatchlist(null)
+    }
+
+    // Toggle stock in edit list
+    const toggleEditStock = (symbol: string) => {
+        if (editSelectedStocks.includes(symbol)) {
+            setEditSelectedStocks(prev => prev.filter(s => s !== symbol))
+        } else {
+            setEditSelectedStocks(prev => [symbol, ...prev]) // Add to top
+        }
+    }
+
     const toggleDrawer = (drawer: DrawerType) => {
         setActiveDrawer(activeDrawer === drawer ? null : drawer)
+        setEditingWatchlist(null) // Reset edit mode when closing/switching
     }
 
     const navItems: { id: DrawerType; icon: typeof Layers; label: string }[] = [
@@ -147,6 +221,150 @@ export function Sidebar({
     // Render drawer content based on type (NOT a component - render function to preserve focus)
     const renderDrawerContent = (type: DrawerType) => {
         if (!type) return null
+
+        // --- EDIT WATCHLIST VIEW ---
+        if (type === "watchlist" && editingWatchlist) {
+            const isNew = editingWatchlist.id === 0
+
+            // Filter available stocks based on search and exclude selected
+            const filteredAvailable = allStocks.filter(s =>
+                !editSelectedStocks.includes(s.kode) &&
+                (s.kode.toLowerCase().includes(editSearch.toLowerCase()) ||
+                    s.nama.toLowerCase().includes(editSearch.toLowerCase()))
+            ).slice(0, 50) // Limit results for perf
+
+            return (
+                <div className="flex flex-col h-full">
+                    {/* Edit Header */}
+                    <div className="flex items-center justify-between p-3 border-b" style={{ borderColor: theme.headerBorder }}>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setEditingWatchlist(null)}
+                                className="p-1 rounded hover:bg-white/5"
+                            >
+                                <ArrowLeft size={16} style={{ color: theme.textSecondary }} />
+                            </button>
+                            <span className="font-semibold text-sm" style={{ color: theme.textPrimary }}>
+                                {isNew ? "Create Watchlist" : "Edit Watchlist"}
+                            </span>
+                        </div>
+                        <button
+                            onClick={saveEditing}
+                            className="p-1.5 rounded bg-green-500/10 text-green-500 hover:bg-green-500/20"
+                            title="Save"
+                        >
+                            <Save size={16} />
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
+                        {/* Name Input */}
+                        <div>
+                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>Name</label>
+                            <input
+                                type="text"
+                                value={editName}
+                                onChange={(e) => setEditName(e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+                                style={{
+                                    backgroundColor: theme.inputBg,
+                                    border: `1px solid ${theme.inputBorder}`,
+                                    color: theme.textPrimary
+                                }}
+                                placeholder="Watchlist Name"
+                            />
+                        </div>
+
+                        {/* Search Add */}
+                        <div>
+                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>Add Stocks</label>
+                            <div className="relative">
+                                <Search className="absolute left-2.5 top-2.5" size={14} style={{ color: theme.textSecondary }} />
+                                <input
+                                    type="text"
+                                    value={editSearch}
+                                    onChange={(e) => setEditSearch(e.target.value)}
+                                    className="w-full pl-8 pr-3 py-2 rounded-lg text-sm outline-none"
+                                    style={{
+                                        backgroundColor: theme.inputBg,
+                                        border: `1px solid ${theme.inputBorder}`,
+                                        color: theme.textPrimary
+                                    }}
+                                    placeholder="Search details..."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Selected List */}
+                        {editSelectedStocks.length > 0 && (
+                            <div>
+                                <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>
+                                    Selected ({editSelectedStocks.length})
+                                </label>
+                                <div className="space-y-1">
+                                    {editSelectedStocks.map(symbol => (
+                                        <div
+                                            key={symbol}
+                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-sm group"
+                                            style={{ backgroundColor: `${theme.accent}10` }}
+                                        >
+                                            <span style={{ color: theme.textPrimary }}>{symbol}</span>
+                                            <button
+                                                onClick={() => toggleEditStock(symbol)}
+                                                className="opacity-60 hover:opacity-100 hover:text-red-400"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Available List Result */}
+                        {editSearch && (
+                            <div>
+                                <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>
+                                    Available
+                                </label>
+                                <div className="space-y-1">
+                                    {filteredAvailable.map(stock => (
+                                        <button
+                                            key={stock.kode}
+                                            onClick={() => toggleEditStock(stock.kode)}
+                                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left hover:opacity-80 transition-all"
+                                            style={{ border: `1px solid ${theme.headerBorder}` }}
+                                        >
+                                            <div>
+                                                <div style={{ color: theme.textPrimary }}>{stock.kode}</div>
+                                                {stock.nama && <div className="text-xs opacity-60">{stock.nama}</div>}
+                                            </div>
+                                            <Plus size={14} style={{ color: theme.textSecondary }} />
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {!isNew && (
+                            <div className="pt-4 border-t" style={{ borderColor: theme.headerBorder }}>
+                                <button
+                                    onClick={() => {
+                                        if (confirm("Delete this watchlist?")) {
+                                            onDeleteWatchlist(editingWatchlist.id)
+                                            setEditingWatchlist(null)
+                                        }
+                                    }}
+                                    className="w-full py-2 flex items-center justify-center gap-2 text-red-400 hover:bg-red-400/10 rounded-lg text-xs transition-colors"
+                                >
+                                    <Trash2 size={14} /> Delete Watchlist
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )
+        }
 
         const renderIndicesContent = () => (
             <div className="p-3">
@@ -190,29 +408,47 @@ export function Sidebar({
         const renderWatchlistContent = () => (
             <div className="p-3">
                 <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                    {SAMPLE_WATCHLISTS.map((wl) => (
-                        <button
+                    {watchlists.map((wl) => (
+                        <div
                             key={wl.id}
-                            onClick={() => handleWatchlistSelect(wl.id)}
-                            className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
-                            style={{
-                                backgroundColor: selectedWatchlist === wl.id ? `${theme.accent}20` : "transparent",
-                                color: selectedWatchlist === wl.id ? theme.accent : theme.textPrimary,
-                                border: selectedWatchlist === wl.id ? `1px solid ${theme.accent}40` : "1px solid transparent",
-                            }}
+                            className="group relative"
                         >
-                            <div className="font-medium flex items-center gap-2">
-                                <Star size={14} />
-                                {wl.name}
-                            </div>
-                            <div className="text-xs" style={{ color: theme.textSecondary }}>
-                                {wl.stocks.length} stocks
-                            </div>
-                        </button>
+                            <button
+                                onClick={() => handleWatchlistSelect(wl.id)}
+                                className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all pr-8"
+                                style={{
+                                    backgroundColor: selectedWatchlist === wl.id ? `${theme.accent}20` : "transparent",
+                                    color: selectedWatchlist === wl.id ? theme.accent : theme.textPrimary,
+                                    border: selectedWatchlist === wl.id ? `1px solid ${theme.accent}40` : "1px solid transparent",
+                                }}
+                            >
+                                <div className="font-medium flex items-center gap-2">
+                                    <Star size={14} />
+                                    {wl.name}
+                                </div>
+                                <div className="text-xs" style={{ color: theme.textSecondary }}>
+                                    {wl.stocks.length} stocks
+                                </div>
+                            </button>
+
+                            {/* Edit Button - Only visible on hover */}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    startEditingKey(wl)
+                                }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/10"
+                                style={{ color: theme.textSecondary }}
+                                title="Edit Watchlist"
+                            >
+                                <Edit2 size={12} />
+                            </button>
+                        </div>
                     ))}
 
                     {/* Add new watchlist */}
                     <button
+                        onClick={() => startEditingKey(null)}
                         className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center gap-2 hover:opacity-80 mt-2"
                         style={{
                             color: theme.textSecondary,

@@ -22,16 +22,37 @@ interface StockData {
     }
 }
 
-// Sample watchlist stocks (for demo) - will be DB later
-const SAMPLE_WATCHLIST_STOCKS: Record<number, string[]> = {
-    1: ["BBCA", "BBRI", "BMRI", "BBNI"],
-    2: ["GOTO", "BUKA", "EMTK", "ARTO"],
+interface Watchlist {
+    id: number
+    name: string
+    stocks: string[]
 }
+
+// Default watchlists
+const DEFAULT_WATCHLISTS: Watchlist[] = [
+    {
+        id: 1,
+        name: "Banking Favorites",
+        stocks: ["BMRI", "BBRI", "BBCA", "BBNI", "BRIS", "BNGA", "NISP"]
+    },
+    {
+        id: 2,
+        name: "50 Biggest Market Capitalization",
+        stocks: [
+            "BREN", "BBCA", "DSSA", "TPIA", "BBRI", "BYAN", "DCII", "BMRI", "AMMN", "TLKM",
+            "BRPT", "MORA", "ASII", "CUAN", "PANI", "IMPC", "CDIA", "SRAJ", "BNLI", "BBNI",
+            "FILM", "BRMS", "BUMI", "DNET", "MLPT", "MPRO", "PTRO", "UNTR", "BRIS", "UNVR",
+            "RISE", "ICBP", "SMMA", "EMAS", "CASA", "HMSP", "AMRT", "ANTM", "ISAT", "CPIN",
+            "GOTO", "NCKL", "EXCL", "BELI", "EMTK", "ADMR", "MBMA", "TBIG", "INDF", "MTEL"
+        ]
+    },
+]
 
 function IndexContent() {
     const [timePeriod, setTimePeriod] = useState<TimePeriod>("1D")
     const [selectedIndex, setSelectedIndex] = useState<string>("IDX80") // Default to IDX80
-    const [selectedWatchlist, setSelectedWatchlist] = useState<number | null>(null)
+    const [selectedWatchlistId, setSelectedWatchlistId] = useState<number | null>(null)
+    const [watchlists, setWatchlists] = useState<Watchlist[]>(DEFAULT_WATCHLISTS)
     const [indexSymbols, setIndexSymbols] = useState<string[]>([])
     const [isLoadingIndex, setIsLoadingIndex] = useState(true)
 
@@ -93,12 +114,12 @@ function IndexContent() {
     const handleSelectIndex = useCallback((indexKode: string | null) => {
         console.log("[Page] handleSelectIndex called with:", indexKode)
         setSelectedIndex(indexKode || "IDX80") // Default back to IDX80 if null
-        setSelectedWatchlist(null)
+        setSelectedWatchlistId(null)
     }, [])
 
     // Handle watchlist selection - also clears index
     const handleSelectWatchlist = useCallback((watchlistId: number | null) => {
-        setSelectedWatchlist(watchlistId)
+        setSelectedWatchlistId(watchlistId)
         if (watchlistId) {
             setSelectedIndex("") // Clear index when watchlist selected
         }
@@ -108,10 +129,33 @@ function IndexContent() {
 
     // Determine which stocks to display based on filter selection
     const getSelectedSymbols = (): string[] => {
-        if (selectedWatchlist && SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]) {
-            return SAMPLE_WATCHLIST_STOCKS[selectedWatchlist]
+        if (selectedWatchlistId) {
+            const watchlist = watchlists.find(w => w.id === selectedWatchlistId)
+            return watchlist ? watchlist.stocks : []
         }
         return indexSymbols
+    }
+
+    // CRUD Handlers for Watchlists
+    const handleCreateWatchlist = (name: string, stocks: string[]) => {
+        const newId = Math.max(0, ...watchlists.map(w => w.id)) + 1
+        setWatchlists([...watchlists, { id: newId, name, stocks }])
+        // Automatically select the new watchlist
+        handleSelectWatchlist(newId)
+    }
+
+    const handleUpdateWatchlist = (id: number, name: string, stocks: string[]) => {
+        setWatchlists(watchlists.map(w =>
+            w.id === id ? { ...w, id, name, stocks } : w
+        ))
+    }
+
+    const handleDeleteWatchlist = (id: number) => {
+        setWatchlists(watchlists.filter(w => w.id !== id))
+        if (selectedWatchlistId === id) {
+            handleSelectWatchlist(null)
+            setSelectedIndex("IDX80")
+        }
     }
 
     return (
@@ -131,9 +175,13 @@ function IndexContent() {
                 <Sidebar
                     selectedIndex={selectedIndex}
                     onSelectIndex={handleSelectIndex}
-                    selectedWatchlist={selectedWatchlist}
+                    selectedWatchlist={selectedWatchlistId}
                     onSelectWatchlist={handleSelectWatchlist}
                     isSearchOpen={isSearchOpen}
+                    watchlists={watchlists}
+                    onCreateWatchlist={handleCreateWatchlist}
+                    onUpdateWatchlist={handleUpdateWatchlist}
+                    onDeleteWatchlist={handleDeleteWatchlist}
                 />
 
                 {/* Bubble Canvas */}
