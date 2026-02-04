@@ -64,7 +64,10 @@ export function Sidebar({
     const indicesScrollRef = useRef<HTMLDivElement>(null)
     const scrollPositionRef = useRef<number>(0)
 
-    // Edit Mode State
+
+
+    // Indices Search State
+    const [indicesSearch, setIndicesSearch] = useState("")
     const [editingWatchlist, setEditingWatchlist] = useState<Watchlist | null>(null)
     const [editName, setEditName] = useState("")
     const [editSearch, setEditSearch] = useState("")
@@ -125,6 +128,12 @@ export function Sidebar({
                 setIsLoadingIndices(false)
             })
     }, [])
+
+    const filteredIndices = indices.filter(
+        (idx) =>
+            idx.kode.toLowerCase().includes(indicesSearch.toLowerCase()) ||
+            idx.nama.toLowerCase().includes(indicesSearch.toLowerCase())
+    )
 
 
     const handleIndexSelect = (kode: string) => {
@@ -368,6 +377,25 @@ export function Sidebar({
 
         const renderIndicesContent = () => (
             <div className="p-3">
+                {/* Search */}
+                <div
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
+                    style={{
+                        backgroundColor: theme.inputBg,
+                        border: `1px solid ${theme.inputBorder}`,
+                    }}
+                >
+                    <Search size={14} style={{ color: theme.textSecondary }} />
+                    <input
+                        type="text"
+                        placeholder="Search indices..."
+                        value={indicesSearch}
+                        onChange={(e) => setIndicesSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        className="bg-transparent text-sm outline-none flex-1"
+                        style={{ color: theme.textPrimary }}
+                    />
+                </div>
 
                 {/* Index list */}
                 <div ref={indicesScrollRef} className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
@@ -375,12 +403,12 @@ export function Sidebar({
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             Loading indices...
                         </div>
-                    ) : indices.length === 0 ? (
+                    ) : filteredIndices.length === 0 ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             No indices found
                         </div>
                     ) : (
-                        indices.map((idx) => (
+                        filteredIndices.map((idx) => (
                             <button
                                 key={idx.id}
                                 onClick={(e) => {
