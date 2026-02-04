@@ -535,9 +535,40 @@ export class BubblePhysics {
             }))
         }
 
-        data.forEach((item, index) => {
-            const angle = (index / data.length) * Math.PI * 2
-            const distance = 250 + Math.random() * 450
+        // Calculate grid dimensions to distribute bubbles evenly across canvas
+        const dpr = window.devicePixelRatio || 1
+        const canvasWidth = this.canvas.width / dpr
+        const canvasHeight = this.canvas.height / dpr
+        const padding = 60 // Edge padding
+        const availableWidth = canvasWidth - padding * 2
+        const availableHeight = canvasHeight - padding * 2
+
+        // Create grid positions and shuffle them for natural distribution
+        const cols = Math.ceil(Math.sqrt(data.length * (canvasWidth / canvasHeight)))
+        const rows = Math.ceil(data.length / cols)
+        const cellWidth = availableWidth / cols
+        const cellHeight = availableHeight / rows
+
+        // Generate shuffled indices for random placement
+        const indices: number[] = Array.from({ length: data.length }, (_, i) => i)
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            const temp = indices[i]!
+            indices[i] = indices[j]!
+            indices[j] = temp
+        }
+
+        data.forEach((item, dataIndex) => {
+            const gridIndex = indices[dataIndex]!
+            const col = gridIndex % cols
+            const row = Math.floor(gridIndex / cols)
+
+            // Position with random jitter within the cell
+            const jitterX = (Math.random() - 0.5) * cellWidth * 0.6
+            const jitterY = (Math.random() - 0.5) * cellHeight * 0.6
+            const x = padding + col * cellWidth + cellWidth / 2 + jitterX
+            const y = padding + row * cellHeight + cellHeight / 2 + jitterY
+
             const radius = this.calculateRadius(item.change)
 
             const velocityScale = 1.5 / (1 + radius / 30)
@@ -545,8 +576,8 @@ export class BubblePhysics {
             const initialSpeed = (Math.random() * 1.5 + 0.5) * velocityScale
 
             this.bubbles.push({
-                x: centerX + Math.cos(angle) * distance,
-                y: centerY + Math.sin(angle) * distance,
+                x: x,
+                y: y,
                 vx: Math.cos(initialAngle) * initialSpeed,
                 vy: Math.sin(initialAngle) * initialSpeed,
                 radius: radius,
