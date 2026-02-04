@@ -67,7 +67,20 @@ export function Header({
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement
-            if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT") {
+            const activeElement = document.activeElement as HTMLElement
+
+            // Check both the event target AND the currently focused element
+            // This handles edge cases where the event target differs from active element
+            const isInputFocused =
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT" ||
+                activeElement?.tagName === "INPUT" ||
+                activeElement?.tagName === "TEXTAREA" ||
+                activeElement?.tagName === "SELECT" ||
+                activeElement?.isContentEditable
+
+            if (isInputFocused) {
                 return
             }
 

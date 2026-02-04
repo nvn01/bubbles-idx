@@ -44,6 +44,7 @@ function IndexContent() {
 
     // Fetch symbols for the selected index
     useEffect(() => {
+        console.log("[Page] useEffect for selectedIndex:", selectedIndex)
         if (!selectedIndex) {
             setIndexSymbols([])
             setIsLoadingIndex(false)
@@ -57,6 +58,7 @@ function IndexContent() {
                 return res.json()
             })
             .then(data => {
+                console.log("[Page] Fetched symbols for", selectedIndex, ":", data.symbols?.length || 0, "symbols")
                 setIndexSymbols(data.symbols || [])
                 setIsLoadingIndex(false)
             })
@@ -89,6 +91,7 @@ function IndexContent() {
 
     // Handle index selection - also clears watchlist
     const handleSelectIndex = useCallback((indexKode: string | null) => {
+        console.log("[Page] handleSelectIndex called with:", indexKode)
         setSelectedIndex(indexKode || "IDX80") // Default back to IDX80 if null
         setSelectedWatchlist(null)
     }, [])
@@ -98,9 +101,9 @@ function IndexContent() {
         setSelectedWatchlist(watchlistId)
         if (watchlistId) {
             setSelectedIndex("") // Clear index when watchlist selected
-        } else {
-            setSelectedIndex("IDX80") // Default back to IDX80
         }
+        // Note: Don't reset to IDX80 when watchlistId is null - 
+        // the index is already being managed by handleSelectIndex
     }, [])
 
     // Determine which stocks to display based on filter selection

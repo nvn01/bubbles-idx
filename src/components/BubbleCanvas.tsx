@@ -99,7 +99,7 @@ export function BubbleCanvas({
         }
     }, [])
 
-    // Reinitialize physics when filtered data or selectedSymbols change
+    // Reinitialize physics when selectedSymbols or timePeriod change (NOT on ticker data updates)
     useEffect(() => {
         const canvas = canvasRef.current
         const container = containerRef.current
@@ -117,7 +117,8 @@ export function BubbleCanvas({
         const ctx = canvas.getContext('2d')
         ctx?.scale(dpr, dpr)
 
-        // Recreate physics engine when symbols change (not on theme change)
+        // Recreate physics engine when symbols or time period changes
+        // Pass initial ticker data if available
         physicsRef.current = new BubblePhysics(
             canvas,
             timePeriod,
@@ -158,7 +159,7 @@ export function BubbleCanvas({
             resizeObserver.disconnect()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [timePeriod, filteredTickerData, selectedSymbolsKey, handleBubbleDoubleClick]) // selectedSymbolsKey ensures recreation on index change
+    }, [timePeriod, selectedSymbolsKey, handleBubbleDoubleClick]) // Only recreate on time period or symbol changes, NOT on ticker data updates
 
     // Update ticker data in physics when new data arrives (without recreating)
     useEffect(() => {

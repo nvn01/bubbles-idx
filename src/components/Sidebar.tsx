@@ -81,6 +81,7 @@ export function Sidebar({
     )
 
     const handleIndexSelect = (kode: string) => {
+        console.log("[Sidebar] handleIndexSelect called with:", kode, "current selectedIndex:", selectedIndex)
         if (selectedIndex === kode) {
             onSelectIndex(null)
         } else {
@@ -171,7 +172,10 @@ export function Sidebar({
                         filteredIndices.map((idx) => (
                             <button
                                 key={idx.id}
-                                onClick={() => handleIndexSelect(idx.kode)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleIndexSelect(idx.kode)
+                                }}
                                 className="w-full text-left px-3 py-2 rounded-lg text-sm transition-all"
                                 style={{
                                     backgroundColor: selectedIndex === idx.kode ? `${theme.accent}20` : "transparent",
