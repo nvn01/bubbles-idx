@@ -29,8 +29,8 @@ export async function GET(request: Request) {
                 s.nama_emiten,
                 t.d,
                 t.price
-            FROM stock s
-            LEFT JOIN ticker t ON s.kode_emiten = t.kode_emiten
+            FROM stocks s
+            LEFT JOIN ticker t ON s.id = t.stocks_id
             WHERE 
                 s.kode_emiten ILIKE ${likeTerm}
                 OR s.nama_emiten ILIKE ${likeTerm}
