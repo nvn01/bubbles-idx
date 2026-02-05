@@ -66,22 +66,27 @@ export function Header({
     // Global keyboard listener for search
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            const target = e.target as HTMLElement
-            const activeElement = document.activeElement as HTMLElement
+            // Get the currently focused element at the moment of keypress
+            const activeElement = document.activeElement as HTMLElement | null
 
-            // Check both the event target AND the currently focused element
-            // This handles edge cases where the event target differs from active element
-            const isInputFocused =
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA" ||
-                target.tagName === "SELECT" ||
-                activeElement?.tagName === "INPUT" ||
-                activeElement?.tagName === "TEXTAREA" ||
-                activeElement?.tagName === "SELECT" ||
-                activeElement?.isContentEditable
-
-            if (isInputFocused) {
+            // Skip if the header's own search input is focused
+            if (inputRef.current && activeElement === inputRef.current) {
                 return
+            }
+
+            // Check if any input-like element is focused
+            // This handles the sidebar search input and any other inputs on the page
+            if (activeElement) {
+                const tagName = activeElement.tagName.toUpperCase()
+                if (
+                    tagName === "INPUT" ||
+                    tagName === "TEXTAREA" ||
+                    tagName === "SELECT" ||
+                    activeElement.isContentEditable ||
+                    activeElement.getAttribute("role") === "textbox"
+                ) {
+                    return
+                }
             }
 
             if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
@@ -92,8 +97,9 @@ export function Header({
             }
         }
 
-        window.addEventListener("keydown", handleKeyDown)
-        return () => window.removeEventListener("keydown", handleKeyDown)
+        // Use capture phase to ensure we check focus state before the event bubbles
+        window.addEventListener("keydown", handleKeyDown, true)
+        return () => window.removeEventListener("keydown", handleKeyDown, true)
     }, [])
 
     const handleStockClick = (symbol: string, name: string) => {
