@@ -462,6 +462,7 @@ export class BubblePhysics {
     private lastClickTime = 0
     private lastClickedBubble: Bubble | null = null
     private tickerData: TickerData[] = []
+    private obstacle: { x: number, y: number, width: number, height: number } | null = null
 
     constructor(
         canvas: HTMLCanvasElement,
@@ -793,6 +794,25 @@ export class BubblePhysics {
                 bubble.y = this.canvasHeight - bubble.radius
                 bubble.vy *= -0.8
             }
+
+            // Obstacle collision (Bottom Right corner specific optimization)
+            if (this.obstacle) {
+                const obs = this.obstacle
+                if (bubble.x + bubble.radius > obs.x && bubble.y + bubble.radius > obs.y) {
+                    const overlapX = (bubble.x + bubble.radius) - obs.x
+                    const overlapY = (bubble.y + bubble.radius) - obs.y
+
+                    if (overlapX < overlapY) {
+                        // Push Left
+                        bubble.x = obs.x - bubble.radius
+                        bubble.vx *= -0.8
+                    } else {
+                        // Push Up
+                        bubble.y = obs.y - bubble.radius
+                        bubble.vy *= -0.8
+                    }
+                }
+            }
         })
 
         for (let i = 0; i < this.bubbles.length; i++) {
@@ -933,5 +953,9 @@ export class BubblePhysics {
             bubble.y = newCenterY + (bubble.y - oldCenterY)
             bubble.targetRadius = this.calculateRadius(bubble.change)
         })
+    }
+
+    setObstacle(x: number, y: number, width: number, height: number) {
+        this.obstacle = { x, y, width, height }
     }
 }

@@ -140,18 +140,12 @@ export function Header({
                 <div className="hidden md:block h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
 
                 {/* LIVE text on desktop, just blinking dot on mobile */}
-                {/* Market Status & Delay Info */}
+                {/* Market Status */}
                 <div className="flex items-center gap-2 flex-shrink-0" title={isMarketActive ? "Market Open (10m delay)" : "Market Closed"}>
                     <div
                         className={`w-2 h-2 rounded-full ${isMarketActive ? 'live-indicator' : ''}`}
                         style={{ backgroundColor: isMarketActive ? "#ef4444" : theme.textSecondary }}
                     />
-                    <span
-                        className="text-[10px] uppercase font-medium tracking-wide opacity-70"
-                        style={{ color: theme.textSecondary }}
-                    >
-                        10m delay
-                    </span>
                 </div>
                 <div className="flex gap-1 md:gap-2">
                     {(["1H", "1D", "1W", "1M", "1Y"] as const).map((time) => (

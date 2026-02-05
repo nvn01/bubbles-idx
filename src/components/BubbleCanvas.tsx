@@ -30,6 +30,7 @@ export function BubbleCanvas({
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const obstacleRef = useRef<HTMLDivElement>(null)
     const physicsRef = useRef<BubblePhysics | null>(null)
     const eventSourceRef = useRef<EventSource | null>(null)
     const { theme } = useTheme()
@@ -151,6 +152,18 @@ export function BubbleCanvas({
             ctx?.scale(dpr, dpr)
 
             physicsRef.current?.updateCanvasBounds(displayWidth, displayHeight)
+
+            // Update obstacle position in physics engine
+            if (obstacleRef.current && physicsRef.current) {
+                const obs = obstacleRef.current
+                physicsRef.current.setObstacle(
+                    obs.offsetLeft,
+                    obs.offsetTop,
+                    obs.offsetWidth,
+                    obs.offsetHeight
+                )
+            }
+
             physicsRef.current?.render()
         })
         resizeObserver.observe(container)
@@ -204,6 +217,20 @@ export function BubbleCanvas({
                         <div className="text-lg animate-pulse" style={{ color: theme.textPrimary }}>Loading...</div>
                     </div>
                 )}
+
+                {/* Delay Info - Acts as physics obstacle */}
+                <div
+                    ref={obstacleRef}
+                    className="absolute bottom-4 right-4 px-3 py-1.5 rounded-lg border backdrop-blur-md z-0 pointer-events-none select-none"
+                    style={{
+                        backgroundColor: `${theme.headerBg}80`,
+                        borderColor: theme.headerBorder,
+                    }}
+                >
+                    <span className="text-[10px] uppercase font-medium tracking-wide opacity-70" style={{ color: theme.textSecondary }}>
+                        10m delay
+                    </span>
+                </div>
             </div>
 
             <StockDetailModal
