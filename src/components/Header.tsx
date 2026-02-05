@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, X, Search } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 import { Logo } from "~/components/Logo"
 import type { TimePeriod } from "~/lib/bubble-physics"
+import { isMarketOpen } from "~/lib/utils"
 
 // Sample stock data for search results
 const SAMPLE_STOCKS = [
@@ -34,6 +35,16 @@ export function Header({
     const { theme, nextTheme, prevTheme } = useTheme()
     const [searchQuery, setSearchQuery] = useState("")
     const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
+    const [isMarketActive, setIsMarketActive] = useState(false)
+
+    // Check market status periodically
+    useEffect(() => {
+        setIsMarketActive(isMarketOpen())
+        const interval = setInterval(() => {
+            setIsMarketActive(isMarketOpen())
+        }, 60000) // Check every minute
+        return () => clearInterval(interval)
+    }, [])
 
     // Sync dropdown state with parent
     const setIsDropdownOpen = (open: boolean) => {
@@ -129,16 +140,17 @@ export function Header({
                 <div className="hidden md:block h-4 w-px opacity-30" style={{ backgroundColor: theme.textSecondary }} />
 
                 {/* LIVE text on desktop, just blinking dot on mobile */}
-                <div className="flex items-center gap-1 flex-shrink-0">
+                {/* Market Status & Delay Info */}
+                <div className="flex items-center gap-2 flex-shrink-0" title={isMarketActive ? "Market Open (10m delay)" : "Market Closed"}>
                     <div
-                        className="w-2 h-2 rounded-full live-indicator"
-                        style={{ backgroundColor: "#ef4444" }}
+                        className={`w-2 h-2 rounded-full ${isMarketActive ? 'live-indicator' : ''}`}
+                        style={{ backgroundColor: isMarketActive ? "#ef4444" : theme.textSecondary }}
                     />
                     <span
-                        className="hidden md:inline font-bold text-sm"
-                        style={{ color: "#ef4444" }}
+                        className="text-[10px] uppercase font-medium tracking-wide opacity-70"
+                        style={{ color: theme.textSecondary }}
                     >
-                        LIVE
+                        10m delay
                     </span>
                 </div>
                 <div className="flex gap-1 md:gap-2">
