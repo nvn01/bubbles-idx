@@ -10,33 +10,65 @@ export async function GET(request: Request) {
     }
 
     try {
-        const stocks = await prisma.stock.findMany({
-            where: {
-                OR: [
-                    { kode_emiten: { contains: q, mode: "insensitive" } },
-                    { nama_emiten: { contains: q, mode: "insensitive" } },
-                ],
-            },
-            take: 10,
-            select: {
-                kode_emiten: true,
-                nama_emiten: true,
-                tickers: {
-                    orderBy: { ts: "desc" },
-                    take: 1,
-                    select: {
-                        d: true, // 1 day % change
-                        price: true
-                    }
-                }
-            }
+        // Use raw SQL to prioritize symbol matches over name matches
+        // Priority 1: Symbol starts with query (e.g., "BB" -> BBRI, BBCA)
+        // Priority 2: Symbol contains query anywhere
+        // Priority 3: Name contains query
+        const searchTerm = q.toUpperCase()
+        const likeTerm = `%${searchTerm}%`
+        const startsWithTerm = `${searchTerm}%`
+
+        const stocks = await prisma.$queryRaw<Array<{
+            kode_emiten: string
+            nama_emiten: string
+            d: number | null
+            price: number | null
+        }>>`
+            SELECT DISTINCT ON (s.kode_emiten)
+                s.kode_emiten,
+                s.nama_emiten,
+                t.d,
+                t.price
+            FROM stock s
+            LEFT JOIN ticker t ON s.kode_emiten = t.kode_emiten
+            WHERE 
+                s.kode_emiten ILIKE ${likeTerm}
+                OR s.nama_emiten ILIKE ${likeTerm}
+            ORDER BY 
+                s.kode_emiten,
+                t.ts DESC NULLS LAST
+        `
+
+        // Sort results by priority in JavaScript for cleaner logic
+        const sortedStocks = stocks.sort((a, b) => {
+            const aSymbol = a.kode_emiten.toUpperCase()
+            const bSymbol = b.kode_emiten.toUpperCase()
+            const aName = a.nama_emiten.toUpperCase()
+            const bName = b.nama_emiten.toUpperCase()
+
+            // Priority 1: Symbol starts with search term
+            const aStartsWith = aSymbol.startsWith(searchTerm)
+            const bStartsWith = bSymbol.startsWith(searchTerm)
+
+            if (aStartsWith && !bStartsWith) return -1
+            if (!aStartsWith && bStartsWith) return 1
+
+            // Priority 2: Symbol contains search term (both start or both don't)
+            const aSymbolContains = aSymbol.includes(searchTerm)
+            const bSymbolContains = bSymbol.includes(searchTerm)
+
+            if (aSymbolContains && !bSymbolContains) return -1
+            if (!aSymbolContains && bSymbolContains) return 1
+
+            // Priority 3: Sort alphabetically by symbol
+            return aSymbol.localeCompare(bSymbol)
         })
 
-        const results = stocks.map(stock => ({
+        const results = sortedStocks.map(stock => ({
             symbol: stock.kode_emiten,
             name: stock.nama_emiten,
-            change: stock.tickers[0]?.d || 0,
-            price: stock.tickers[0]?.price || 0
+            change: stock.d || 0,
+            price: stock.price || 0
         }))
 
         return NextResponse.json(results)

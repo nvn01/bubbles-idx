@@ -226,8 +226,8 @@ export function Header({
                             {isSearching ? (
                                 <div className="p-4 text-center text-sm" style={{ color: theme.textSecondary }}>Searching...</div>
                             ) : searchResults.length > 0 ? (
-                                <div className="space-y-1">
-                                    {searchResults.slice(0, 5).map((stock) => (
+                                <div className="space-y-1 max-h-80 overflow-y-auto custom-scrollbar">
+                                    {searchResults.map((stock) => (
                                         <div
                                             key={stock.symbol}
                                             onClick={() => handleStockClick(stock.symbol, stock.name)}
