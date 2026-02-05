@@ -45,6 +45,15 @@ interface CalendarDay {
     events: CalendarEvent[]
 }
 
+interface BrokerData {
+    rank: number
+    kode: string
+    nama: string
+    value: number
+    volume: number
+    frequency: number
+}
+
 type DrawerType = "indices" | "watchlist" | "news" | "calendar" | "brokers" | "settings" | null
 
 interface SidebarProps {
@@ -91,6 +100,17 @@ export function Sidebar({
     // Calendar State
     const [calendarData, setCalendarData] = useState<CalendarDay[]>([])
     const [isLoadingCalendar, setIsLoadingCalendar] = useState(false)
+
+    // Brokers State
+    const [brokersData, setBrokersData] = useState<BrokerData[]>([])
+    const [isLoadingBrokers, setIsLoadingBrokers] = useState(false)
+    const [brokerStartDate, setBrokerStartDate] = useState<string>(
+        new Date().toISOString().split('T')[0] || ''
+    )
+    const [brokerEndDate, setBrokerEndDate] = useState<string>(
+        new Date().toISOString().split('T')[0] || ''
+    )
+    const [brokerSortBy, setBrokerSortBy] = useState<'value' | 'volume' | 'frequency'>('value')
 
     // Fetch all stocks for the "Available" list in edit mode
     useEffect(() => {
@@ -163,6 +183,25 @@ export function Sidebar({
                 })
         }
     }, [activeDrawer, calendarData.length])
+
+    // Fetch brokers when drawer opens or filters change
+    useEffect(() => {
+        if (activeDrawer === "brokers") {
+            setIsLoadingBrokers(true)
+            fetch(`/api/brokers?startDate=${brokerStartDate}&endDate=${brokerEndDate}&sortBy=${brokerSortBy}&limit=20`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.brokers && Array.isArray(data.brokers)) {
+                        setBrokersData(data.brokers)
+                    }
+                    setIsLoadingBrokers(false)
+                })
+                .catch(err => {
+                    console.error("Error fetching brokers:", err)
+                    setIsLoadingBrokers(false)
+                })
+        }
+    }, [activeDrawer, brokerStartDate, brokerEndDate, brokerSortBy])
 
     const filteredIndices = indices.filter(
         (idx) =>
@@ -630,6 +669,140 @@ export function Sidebar({
             )
         }
 
+        const renderBrokersContent = () => {
+            // Format large numbers
+            const formatNumber = (num: number): string => {
+                if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T'
+                if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B'
+                if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M'
+                if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K'
+                return num.toString()
+            }
+
+            // Format date for display
+            const formatDisplayDate = (dateStr: string) => {
+                const date = new Date(dateStr)
+                return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+            }
+
+            const SortButton = ({ field, label }: { field: 'value' | 'volume' | 'frequency', label: string }) => (
+                <button
+                    onClick={() => setBrokerSortBy(field)}
+                    className={`text-xs font-medium px-1 py-0.5 rounded transition-all ${brokerSortBy === field ? 'opacity-100' : 'opacity-60 hover:opacity-80'}`}
+                    style={{
+                        color: brokerSortBy === field ? theme.accent : theme.textSecondary,
+                        backgroundColor: brokerSortBy === field ? `${theme.accent}20` : 'transparent'
+                    }}
+                >
+                    {label}
+                </button>
+            )
+
+            return (
+                <div className="p-3 h-full flex flex-col">
+                    {/* Date Range Display */}
+                    <div
+                        className="text-center mb-3 py-2 px-3 rounded-lg text-sm font-medium"
+                        style={{
+                            backgroundColor: `${theme.textSecondary}10`,
+                            color: theme.textPrimary
+                        }}
+                    >
+                        {formatDisplayDate(brokerStartDate)} - {formatDisplayDate(brokerEndDate)}
+                    </div>
+
+                    {/* Date Inputs */}
+                    <div className="flex gap-2 mb-3">
+                        <input
+                            type="date"
+                            value={brokerStartDate}
+                            onChange={(e) => setBrokerStartDate(e.target.value)}
+                            className="flex-1 px-2 py-1.5 rounded text-xs outline-none"
+                            style={{
+                                backgroundColor: theme.inputBg,
+                                border: `1px solid ${theme.inputBorder}`,
+                                color: theme.textPrimary
+                            }}
+                        />
+                        <input
+                            type="date"
+                            value={brokerEndDate}
+                            onChange={(e) => setBrokerEndDate(e.target.value)}
+                            className="flex-1 px-2 py-1.5 rounded text-xs outline-none"
+                            style={{
+                                backgroundColor: theme.inputBg,
+                                border: `1px solid ${theme.inputBorder}`,
+                                color: theme.textPrimary
+                            }}
+                        />
+                    </div>
+
+                    {/* Table Header with Sort */}
+                    <div
+                        className="grid grid-cols-12 gap-1 px-2 py-1.5 text-xs font-semibold border-b mb-1"
+                        style={{
+                            color: theme.textSecondary,
+                            borderColor: theme.headerBorder
+                        }}
+                    >
+                        <div className="col-span-1">#</div>
+                        <div className="col-span-2">Code</div>
+                        <div className="col-span-3 text-right"><SortButton field="value" label="T.Val" /></div>
+                        <div className="col-span-3 text-right"><SortButton field="volume" label="T.Vol" /></div>
+                        <div className="col-span-3 text-right"><SortButton field="frequency" label="T.Freq" /></div>
+                    </div>
+
+                    {/* Broker List */}
+                    {isLoadingBrokers ? (
+                        <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
+                            Loading brokers...
+                        </div>
+                    ) : brokersData.length === 0 ? (
+                        <div className="text-center py-4">
+                            <p className="text-sm" style={{ color: theme.textSecondary }}>
+                                No data for selected dates
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-0.5">
+                            {brokersData.map((broker) => (
+                                <div
+                                    key={broker.kode}
+                                    className="grid grid-cols-12 gap-1 px-2 py-1.5 rounded text-xs hover:opacity-80 transition-all"
+                                    style={{ backgroundColor: `${theme.textSecondary}08` }}
+                                    title={broker.nama}
+                                >
+                                    <div className="col-span-1 font-bold" style={{ color: theme.accent }}>
+                                        {broker.rank}
+                                    </div>
+                                    <div className="col-span-2 font-medium truncate" style={{ color: theme.textPrimary }}>
+                                        {broker.kode}
+                                    </div>
+                                    <div
+                                        className="col-span-3 text-right"
+                                        style={{ color: brokerSortBy === 'value' ? theme.bubble.positiveColor : theme.textSecondary }}
+                                    >
+                                        {formatNumber(broker.value)}
+                                    </div>
+                                    <div
+                                        className="col-span-3 text-right"
+                                        style={{ color: brokerSortBy === 'volume' ? theme.bubble.positiveColor : theme.textSecondary }}
+                                    >
+                                        {formatNumber(broker.volume)}
+                                    </div>
+                                    <div
+                                        className="col-span-3 text-right"
+                                        style={{ color: brokerSortBy === 'frequency' ? theme.bubble.positiveColor : theme.textSecondary }}
+                                    >
+                                        {formatNumber(broker.frequency)}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )
+        }
 
         const renderSettingsContent = () => (
             <div className="p-3 space-y-4">
@@ -740,7 +913,7 @@ export function Sidebar({
             case "calendar":
                 return renderCalendarContent()
             case "brokers":
-                return renderPlaceholderContent("Top Brokers", "Top broker net buy/sell data coming soon.")
+                return renderBrokersContent()
             case "settings":
                 return renderSettingsContent()
             default:
