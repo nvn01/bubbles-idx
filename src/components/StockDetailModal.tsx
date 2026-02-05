@@ -164,7 +164,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
+                className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row overflow-y-auto md:overflow-hidden"
                 style={{
                     backgroundColor: theme.headerBg,
                     border: `1px solid ${theme.headerBorder}`,
@@ -197,9 +197,22 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                     {activeStock.symbol}
                                 </span>
                             </div>
-                            <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
-                                <Star size={20} />
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
+                                    <Star size={20} />
+                                </button>
+                                {/* Mobile close button */}
+                                <button
+                                    onClick={onClose}
+                                    className="md:hidden p-1.5 rounded-lg hover:opacity-70 transition-opacity"
+                                    style={{
+                                        backgroundColor: `${theme.textSecondary}20`,
+                                        color: theme.textSecondary
+                                    }}
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Price */}
@@ -300,9 +313,10 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                     {tf}
                                 </button>
                             ))}
+                            {/* Desktop close button */}
                             <button
                                 onClick={onClose}
-                                className="ml-2 p-2 rounded-full hover:opacity-70 transition-opacity"
+                                className="hidden md:flex ml-2 p-2 rounded-full hover:opacity-70 transition-opacity"
                                 style={{
                                     backgroundColor: `${theme.textSecondary}20`,
                                     color: theme.textSecondary
