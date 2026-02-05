@@ -197,8 +197,11 @@ export function BubbleCanvas({
             >
                 <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing block" />
                 {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                        <div className="text-white text-lg animate-pulse">Loading...</div>
+                    <div
+                        className="absolute inset-0 flex items-center justify-center z-10"
+                        style={{ backgroundColor: theme.background }}
+                    >
+                        <div className="text-lg animate-pulse" style={{ color: theme.textPrimary }}>Loading...</div>
                     </div>
                 )}
             </div>
