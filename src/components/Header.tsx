@@ -188,7 +188,7 @@ export function Header({
                         placeholder="Search"
                         value={searchQuery}
                         onChange={(e) => {
-                            setSearchQuery(e.target.value)
+                            setSearchQuery(e.target.value.toUpperCase())
                             setIsDropdownOpen(true)
                         }}
                         onFocus={() => searchQuery && setIsDropdownOpen(true)}

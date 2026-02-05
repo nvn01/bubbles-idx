@@ -291,7 +291,7 @@ export function Sidebar({
                                 <input
                                     type="text"
                                     value={editSearch}
-                                    onChange={(e) => setEditSearch(e.target.value)}
+                                    onChange={(e) => setEditSearch(e.target.value.toUpperCase())}
                                     className="w-full pl-8 pr-3 py-2 rounded-lg text-sm outline-none"
                                     style={{
                                         backgroundColor: theme.inputBg,
@@ -389,7 +389,7 @@ export function Sidebar({
                         type="text"
                         placeholder="Search indices..."
                         value={indicesSearch}
-                        onChange={(e) => setIndicesSearch(e.target.value)}
+                        onChange={(e) => setIndicesSearch(e.target.value.toUpperCase())}
                         onKeyDown={(e) => e.stopPropagation()}
                         className="bg-transparent text-sm outline-none flex-1"
                         style={{ color: theme.textPrimary }}
