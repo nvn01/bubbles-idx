@@ -978,7 +978,7 @@ export function Sidebar({
 
             {/* Drawer panel */}
             <div
-                className={`h-full overflow-hidden transition-all duration-300 ${activeDrawer ? "w-64" : "w-0"
+                className={`h-full overflow-hidden transition-all duration-300 ${activeDrawer ? "w-72" : "w-0"
                     }`}
                 style={{
                     backgroundColor: theme.headerBg,
