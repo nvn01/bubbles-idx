@@ -296,8 +296,9 @@ export function Sidebar({
                                     style={{
                                         backgroundColor: theme.inputBg,
                                         border: `1px solid ${theme.inputBorder}`,
-                                        color: theme.textPrimary
-                                    }}
+                                        color: theme.textPrimary,
+                                        "--placeholder-color": theme.textSecondary
+                                    } as React.CSSProperties}
                                     placeholder="Search details..."
                                 />
                             </div>
@@ -392,7 +393,10 @@ export function Sidebar({
                         onChange={(e) => setIndicesSearch(e.target.value.toUpperCase())}
                         onKeyDown={(e) => e.stopPropagation()}
                         className="bg-transparent text-sm outline-none flex-1"
-                        style={{ color: theme.textPrimary }}
+                        style={{
+                            color: theme.textPrimary,
+                            "--placeholder-color": theme.textSecondary
+                        } as React.CSSProperties}
                     />
                 </div>
 

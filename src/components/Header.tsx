@@ -193,7 +193,10 @@ export function Header({
                         }}
                         onFocus={() => searchQuery && setIsDropdownOpen(true)}
                         className="flex-1 bg-transparent text-sm outline-none min-w-0"
-                        style={{ color: theme.textPrimary }}
+                        style={{
+                            color: theme.textPrimary,
+                            "--placeholder-color": theme.textSecondary
+                        } as React.CSSProperties}
                     />
                     {searchQuery && (
                         <button
