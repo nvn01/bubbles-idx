@@ -33,6 +33,18 @@ interface Watchlist {
     stocks: string[]
 }
 
+interface CalendarEvent {
+    id: number
+    kode_emiten: string
+    description: string
+    location: string | null
+}
+
+interface CalendarDay {
+    date: string
+    events: CalendarEvent[]
+}
+
 type DrawerType = "indices" | "watchlist" | "news" | "calendar" | "brokers" | "settings" | null
 
 interface SidebarProps {
@@ -75,6 +87,10 @@ export function Sidebar({
 
     // Available stocks for adding (mock for now, ideally fetch from API)
     const [allStocks, setAllStocks] = useState<IndexData[]>([])
+
+    // Calendar State
+    const [calendarData, setCalendarData] = useState<CalendarDay[]>([])
+    const [isLoadingCalendar, setIsLoadingCalendar] = useState(false)
 
     // Fetch all stocks for the "Available" list in edit mode
     useEffect(() => {
@@ -128,6 +144,25 @@ export function Sidebar({
                 setIsLoadingIndices(false)
             })
     }, [])
+
+    // Fetch calendar events when drawer opens
+    useEffect(() => {
+        if (activeDrawer === "calendar" && calendarData.length === 0) {
+            setIsLoadingCalendar(true)
+            fetch("/api/calendar?upcoming=true&limit=50")
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        setCalendarData(data)
+                    }
+                    setIsLoadingCalendar(false)
+                })
+                .catch(err => {
+                    console.error("Error fetching calendar:", err)
+                    setIsLoadingCalendar(false)
+                })
+        }
+    }, [activeDrawer, calendarData.length])
 
     const filteredIndices = indices.filter(
         (idx) =>
@@ -504,6 +539,98 @@ export function Sidebar({
             </div>
         )
 
+        const renderCalendarContent = () => {
+            // Helper to format date nicely
+            const formatDate = (dateStr: string) => {
+                const date = new Date(dateStr)
+                const today = new Date()
+                today.setHours(0, 0, 0, 0)
+                const tomorrow = new Date(today)
+                tomorrow.setDate(tomorrow.getDate() + 1)
+
+                if (date.toDateString() === today.toDateString()) {
+                    return "Today"
+                } else if (date.toDateString() === tomorrow.toDateString()) {
+                    return "Tomorrow"
+                } else {
+                    return date.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    })
+                }
+            }
+
+            return (
+                <div className="p-3 h-full flex flex-col">
+                    {isLoadingCalendar ? (
+                        <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
+                            Loading events...
+                        </div>
+                    ) : calendarData.length === 0 ? (
+                        <div className="text-center py-4">
+                            <Calendar size={32} className="mx-auto mb-2 opacity-50" style={{ color: theme.textSecondary }} />
+                            <p className="text-sm" style={{ color: theme.textSecondary }}>
+                                No upcoming events
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
+                            {calendarData.map((day) => (
+                                <div key={day.date}>
+                                    {/* Date Header */}
+                                    <div
+                                        className="text-xs font-semibold uppercase tracking-wide mb-2 sticky top-0 py-1"
+                                        style={{
+                                            color: theme.accent,
+                                            backgroundColor: theme.headerBg
+                                        }}
+                                    >
+                                        {formatDate(day.date)}
+                                    </div>
+
+                                    {/* Events for this date */}
+                                    <div className="space-y-1">
+                                        {day.events.map((event) => (
+                                            <div
+                                                key={event.id}
+                                                className="px-3 py-2 rounded-lg text-sm"
+                                                style={{
+                                                    backgroundColor: `${theme.textSecondary}10`,
+                                                    border: `1px solid ${theme.headerBorder}`
+                                                }}
+                                            >
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span
+                                                        className="font-bold text-xs px-1.5 py-0.5 rounded"
+                                                        style={{
+                                                            backgroundColor: `${theme.accent}20`,
+                                                            color: theme.accent
+                                                        }}
+                                                    >
+                                                        {event.kode_emiten}
+                                                    </span>
+                                                </div>
+                                                <p style={{ color: theme.textPrimary }} className="text-sm">
+                                                    {event.description}
+                                                </p>
+                                                {event.location && (
+                                                    <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
+                                                        📍 {event.location}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+
         const renderSettingsContent = () => (
             <div className="p-3 space-y-4">
                 {/* Language */}
@@ -611,7 +738,7 @@ export function Sidebar({
             case "news":
                 return renderPlaceholderContent("Market News", "Latest stock market news and updates coming soon.")
             case "calendar":
-                return renderPlaceholderContent("Economic Calendar", "IPO dates, earnings, dividends calendar coming soon.")
+                return renderCalendarContent()
             case "brokers":
                 return renderPlaceholderContent("Top Brokers", "Top broker net buy/sell data coming soon.")
             case "settings":
