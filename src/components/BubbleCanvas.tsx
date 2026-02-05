@@ -221,13 +221,13 @@ export function BubbleCanvas({
                 {/* Delay Info - Acts as physics obstacle */}
                 <div
                     ref={obstacleRef}
-                    className="absolute bottom-4 right-4 px-3 py-1.5 rounded-lg border backdrop-blur-md z-0 pointer-events-none select-none"
+                    className="absolute bottom-4 right-4 px-3 py-1 rounded-lg border backdrop-blur-md z-0 pointer-events-none select-none flex items-center justify-center"
                     style={{
                         backgroundColor: `${theme.headerBg}80`,
                         borderColor: theme.headerBorder,
                     }}
                 >
-                    <span className="text-[10px] uppercase font-medium tracking-wide opacity-70" style={{ color: theme.textSecondary }}>
+                    <span className="text-[10px] uppercase font-medium tracking-wide opacity-70 leading-none pt-[1px]" style={{ color: theme.textSecondary }}>
                         10m delay
                     </span>
                 </div>
