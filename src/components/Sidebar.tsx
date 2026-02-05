@@ -375,10 +375,10 @@ export function Sidebar({
         }
 
         const renderIndicesContent = () => (
-            <div className="p-3">
+            <div className="p-3 h-full flex flex-col text-left">
                 {/* Search */}
                 <div
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3 shrink-0"
                     style={{
                         backgroundColor: theme.inputBg,
                         border: `1px solid ${theme.inputBorder}`,
@@ -397,7 +397,7 @@ export function Sidebar({
                 </div>
 
                 {/* Index list */}
-                <div ref={indicesScrollRef} className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                <div ref={indicesScrollRef} className="space-y-1 flex-1 overflow-y-auto custom-scrollbar min-h-0">
                     {isLoadingIndices ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
                             Loading indices...
@@ -433,8 +433,8 @@ export function Sidebar({
         )
 
         const renderWatchlistContent = () => (
-            <div className="p-3">
-                <div className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div className="p-3 h-full flex flex-col text-left">
+                <div className="space-y-1 flex-1 overflow-y-auto custom-scrollbar min-h-0">
                     {watchlists.map((wl) => (
                         <div
                             key={wl.id}
