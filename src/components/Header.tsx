@@ -231,7 +231,7 @@ export function Header({
                                         <div
                                             key={stock.symbol}
                                             onClick={() => handleStockClick(stock.symbol, stock.name)}
-                                            className="w-full flex items-center justify-between px-2 py-2 rounded-lg hover:opacity-80 transition-all cursor-pointer"
+                                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:opacity-80 transition-all cursor-pointer"
                                             role="button"
                                             tabIndex={0}
                                             onKeyDown={(e) => {
@@ -242,38 +242,16 @@ export function Header({
                                             style={{ backgroundColor: `${theme.textSecondary}10` }}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <div
-                                                    className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs"
-                                                    style={{
-                                                        backgroundColor: `${theme.accent}20`,
-                                                        color: theme.accent,
-                                                    }}
-                                                >
-                                                    {stock.symbol.slice(0, 2)}
-                                                </div>
-                                                <div className="text-left">
-                                                    <span className="font-medium text-sm" style={{ color: theme.textPrimary }}>
-                                                        {stock.name}
-                                                    </span>
-                                                    <span className="ml-2 text-xs" style={{ color: theme.textSecondary }}>
-                                                        ${stock.symbol}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-sm font-medium" style={{ color: getChangeColor(stock.change) }}>
-                                                    {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
+                                                <span className="font-bold text-sm" style={{ color: theme.accent }}>
+                                                    {stock.symbol}
                                                 </span>
-                                                <span
-                                                    className="px-3 py-1 rounded text-xs font-medium"
-                                                    style={{
-                                                        backgroundColor: theme.accent,
-                                                        color: theme.headerBg,
-                                                    }}
-                                                >
-                                                    OPEN
+                                                <span className="text-sm truncate" style={{ color: theme.textSecondary }}>
+                                                    {stock.name}
                                                 </span>
                                             </div>
+                                            <span className="text-sm font-medium flex-shrink-0" style={{ color: getChangeColor(stock.change) }}>
+                                                {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
+                                            </span>
                                         </div>
                                     ))}
                                 </div>
