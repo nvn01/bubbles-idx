@@ -18,6 +18,7 @@ import {
     Trash2,
     Save,
     Search,
+    ExternalLink,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
@@ -288,7 +289,7 @@ export function Sidebar({
         return (
             <button
                 onClick={() => setIsMobileOpen(!isMobileOpen)}
-                className="fixed top-[3.75rem] left-3 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
+                className="fixed top-[3.75rem] left-2 z-50 md:hidden p-2 rounded-lg transition-all shadow-lg"
                 style={{
                     backgroundColor: theme.headerBg,
                     border: `1px solid ${theme.headerBorder}`,
@@ -894,10 +895,11 @@ export function Sidebar({
                     {/* Legal */}
                     <a
                         href="/legal"
-                        className="block text-sm hover:opacity-80 transition-opacity"
+                        className="flex items-center gap-1.5 text-sm hover:opacity-80 transition-opacity"
                         style={{ color: theme.textSecondary }}
                     >
-                        Terms of Service & Privacy Policy →
+                        Terms of Service & Privacy Policy
+                        <ExternalLink size={14} />
                     </a>
                 </div>
             </div>
