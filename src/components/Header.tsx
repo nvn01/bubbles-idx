@@ -8,16 +8,7 @@ import type { TimePeriod } from "~/lib/bubble-physics"
 import { isMarketOpen } from "~/lib/utils"
 
 // Sample stock data for search results
-const SAMPLE_STOCKS = [
-    { symbol: "BBCA", name: "Bank Central Asia Tbk.", change: 2.5 },
-    { symbol: "BBRI", name: "Bank Rakyat Indonesia (Persero) Tbk.", change: -1.2 },
-    { symbol: "BMRI", name: "Bank Mandiri (Persero) Tbk.", change: 1.8 },
-    { symbol: "BBNI", name: "Bank Negara Indonesia (Persero) Tbk.", change: 0.5 },
-    { symbol: "TLKM", name: "Telkom Indonesia (Persero) Tbk.", change: -0.3 },
-    { symbol: "ASII", name: "Astra International Tbk.", change: 3.1 },
-    { symbol: "GOTO", name: "GoTo Gojek Tokopedia Tbk.", change: -5.2 },
-    { symbol: "BUKA", name: "Bukalapak.com Tbk.", change: -2.8 },
-]
+// Sample stock data removed
 
 export function Header({
     timePeriod,
@@ -36,6 +27,8 @@ export function Header({
     const [searchQuery, setSearchQuery] = useState("")
     const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
     const [isMarketActive, setIsMarketActive] = useState(false)
+    const [searchResults, setSearchResults] = useState<{ symbol: string; name: string; change: number }[]>([])
+    const [isSearching, setIsSearching] = useState(false)
 
     // Check market status periodically
     useEffect(() => {
@@ -46,6 +39,31 @@ export function Header({
         return () => clearInterval(interval)
     }, [])
 
+    // Search API Effect
+    useEffect(() => {
+        if (!searchQuery || searchQuery.length < 2) {
+            setSearchResults([])
+            return
+        }
+
+        const timeoutId = setTimeout(async () => {
+            setIsSearching(true)
+            try {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`)
+                if (res.ok) {
+                    const data = await res.json()
+                    setSearchResults(data)
+                }
+            } catch (err) {
+                console.error("Search failed:", err)
+            } finally {
+                setIsSearching(false)
+            }
+        }, 300)
+
+        return () => clearTimeout(timeoutId)
+    }, [searchQuery])
+
     // Sync dropdown state with parent
     const setIsDropdownOpen = (open: boolean) => {
         setIsDropdownOpenInternal(open)
@@ -53,15 +71,6 @@ export function Header({
     }
     const searchRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-
-    // Filter stocks based on query
-    const filteredStocks = searchQuery
-        ? SAMPLE_STOCKS.filter(
-            (stock) =>
-                stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                stock.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        : []
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -214,9 +223,11 @@ export function Header({
                             <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: theme.textSecondary }}>
                                 Tickers
                             </h4>
-                            {filteredStocks.length > 0 ? (
+                            {isSearching ? (
+                                <div className="p-4 text-center text-sm" style={{ color: theme.textSecondary }}>Searching...</div>
+                            ) : searchResults.length > 0 ? (
                                 <div className="space-y-1">
-                                    {filteredStocks.slice(0, 5).map((stock) => (
+                                    {searchResults.slice(0, 5).map((stock) => (
                                         <div
                                             key={stock.symbol}
                                             onClick={() => handleStockClick(stock.symbol, stock.name)}
