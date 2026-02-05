@@ -712,12 +712,12 @@ export function Sidebar({
                     </div>
 
                     {/* Date Inputs */}
-                    <div className="flex gap-2 mb-3">
+                    <div className="flex gap-1 mb-3">
                         <input
                             type="date"
                             value={brokerStartDate}
                             onChange={(e) => setBrokerStartDate(e.target.value)}
-                            className="flex-1 px-2 py-1.5 rounded text-xs outline-none"
+                            className="flex-1 min-w-0 px-1.5 py-1.5 rounded text-xs outline-none"
                             style={{
                                 backgroundColor: theme.inputBg,
                                 border: `1px solid ${theme.inputBorder}`,
@@ -728,7 +728,7 @@ export function Sidebar({
                             type="date"
                             value={brokerEndDate}
                             onChange={(e) => setBrokerEndDate(e.target.value)}
-                            className="flex-1 px-2 py-1.5 rounded text-xs outline-none"
+                            className="flex-1 min-w-0 px-1.5 py-1.5 rounded text-xs outline-none"
                             style={{
                                 backgroundColor: theme.inputBg,
                                 border: `1px solid ${theme.inputBorder}`,
@@ -739,7 +739,7 @@ export function Sidebar({
 
                     {/* Table Header with Sort */}
                     <div
-                        className="grid grid-cols-12 gap-1 px-2 py-1.5 text-xs font-semibold border-b mb-1"
+                        className="grid grid-cols-12 gap-0.5 px-1 py-1.5 text-xs font-semibold border-b mb-1"
                         style={{
                             color: theme.textSecondary,
                             borderColor: theme.headerBorder
@@ -747,9 +747,9 @@ export function Sidebar({
                     >
                         <div className="col-span-1">#</div>
                         <div className="col-span-2">Code</div>
-                        <div className="col-span-3 text-right"><SortButton field="value" label="T.Val" /></div>
-                        <div className="col-span-3 text-right"><SortButton field="volume" label="T.Vol" /></div>
-                        <div className="col-span-3 text-right"><SortButton field="frequency" label="T.Freq" /></div>
+                        <div className="col-span-3 text-right"><SortButton field="value" label="Val" /></div>
+                        <div className="col-span-3 text-right"><SortButton field="volume" label="Vol" /></div>
+                        <div className="col-span-3 text-right"><SortButton field="frequency" label="Freq" /></div>
                     </div>
 
                     {/* Broker List */}
@@ -768,7 +768,7 @@ export function Sidebar({
                             {brokersData.map((broker) => (
                                 <div
                                     key={broker.kode}
-                                    className="grid grid-cols-12 gap-1 px-2 py-1.5 rounded text-xs hover:opacity-80 transition-all"
+                                    className="grid grid-cols-12 gap-0.5 px-1 py-1.5 rounded text-xs hover:opacity-80 transition-all"
                                     style={{ backgroundColor: `${theme.textSecondary}08` }}
                                     title={broker.nama}
                                 >
