@@ -289,12 +289,20 @@ export function Sidebar({
         setEditingWatchlist(null)
     }
 
-    // Toggle stock in edit list
+    // Toggle stock in edit list - auto-saves immediately
     const toggleEditStock = (symbol: string) => {
-        if (editSelectedStocks.includes(symbol)) {
-            setEditSelectedStocks(prev => prev.filter(s => s !== symbol))
-        } else {
-            setEditSelectedStocks(prev => [symbol, ...prev]) // Add to top
+        if (!editingWatchlist) return
+
+        const newStocks = editSelectedStocks.includes(symbol)
+            ? editSelectedStocks.filter(s => s !== symbol)
+            : [symbol, ...editSelectedStocks] // Add to top
+
+        setEditSelectedStocks(newStocks)
+
+        // Auto-save immediately (only for existing watchlists, not new ones)
+        if (editingWatchlist.id !== 0) {
+            const finalName = editName.trim() || editingWatchlist.name || "Untitled Watchlist"
+            onUpdateWatchlist(editingWatchlist.id, finalName, newStocks)
         }
     }
 
