@@ -127,7 +127,10 @@ function IndexContent() {
         if (watchlistId) {
             setSelectedIndex("") // Clear index when watchlist selected
         } else {
-            setSelectedIndex("IDX80") // Reset to IDX80 when watchlist deselected
+            // Reset to IDX80 when watchlist deselected
+            // Set loading first to prevent flash of all stocks
+            setIsLoadingIndex(true)
+            setSelectedIndex("IDX80")
         }
     }, [])
 
