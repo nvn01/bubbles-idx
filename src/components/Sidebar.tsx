@@ -55,6 +55,17 @@ interface BrokerData {
     frequency: number
 }
 
+interface NewsItem {
+    id: number
+    title: string
+    excerpt: string
+    source: string
+    time: string
+    url: string
+    imageUrl: string | null
+    symbols: string[]
+}
+
 type DrawerType = "indices" | "watchlist" | "news" | "calendar" | "brokers" | "settings" | null
 
 interface SidebarProps {
@@ -112,6 +123,10 @@ export function Sidebar({
         new Date().toISOString().split('T')[0] || ''
     )
     const [brokerSortBy, setBrokerSortBy] = useState<'value' | 'volume' | 'frequency'>('value')
+
+    // News State
+    const [newsData, setNewsData] = useState<NewsItem[]>([])
+    const [isLoadingNews, setIsLoadingNews] = useState(false)
 
     // Fetch all stocks for the "Available" list in edit mode
     useEffect(() => {
@@ -203,6 +218,25 @@ export function Sidebar({
                 })
         }
     }, [activeDrawer, brokerStartDate, brokerEndDate, brokerSortBy])
+
+    // Fetch news when drawer opens
+    useEffect(() => {
+        if (activeDrawer === "news" && newsData.length === 0) {
+            setIsLoadingNews(true)
+            fetch("/api/news")
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        setNewsData(data)
+                    }
+                    setIsLoadingNews(false)
+                })
+                .catch(err => {
+                    console.error("Error fetching news:", err)
+                    setIsLoadingNews(false)
+                })
+        }
+    }, [activeDrawer, newsData.length])
 
     const filteredIndices = indices.filter(
         (idx) =>
@@ -576,6 +610,131 @@ export function Sidebar({
             </div>
         )
 
+        const renderNewsContent = () => {
+            // Helper to format time relative to now
+            const formatTime = (timeStr: string) => {
+                const date = new Date(timeStr)
+                const now = new Date()
+                const diffMs = now.getTime() - date.getTime()
+                const diffMins = Math.floor(diffMs / 60000)
+                const diffHours = Math.floor(diffMs / 3600000)
+                const diffDays = Math.floor(diffMs / 86400000)
+
+                if (diffMins < 60) return `${diffMins}m ago`
+                if (diffHours < 24) return `${diffHours}h ago`
+                if (diffDays < 7) return `${diffDays}d ago`
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            }
+
+            return (
+                <div className="p-3 h-full flex flex-col">
+                    {isLoadingNews ? (
+                        <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
+                            Loading news...
+                        </div>
+                    ) : newsData.length === 0 ? (
+                        <div className="text-center py-4">
+                            <Newspaper size={32} className="mx-auto mb-2 opacity-50" style={{ color: theme.textSecondary }} />
+                            <p className="text-sm" style={{ color: theme.textSecondary }}>
+                                No news available
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-2 flex-1 overflow-y-auto custom-scrollbar">
+                            {newsData.map((item) => (
+                                <a
+                                    key={item.id}
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block p-2.5 rounded-lg transition-all hover:scale-[1.01]"
+                                    style={{
+                                        backgroundColor: `${theme.textSecondary}08`,
+                                        border: `1px solid ${theme.headerBorder}`
+                                    }}
+                                >
+                                    <div className="flex gap-2.5">
+                                        {/* Image */}
+                                        {item.imageUrl && !item.imageUrl.includes('placeholder') ? (
+                                            <div className="w-16 h-12 rounded flex-shrink-0 overflow-hidden relative">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={item.imageUrl}
+                                                    alt=""
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        const target = e.target as HTMLImageElement
+                                                        target.style.display = 'none'
+                                                        const fallback = target.nextElementSibling as HTMLElement
+                                                        if (fallback) fallback.style.display = 'flex'
+                                                    }}
+                                                />
+                                                <div
+                                                    className="absolute inset-0 items-center justify-center text-[10px] font-bold hidden"
+                                                    style={{ backgroundColor: `${theme.textSecondary}20`, color: theme.textSecondary }}
+                                                >
+                                                    NEWS
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="w-16 h-12 rounded flex-shrink-0 flex items-center justify-center"
+                                                style={{ backgroundColor: `${theme.accent}15` }}
+                                            >
+                                                <Newspaper size={18} style={{ color: theme.accent }} />
+                                            </div>
+                                        )}
+
+                                        {/* Content */}
+                                        <div className="flex-1 min-w-0">
+                                            <p
+                                                className="text-xs font-medium line-clamp-2 leading-tight"
+                                                style={{ color: theme.textPrimary }}
+                                            >
+                                                {item.title}
+                                            </p>
+                                            <div className="flex items-center gap-1.5 mt-1">
+                                                <span className="text-[10px]" style={{ color: theme.textSecondary }}>
+                                                    {item.source}
+                                                </span>
+                                                <span className="text-[10px]" style={{ color: theme.textSecondary }}>·</span>
+                                                <span className="text-[10px]" style={{ color: theme.textSecondary }}>
+                                                    {formatTime(item.time)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Stock Tags */}
+                                    {item.symbols && item.symbols.length > 0 && (
+                                        <div className="flex flex-wrap gap-1 mt-2">
+                                            {item.symbols.slice(0, 5).map(symbol => (
+                                                <span
+                                                    key={symbol}
+                                                    className="text-[10px] px-1.5 py-0.5 rounded font-medium"
+                                                    style={{
+                                                        backgroundColor: `${theme.accent}15`,
+                                                        color: theme.accent
+                                                    }}
+                                                >
+                                                    {symbol}
+                                                </span>
+                                            ))}
+                                            {item.symbols.length > 5 && (
+                                                <span className="text-[10px] px-1.5 py-0.5" style={{ color: theme.textSecondary }}>
+                                                    +{item.symbols.length - 5}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
         const renderCalendarContent = () => {
             // Helper to format date nicely
             const formatDate = (dateStr: string) => {
@@ -908,7 +1067,7 @@ export function Sidebar({
             case "watchlist":
                 return renderWatchlistContent()
             case "news":
-                return renderPlaceholderContent("Market News", "Latest stock market news and updates coming soon.")
+                return renderNewsContent()
             case "calendar":
                 return renderCalendarContent()
             case "brokers":
