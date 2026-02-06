@@ -359,7 +359,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                     </div>
                                 </div>
                                 <div
-                                    className="flex-1 rounded-lg p-2 w-full"
+                                    className="flex-1 rounded-lg p-2 w-full overflow-hidden"
                                     style={{ backgroundColor: `${theme.textSecondary}08` }}
                                 >
                                     <svg
@@ -367,7 +367,6 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                         height="100%"
                                         viewBox={`0 0 ${chartPath.width} ${chartPath.height}`}
                                         preserveAspectRatio="none"
-                                        className="overflow-visible"
                                     >
                                         <defs>
                                             <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
