@@ -6,6 +6,7 @@ import { BubbleCanvas } from "~/components/BubbleCanvas"
 import { Sidebar } from "~/components/Sidebar"
 import { StockDetailModal } from "~/components/StockDetailModal"
 import { ThemeProvider } from "~/contexts/ThemeContext"
+import { useLocalStorage, STORAGE_KEYS } from "~/lib/useLocalStorage"
 import type { TimePeriod } from "~/lib/bubble-physics"
 
 interface StockData {
@@ -50,9 +51,27 @@ const DEFAULT_WATCHLISTS: Watchlist[] = [
 
 function IndexContent() {
     const [timePeriod, setTimePeriod] = useState<TimePeriod>("1D")
-    const [selectedIndex, setSelectedIndex] = useState<string>("IDX80") // Default to IDX80
+
+    // Persisted state using localStorage
+    const [selectedIndex, setSelectedIndex, isIndexLoaded] = useLocalStorage<string>(
+        STORAGE_KEYS.SELECTED_INDEX,
+        "IDX80"
+    )
+    const [watchlists, setWatchlists] = useLocalStorage<Watchlist[]>(
+        STORAGE_KEYS.WATCHLISTS,
+        DEFAULT_WATCHLISTS
+    )
+    const [favorites, setFavorites] = useLocalStorage<string[]>(
+        STORAGE_KEYS.FAVORITES,
+        []
+    )
+    const [hiddenStocks, setHiddenStocks] = useLocalStorage<string[]>(
+        STORAGE_KEYS.HIDDEN_STOCKS,
+        []
+    )
+
+    // Non-persisted state
     const [selectedWatchlistId, setSelectedWatchlistId] = useState<number | null>(null)
-    const [watchlists, setWatchlists] = useState<Watchlist[]>(DEFAULT_WATCHLISTS)
     const [indexSymbols, setIndexSymbols] = useState<string[]>([])
     const [isLoadingIndex, setIsLoadingIndex] = useState(true)
 
@@ -63,12 +82,11 @@ function IndexContent() {
     // Search open state - shared between Header and Sidebar for mobile UX
     const [isSearchOpen, setIsSearchOpen] = useState(false)
 
-    // Favorites and hidden stocks (client-side only)
-    const [favorites, setFavorites] = useState<string[]>([])
-    const [hiddenStocks, setHiddenStocks] = useState<string[]>([])
-
-    // Fetch symbols for the selected index
+    // Fetch symbols for the selected index (only after localStorage loaded)
     useEffect(() => {
+        // Wait for localStorage to load before fetching
+        if (!isIndexLoaded) return
+
         console.log("[Page] useEffect for selectedIndex:", selectedIndex)
         if (!selectedIndex) {
             setIndexSymbols([])
@@ -92,7 +110,7 @@ function IndexContent() {
                 setIndexSymbols([])
                 setIsLoadingIndex(false)
             })
-    }, [selectedIndex])
+    }, [selectedIndex, isIndexLoaded])
 
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {

@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import { type Theme, getTheme, getNextTheme, getPrevTheme } from "~/styles/themes";
+import { useLocalStorage, STORAGE_KEYS } from "~/lib/useLocalStorage";
 
 interface ThemeContextType {
     theme: Theme;
@@ -14,18 +15,38 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [themeId, setThemeId] = useState("default");
+    // Use localStorage for persistence, with "default" as initial value
+    const [storedThemeId, setStoredThemeId, isLoaded] = useLocalStorage<string>(
+        STORAGE_KEYS.THEME,
+        "default"
+    );
+
+    // Local state for immediate updates (synced with localStorage)
+    const [themeId, setThemeIdState] = useState("default");
+
+    // Sync local state with localStorage once loaded
+    useEffect(() => {
+        if (isLoaded) {
+            setThemeIdState(storedThemeId);
+        }
+    }, [isLoaded, storedThemeId]);
+
     const theme = getTheme(themeId);
+
+    const setThemeId = useCallback((id: string) => {
+        setThemeIdState(id);
+        setStoredThemeId(id);
+    }, [setStoredThemeId]);
 
     const nextTheme = useCallback(() => {
         const next = getNextTheme(themeId);
         setThemeId(next.id);
-    }, [themeId]);
+    }, [themeId, setThemeId]);
 
     const prevTheme = useCallback(() => {
         const prev = getPrevTheme(themeId);
         setThemeId(prev.id);
-    }, [themeId]);
+    }, [themeId, setThemeId]);
 
     return (
         <ThemeContext.Provider value={{ theme, themeId, setThemeId, nextTheme, prevTheme }}>
