@@ -648,7 +648,8 @@ export function StockDetailModal({
                                         rel="noopener noreferrer"
                                         className="flex gap-3 hover:bg-black/5 p-2 rounded transition-colors group"
                                     >
-                                        {item.imageUrl ? (
+                                        {/* Check for valid image URL (not placeholder) */}
+                                        {item.imageUrl && !item.imageUrl.includes('placeholder') ? (
                                             <div className="w-16 h-12 rounded flex-shrink-0 overflow-hidden bg-cover bg-center relative">
                                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                                 <img
