@@ -4,6 +4,55 @@ import { useState, useEffect, useMemo } from "react"
 import { X, Star, ExternalLink, TrendingUp, TrendingDown } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
+// Skeleton shimmer component for loading states
+const Skeleton = ({ className = "", style = {} }: { className?: string; style?: React.CSSProperties }) => {
+    const { theme } = useTheme()
+    return (
+        <div
+            className={`animate-pulse rounded ${className}`}
+            style={{
+                background: `linear-gradient(90deg, ${theme.textSecondary}15 25%, ${theme.textSecondary}25 50%, ${theme.textSecondary}15 75%)`,
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                ...style
+            }}
+        />
+    )
+}
+
+// Skeleton chart with fake line animation
+const SkeletonChart = () => {
+    const { theme } = useTheme()
+    return (
+        <div className="flex-1 flex flex-col gap-2">
+            <div className="flex justify-between">
+                <Skeleton className="w-24 h-6" />
+                <Skeleton className="w-20 h-6" />
+            </div>
+            <div
+                className="flex-1 rounded-lg overflow-hidden relative min-h-[150px]"
+                style={{ backgroundColor: `${theme.textSecondary}08` }}
+            >
+                <svg width="100%" height="100%" className="animate-pulse">
+                    <defs>
+                        <linearGradient id="skeletonGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor={theme.textSecondary} stopOpacity="0.15" />
+                            <stop offset="100%" stopColor={theme.textSecondary} stopOpacity="0" />
+                        </linearGradient>
+                    </defs>
+                    <path
+                        d="M 0,120 Q 50,100 100,110 T 200,90 T 300,100 T 400,80 T 500,95"
+                        fill="url(#skeletonGradient)"
+                        stroke={theme.textSecondary}
+                        strokeWidth="2"
+                        strokeOpacity="0.3"
+                    />
+                </svg>
+            </div>
+        </div>
+    )
+}
+
 interface StockData {
     symbol: string
     name: string
@@ -330,9 +379,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                     {/* Chart Area */}
                     <div className="flex-1 p-4 min-h-[250px] flex flex-col relative">
                         {isLoading && chartData.length === 0 ? (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="animate-pulse" style={{ color: theme.textSecondary }}>Loading Chart...</span>
-                            </div>
+                            <SkeletonChart />
                         ) : chartPath ? (
                             <>
                                 <div className="flex justify-between items-center mb-2">
