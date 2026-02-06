@@ -16,9 +16,9 @@ import {
     Check,
     ArrowLeft,
     Trash2,
-    Save,
     Search,
     ExternalLink,
+    Briefcase,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
@@ -163,9 +163,22 @@ export function Sidebar({
 
     // Fetch indices from API on mount
     useEffect(() => {
+        console.log("[Sidebar] Fetching indices...")
+        // Safety timeout to prevent infinite loading
+        const timer = setTimeout(() => {
+            setIsLoadingIndices(prev => {
+                if (prev) {
+                    console.warn("[Sidebar] Indices fetch timed out")
+                    return false
+                }
+                return prev
+            })
+        }, 8000)
+
         fetch("/api/indices")
             .then(res => res.json())
             .then(data => {
+                console.log("[Sidebar] Indices fetched:", Array.isArray(data) ? data.length : "invalid")
                 // Ensure data is an array before setting
                 if (Array.isArray(data)) {
                     setIndices(data)
@@ -174,11 +187,15 @@ export function Sidebar({
                     setIndices([])
                 }
                 setIsLoadingIndices(false)
+                clearTimeout(timer)
             })
             .catch(err => {
                 console.error("Error fetching indices:", err)
                 setIsLoadingIndices(false)
+                clearTimeout(timer)
             })
+
+        return () => clearTimeout(timer)
     }, [])
 
     // Fetch calendar events when drawer opens
@@ -252,7 +269,6 @@ export function Sidebar({
 
         saveScrollPosition()
         onSelectIndex(kode)
-        onSelectWatchlist(null)
     }
 
     const handleWatchlistSelect = (id: number) => {
@@ -276,18 +292,7 @@ export function Sidebar({
         setEditSearch("")
     }
 
-    const saveEditing = () => {
-        if (!editingWatchlist) return
 
-        const finalName = editName.trim() || "Untitled Watchlist"
-
-        if (editingWatchlist.id === 0) {
-            onCreateWatchlist(finalName, editSelectedStocks)
-        } else {
-            onUpdateWatchlist(editingWatchlist.id, finalName, editSelectedStocks)
-        }
-        setEditingWatchlist(null)
-    }
 
     // Toggle stock in edit list - auto-saves immediately
     const toggleEditStock = (symbol: string) => {
@@ -299,10 +304,23 @@ export function Sidebar({
 
         setEditSelectedStocks(newStocks)
 
-        // Auto-save immediately (only for existing watchlists, not new ones)
+        // Auto-save immediately
         if (editingWatchlist.id !== 0) {
+            // Existing watchlist: Update
             const finalName = editName.trim() || editingWatchlist.name || "Untitled Watchlist"
             onUpdateWatchlist(editingWatchlist.id, finalName, newStocks)
+        } else {
+            // New watchlist: Create if adding a stock (not if removing and empty)
+            // Only create if we are adding a stock (newStocks length > 0)
+            if (newStocks.length > 0) {
+                const finalName = editName.trim() || "Untitled Watchlist"
+                onCreateWatchlist(finalName, newStocks)
+                // We can't easily switch to the new ID here because we don't know it,
+                // but onCreateWatchlist in page.tsx selects the new watchlist.
+                // We'll trust that flow. The user can continue editing.
+                setEditingWatchlist(null) // Close sidebar or maybe keep it?
+                // Closing is safer to avoid "creating multiple" if they keep clicking.
+            }
         }
     }
 
@@ -316,7 +334,7 @@ export function Sidebar({
         { id: "watchlist", icon: Star, label: "Watchlist" },
         { id: "news", icon: Newspaper, label: "News" },
         { id: "calendar", icon: Calendar, label: "Calendar" },
-        { id: "brokers", icon: BarChart3, label: "Top Brokers" },
+        { id: "brokers", icon: Briefcase, label: "Brokers" },
         { id: "settings", icon: Settings, label: "Settings" },
     ]
 
@@ -370,13 +388,7 @@ export function Sidebar({
                                 {isNew ? "Create Watchlist" : "Edit Watchlist"}
                             </span>
                         </div>
-                        <button
-                            onClick={saveEditing}
-                            className="p-1.5 rounded bg-green-500/10 text-green-500 hover:bg-green-500/20"
-                            title="Save"
-                        >
-                            <Save size={16} />
-                        </button>
+                        {/* Save button removed - using auto-save */}
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
@@ -386,7 +398,14 @@ export function Sidebar({
                             <input
                                 type="text"
                                 value={editName}
-                                onChange={(e) => setEditName(e.target.value)}
+                                onChange={(e) => {
+                                    const newName = e.target.value
+                                    setEditName(newName)
+                                    // Auto-save name for existing watchlists
+                                    if (editingWatchlist.id !== 0) {
+                                        onUpdateWatchlist(editingWatchlist.id, newName.trim() || editingWatchlist.name, editSelectedStocks)
+                                    }
+                                }}
                                 className="w-full px-3 py-2 rounded-lg text-sm outline-none"
                                 style={{
                                     backgroundColor: theme.inputBg,
@@ -488,6 +507,8 @@ export function Sidebar({
                 </div>
             )
         }
+
+
 
         const renderIndicesContent = () => (
             <div className="p-3 h-full flex flex-col text-left">

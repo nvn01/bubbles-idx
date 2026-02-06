@@ -10,8 +10,8 @@ const darkerGrotesque = Darker_Grotesque({
 });
 
 export const metadata: Metadata = {
-    title: "Bubbles Idx. | IDX30 Market Visualization",
-    description: "IDX30 Stock Market Visualization",
+    title: "IDX Stock Market Visualizer | IDX Stock Market Visualizer With Live News",
+    description: "IDX Stock Market Visualizer With Live News - Real-time Indonesian stock market bubble visualization",
 };
 
 export default function RootLayout({
