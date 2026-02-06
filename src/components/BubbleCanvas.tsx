@@ -19,14 +19,32 @@ interface StockData {
     }
 }
 
+interface Watchlist {
+    id: number
+    name: string
+    stocks: string[]
+}
+
 export function BubbleCanvas({
     timePeriod,
     selectedSymbols,
     isLoading: externalLoading = false,
+    hiddenStocks = [],
+    watchlists = [],
+    favorites = [],
+    onToggleFavorite,
+    onToggleHidden,
+    onToggleWatchlistStock,
 }: {
     timePeriod: TimePeriod
     selectedSymbols: string[]
     isLoading?: boolean
+    hiddenStocks?: string[]
+    watchlists?: Watchlist[]
+    favorites?: string[]
+    onToggleFavorite?: (symbol: string) => void
+    onToggleHidden?: (symbol: string) => void
+    onToggleWatchlistStock?: (watchlistId: number, symbol: string) => void
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -40,14 +58,20 @@ export function BubbleCanvas({
     const [allTickerData, setAllTickerData] = useState<TickerData[]>([])
     const [isDataLoading, setIsDataLoading] = useState(true)
 
-    // Filter ticker data by selected symbols
+    // Filter ticker data by selected symbols and exclude hidden stocks
     const filteredTickerData = useMemo(() => {
-        if (selectedSymbols.length === 0) {
-            return allTickerData
+        let data = allTickerData
+        if (selectedSymbols.length > 0) {
+            const symbolSet = new Set(selectedSymbols.map(s => s.toUpperCase()))
+            data = data.filter(t => symbolSet.has(t.symbol.toUpperCase()))
         }
-        const symbolSet = new Set(selectedSymbols.map(s => s.toUpperCase()))
-        return allTickerData.filter(t => symbolSet.has(t.symbol.toUpperCase()))
-    }, [allTickerData, selectedSymbols])
+        // Filter out hidden stocks
+        if (hiddenStocks.length > 0) {
+            const hiddenSet = new Set(hiddenStocks.map(s => s.toUpperCase()))
+            data = data.filter(t => !hiddenSet.has(t.symbol.toUpperCase()))
+        }
+        return data
+    }, [allTickerData, selectedSymbols, hiddenStocks])
 
     // Create a stable key from selectedSymbols to trigger physics recreation
     const selectedSymbolsKey = useMemo(() => selectedSymbols.sort().join(','), [selectedSymbols])
@@ -237,6 +261,12 @@ export function BubbleCanvas({
                 stock={selectedStock}
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                watchlists={watchlists}
+                favorites={favorites}
+                hiddenStocks={hiddenStocks}
+                onToggleFavorite={onToggleFavorite}
+                onToggleHidden={onToggleHidden}
+                onToggleWatchlistStock={onToggleWatchlistStock}
             />
         </>
     )

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
-import { X, Star, ExternalLink, TrendingUp, TrendingDown } from "lucide-react"
+import { useState, useEffect, useMemo, useRef } from "react"
+import { X, Star, ExternalLink, TrendingUp, TrendingDown, Heart, Eye, EyeOff, Plus, Check, List } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 
 // Skeleton shimmer component for loading states
@@ -83,19 +83,56 @@ interface NewsItem {
     imageUrl: string | null
 }
 
+interface Watchlist {
+    id: number
+    name: string
+    stocks: string[]
+}
+
 interface StockDetailModalProps {
     stock: StockData | null
     isOpen: boolean
     onClose: () => void
+    watchlists?: Watchlist[]
+    favorites?: string[]
+    hiddenStocks?: string[]
+    onToggleFavorite?: (symbol: string) => void
+    onToggleHidden?: (symbol: string) => void
+    onToggleWatchlistStock?: (watchlistId: number, symbol: string) => void
 }
 
-export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalProps) {
+export function StockDetailModal({
+    stock,
+    isOpen,
+    onClose,
+    watchlists = [],
+    favorites = [],
+    hiddenStocks = [],
+    onToggleFavorite,
+    onToggleHidden,
+    onToggleWatchlistStock
+}: StockDetailModalProps) {
     const { theme } = useTheme()
     const [chartTimeframe, setChartTimeframe] = useState<string>("1D")
     const [fetchedDetails, setFetchedDetails] = useState<StockData | null>(null)
     const [chartData, setChartData] = useState<ChartPoint[]>([])
     const [news, setNews] = useState<NewsItem[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isStarMenuOpen, setIsStarMenuOpen] = useState(false)
+    const starMenuRef = useRef<HTMLDivElement>(null)
+
+    // Close star menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (starMenuRef.current && !starMenuRef.current.contains(e.target as Node)) {
+                setIsStarMenuOpen(false)
+            }
+        }
+        if (isStarMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside)
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [isStarMenuOpen])
 
     // Reset state when stock changes
     useEffect(() => {
@@ -103,6 +140,7 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
         setChartData([])
         setNews([])
         setIsLoading(true)
+        setIsStarMenuOpen(false)
     }, [stock?.symbol])
 
     // Fetch data when modal opens or timeframe changes
@@ -247,9 +285,108 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <button style={{ color: theme.textSecondary }} className="hover:opacity-70 p-1">
-                                    <Star size={20} />
-                                </button>
+                                {/* Star Menu */}
+                                <div className="relative" ref={starMenuRef}>
+                                    <button
+                                        onClick={() => setIsStarMenuOpen(!isStarMenuOpen)}
+                                        className="hover:opacity-70 p-1 transition-opacity"
+                                        style={{ color: favorites.includes(activeStock.symbol) ? theme.accent : theme.textSecondary }}
+                                    >
+                                        <Star size={20} fill={favorites.includes(activeStock.symbol) ? theme.accent : 'none'} />
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    {isStarMenuOpen && (
+                                        <div
+                                            className="absolute right-0 top-full mt-2 w-56 rounded-lg shadow-xl z-50 overflow-hidden"
+                                            style={{
+                                                backgroundColor: theme.headerBg,
+                                                border: `1px solid ${theme.headerBorder}`
+                                            }}
+                                        >
+                                            {/* Add to Favorites */}
+                                            <button
+                                                onClick={() => {
+                                                    onToggleFavorite?.(activeStock.symbol)
+                                                    setIsStarMenuOpen(false)
+                                                }}
+                                                className="w-full flex items-center gap-3 px-4 py-3 text-sm hover:opacity-80 transition-opacity"
+                                                style={{
+                                                    color: theme.textPrimary,
+                                                    borderBottom: `1px solid ${theme.headerBorder}`
+                                                }}
+                                            >
+                                                <Heart
+                                                    size={18}
+                                                    fill={favorites.includes(activeStock.symbol) ? theme.bubble.negativeColor : 'none'}
+                                                    style={{ color: theme.bubble.negativeColor }}
+                                                />
+                                                {favorites.includes(activeStock.symbol) ? 'Remove from Favorites' : 'Add to Favorites'}
+                                            </button>
+
+                                            {/* Hide/Unhide Symbol */}
+                                            <button
+                                                onClick={() => {
+                                                    onToggleHidden?.(activeStock.symbol)
+                                                    setIsStarMenuOpen(false)
+                                                }}
+                                                className="w-full flex items-center gap-3 px-4 py-3 text-sm hover:opacity-80 transition-opacity"
+                                                style={{
+                                                    color: theme.textPrimary,
+                                                    borderBottom: `1px solid ${theme.headerBorder}`
+                                                }}
+                                            >
+                                                {hiddenStocks.includes(activeStock.symbol) ? (
+                                                    <>
+                                                        <Eye size={18} style={{ color: theme.accent }} />
+                                                        Unhide Symbol
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <EyeOff size={18} style={{ color: theme.textSecondary }} />
+                                                        Hide from Bubbles
+                                                    </>
+                                                )}
+                                            </button>
+
+                                            {/* Watchlists */}
+                                            {watchlists.length > 0 && (
+                                                <div>
+                                                    <div
+                                                        className="px-4 py-2 text-xs font-semibold uppercase tracking-wide"
+                                                        style={{ color: theme.textSecondary }}
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <List size={14} />
+                                                            Watchlists
+                                                        </div>
+                                                    </div>
+                                                    {watchlists.map(wl => {
+                                                        const isInList = wl.stocks.includes(activeStock.symbol)
+                                                        return (
+                                                            <button
+                                                                key={wl.id}
+                                                                onClick={() => {
+                                                                    onToggleWatchlistStock?.(wl.id, activeStock.symbol)
+                                                                }}
+                                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:opacity-80 transition-opacity"
+                                                                style={{ color: theme.textPrimary }}
+                                                            >
+                                                                {isInList ? (
+                                                                    <Check size={16} style={{ color: theme.bubble.positiveColor }} />
+                                                                ) : (
+                                                                    <Plus size={16} style={{ color: theme.textSecondary }} />
+                                                                )}
+                                                                <span className="truncate flex-1 text-left">{wl.name}</span>
+                                                            </button>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
                                 {/* Mobile close button */}
                                 <button
                                     onClick={onClose}

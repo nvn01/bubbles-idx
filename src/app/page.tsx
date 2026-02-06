@@ -63,6 +63,10 @@ function IndexContent() {
     // Search open state - shared between Header and Sidebar for mobile UX
     const [isSearchOpen, setIsSearchOpen] = useState(false)
 
+    // Favorites and hidden stocks (client-side only)
+    const [favorites, setFavorites] = useState<string[]>([])
+    const [hiddenStocks, setHiddenStocks] = useState<string[]>([])
+
     // Fetch symbols for the selected index
     useEffect(() => {
         console.log("[Page] useEffect for selectedIndex:", selectedIndex)
@@ -158,6 +162,38 @@ function IndexContent() {
         }
     }
 
+    // Toggle favorite status
+    const handleToggleFavorite = useCallback((symbol: string) => {
+        setFavorites(prev =>
+            prev.includes(symbol)
+                ? prev.filter(s => s !== symbol)
+                : [...prev, symbol]
+        )
+    }, [])
+
+    // Toggle hidden status
+    const handleToggleHidden = useCallback((symbol: string) => {
+        setHiddenStocks(prev =>
+            prev.includes(symbol)
+                ? prev.filter(s => s !== symbol)
+                : [...prev, symbol]
+        )
+    }, [])
+
+    // Toggle stock in a specific watchlist
+    const handleToggleWatchlistStock = useCallback((watchlistId: number, symbol: string) => {
+        setWatchlists(prev => prev.map(w => {
+            if (w.id !== watchlistId) return w
+            const hasStock = w.stocks.includes(symbol)
+            return {
+                ...w,
+                stocks: hasStock
+                    ? w.stocks.filter(s => s !== symbol)
+                    : [...w.stocks, symbol]
+            }
+        }))
+    }, [])
+
     return (
         <div className="flex flex-col h-screen overflow-hidden">
             {/* Header - full width on top */}
@@ -189,6 +225,12 @@ function IndexContent() {
                     timePeriod={timePeriod}
                     selectedSymbols={getSelectedSymbols()}
                     isLoading={isLoadingIndex}
+                    hiddenStocks={hiddenStocks}
+                    watchlists={watchlists}
+                    favorites={favorites}
+                    onToggleFavorite={handleToggleFavorite}
+                    onToggleHidden={handleToggleHidden}
+                    onToggleWatchlistStock={handleToggleWatchlistStock}
                 />
             </div>
 
@@ -197,6 +239,12 @@ function IndexContent() {
                 stock={selectedStock}
                 isOpen={isDetailOpen}
                 onClose={() => setIsDetailOpen(false)}
+                watchlists={watchlists}
+                favorites={favorites}
+                hiddenStocks={hiddenStocks}
+                onToggleFavorite={handleToggleFavorite}
+                onToggleHidden={handleToggleHidden}
+                onToggleWatchlistStock={handleToggleWatchlistStock}
             />
         </div>
     )
