@@ -648,13 +648,29 @@ export function StockDetailModal({
                                         rel="noopener noreferrer"
                                         className="flex gap-3 hover:bg-black/5 p-2 rounded transition-colors group"
                                     >
-                                        {item.imageUrl && (
-                                            <div
-                                                className="w-16 h-12 rounded flex-shrink-0 bg-cover bg-center"
-                                                style={{ backgroundImage: `url(${item.imageUrl})` }}
-                                            />
-                                        )}
-                                        {!item.imageUrl && (
+                                        {item.imageUrl ? (
+                                            <div className="w-16 h-12 rounded flex-shrink-0 overflow-hidden bg-cover bg-center relative">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={item.imageUrl}
+                                                    alt=""
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        // Hide broken image and show fallback
+                                                        const target = e.target as HTMLImageElement
+                                                        target.style.display = 'none'
+                                                        const fallback = target.nextElementSibling as HTMLElement
+                                                        if (fallback) fallback.style.display = 'flex'
+                                                    }}
+                                                />
+                                                <div
+                                                    className="absolute inset-0 items-center justify-center text-xs font-bold hidden"
+                                                    style={{ backgroundColor: `${theme.textSecondary}20`, color: theme.textSecondary }}
+                                                >
+                                                    NEWS
+                                                </div>
+                                            </div>
+                                        ) : (
                                             <div
                                                 className="w-16 h-12 rounded flex-shrink-0 flex items-center justify-center text-xs font-bold"
                                                 style={{ backgroundColor: `${theme.textSecondary}20`, color: theme.textSecondary }}
