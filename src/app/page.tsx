@@ -162,14 +162,42 @@ function IndexContent() {
         }
     }
 
-    // Toggle favorite status
+    // Toggle favorite status - auto-creates "Favorites" watchlist if needed
     const handleToggleFavorite = useCallback((symbol: string) => {
-        setFavorites(prev =>
-            prev.includes(symbol)
-                ? prev.filter(s => s !== symbol)
-                : [...prev, symbol]
-        )
-    }, [])
+        const isFavorited = favorites.includes(symbol)
+
+        if (isFavorited) {
+            // Remove from favorites
+            setFavorites(prev => prev.filter(s => s !== symbol))
+            // Also remove from Favorites watchlist if it exists
+            setWatchlists(prev => prev.map(w =>
+                w.name === "Favorites"
+                    ? { ...w, stocks: w.stocks.filter(s => s !== symbol) }
+                    : w
+            ))
+        } else {
+            // Add to favorites
+            setFavorites(prev => [...prev, symbol])
+
+            // Check if "Favorites" watchlist exists
+            const favoritesWatchlist = watchlists.find(w => w.name === "Favorites")
+            if (favoritesWatchlist) {
+                // Add to existing Favorites watchlist
+                setWatchlists(prev => prev.map(w =>
+                    w.name === "Favorites" && !w.stocks.includes(symbol)
+                        ? { ...w, stocks: [...w.stocks, symbol] }
+                        : w
+                ))
+            } else {
+                // Create new Favorites watchlist with this stock
+                const newId = Math.max(0, ...watchlists.map(w => w.id)) + 1
+                setWatchlists(prev => [
+                    { id: newId, name: "Favorites", stocks: [symbol] },
+                    ...prev
+                ])
+            }
+        }
+    }, [favorites, watchlists])
 
     // Toggle hidden status
     const handleToggleHidden = useCallback((symbol: string) => {
