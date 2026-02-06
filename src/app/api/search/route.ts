@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
 
+// Simple in-memory cache for search results
+const searchCache = new Map<string, { data: unknown; timestamp: number }>()
+const CACHE_TTL = 30000 // 30 seconds
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const q = searchParams.get("q")
@@ -9,67 +13,73 @@ export async function GET(request: Request) {
         return NextResponse.json([])
     }
 
+    const searchTerm = q.toUpperCase()
+
+    // Check cache first
+    const cacheKey = searchTerm
+    const cached = searchCache.get(cacheKey)
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return NextResponse.json(cached.data)
+    }
+
     try {
-        // Use raw SQL to prioritize symbol matches over name matches
-        // Priority 1: Symbol starts with query (e.g., "BB" -> BBRI, BBCA)
-        // Priority 2: Symbol contains query anywhere
-        // Priority 3: Name contains query
-        const searchTerm = q.toUpperCase()
         const likeTerm = `%${searchTerm}%`
         const startsWithTerm = `${searchTerm}%`
 
+        // Optimized query: 
+        // 1. Uses LIMIT to cap results
+        // 2. Uses subquery for latest ticker instead of JOIN+DISTINCT ON
+        // 3. Prioritizes matches in ORDER BY directly in SQL
         const stocks = await prisma.$queryRaw<Array<{
             kode_emiten: string
             nama_emiten: string
             d: number | null
             price: number | null
+            priority: number
         }>>`
-            SELECT DISTINCT ON (s.kode_emiten)
+            SELECT 
                 s.kode_emiten,
                 s.nama_emiten,
-                t.d,
-                t.price
+                COALESCE(
+                    (SELECT t.d FROM ticker t WHERE t.stocks_id = s.id ORDER BY t.ts DESC LIMIT 1),
+                    0
+                ) as d,
+                COALESCE(
+                    (SELECT t.price FROM ticker t WHERE t.stocks_id = s.id ORDER BY t.ts DESC LIMIT 1),
+                    0
+                ) as price,
+                CASE 
+                    WHEN s.kode_emiten ILIKE ${startsWithTerm} THEN 1
+                    WHEN s.kode_emiten ILIKE ${likeTerm} THEN 2
+                    ELSE 3
+                END as priority
             FROM stocks s
-            LEFT JOIN ticker t ON s.id = t.stocks_id
             WHERE 
                 s.kode_emiten ILIKE ${likeTerm}
                 OR s.nama_emiten ILIKE ${likeTerm}
-            ORDER BY 
-                s.kode_emiten,
-                t.ts DESC NULLS LAST
+            ORDER BY priority, s.kode_emiten
+            LIMIT 50
         `
 
-        // Sort results by priority in JavaScript for cleaner logic
-        const sortedStocks = stocks.sort((a, b) => {
-            const aSymbol = a.kode_emiten.toUpperCase()
-            const bSymbol = b.kode_emiten.toUpperCase()
-            const aName = a.nama_emiten.toUpperCase()
-            const bName = b.nama_emiten.toUpperCase()
-
-            // Priority 1: Symbol starts with search term
-            const aStartsWith = aSymbol.startsWith(searchTerm)
-            const bStartsWith = bSymbol.startsWith(searchTerm)
-
-            if (aStartsWith && !bStartsWith) return -1
-            if (!aStartsWith && bStartsWith) return 1
-
-            // Priority 2: Symbol contains search term (both start or both don't)
-            const aSymbolContains = aSymbol.includes(searchTerm)
-            const bSymbolContains = bSymbol.includes(searchTerm)
-
-            if (aSymbolContains && !bSymbolContains) return -1
-            if (!aSymbolContains && bSymbolContains) return 1
-
-            // Priority 3: Sort alphabetically by symbol
-            return aSymbol.localeCompare(bSymbol)
-        })
-
-        const results = sortedStocks.map(stock => ({
+        const results = stocks.map(stock => ({
             symbol: stock.kode_emiten,
             name: stock.nama_emiten,
-            change: stock.d || 0,
-            price: stock.price || 0
+            change: Number(stock.d) || 0,
+            price: Number(stock.price) || 0
         }))
+
+        // Cache the results
+        searchCache.set(cacheKey, { data: results, timestamp: Date.now() })
+
+        // Clean old cache entries periodically
+        if (searchCache.size > 100) {
+            const now = Date.now()
+            for (const [key, value] of searchCache.entries()) {
+                if (now - value.timestamp > CACHE_TTL) {
+                    searchCache.delete(key)
+                }
+            }
+        }
 
         return NextResponse.json(results)
     } catch (error) {
