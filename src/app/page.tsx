@@ -126,9 +126,9 @@ function IndexContent() {
         setSelectedWatchlistId(watchlistId)
         if (watchlistId) {
             setSelectedIndex("") // Clear index when watchlist selected
+        } else {
+            setSelectedIndex("IDX80") // Reset to IDX80 when watchlist deselected
         }
-        // Note: Don't reset to IDX80 when watchlistId is null - 
-        // the index is already being managed by handleSelectIndex
     }, [])
 
     // Determine which stocks to display based on filter selection
