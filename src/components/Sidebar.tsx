@@ -213,22 +213,19 @@ export function Sidebar({
 
     const handleIndexSelect = (kode: string) => {
         console.log("[Sidebar] handleIndexSelect called with:", kode, "current selectedIndex:", selectedIndex)
-        // Save scroll position before state change triggers re-render
+        // Don't toggle - clicking same item does nothing
+        if (selectedIndex === kode) return
+
         saveScrollPosition()
-        if (selectedIndex === kode) {
-            onSelectIndex(null)
-        } else {
-            onSelectIndex(kode)
-            onSelectWatchlist(null)
-        }
+        onSelectIndex(kode)
+        onSelectWatchlist(null)
     }
 
     const handleWatchlistSelect = (id: number) => {
-        if (selectedWatchlist === id) {
-            onSelectWatchlist(null)
-        } else {
-            onSelectWatchlist(id)
-        }
+        // Don't toggle - clicking same item does nothing
+        if (selectedWatchlist === id) return
+
+        onSelectWatchlist(id)
     }
 
     const startEditingKey = (watchlist: Watchlist | null) => {
