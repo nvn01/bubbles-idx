@@ -190,6 +190,51 @@ export function StockDetailModal({
         return () => clearTimeout(timeoutId)
     }, [stock, isOpen, chartTimeframe, fetchedDetails]) // precise deps
 
+    // Subscribe to SSE for real-time price updates
+    useEffect(() => {
+        if (!isOpen || !stock) return
+
+        const eventSource = new EventSource("/api/ticker/stream")
+
+        eventSource.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data) as Array<{
+                    symbol: string
+                    price: number
+                    h: number
+                    d: number
+                    w: number
+                    m: number
+                    y: number
+                }>
+
+                // Find the current stock in the ticker data
+                const ticker = data.find(t => t.symbol.toUpperCase() === stock.symbol.toUpperCase())
+                if (ticker) {
+                    setFetchedDetails(prev => {
+                        if (!prev) return prev
+                        return {
+                            ...prev,
+                            price: ticker.price,
+                            change: ticker.d,
+                            changes: {
+                                h: ticker.h,
+                                d: ticker.d,
+                                w: ticker.w,
+                                m: ticker.m,
+                                y: ticker.y,
+                            }
+                        }
+                    })
+                }
+            } catch (error) {
+                console.error("Error parsing SSE data:", error)
+            }
+        }
+
+        return () => eventSource.close()
+    }, [isOpen, stock?.symbol])
+
     // Generate chart path
     const chartPath = useMemo(() => {
         if (chartData.length < 2) return null
