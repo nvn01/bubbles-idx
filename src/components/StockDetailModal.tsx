@@ -379,7 +379,12 @@ export function StockDetailModal({ stock, isOpen, onClose }: StockDetailModalPro
                     {/* Chart Area */}
                     <div className="flex-1 p-4 min-h-[250px] flex flex-col relative">
                         {isLoading && chartData.length === 0 ? (
-                            <SkeletonChart />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div
+                                    className="w-8 h-8 border-3 border-t-transparent rounded-full animate-spin"
+                                    style={{ borderColor: `${theme.textSecondary}40`, borderTopColor: theme.accent }}
+                                />
+                            </div>
                         ) : chartPath ? (
                             <>
                                 <div className="flex justify-between items-center mb-2">
