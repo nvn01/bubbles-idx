@@ -489,22 +489,12 @@ export class BubblePhysics {
         this.bubbleStyle = newStyle
     }
 
-    private calculateRadius(changePercent: number): number {
+    private calculateScore(changePercent: number): number {
+        // Aggressive scoring: weighting larger changes much more heavily
+        // Base score ensures 0% change still has visibility
         const absChange = Math.abs(changePercent)
-        const minDimension = Math.min(this.canvasWidth, this.canvasHeight)
-
-        let sizeMultiplier = 1.0
-        if (minDimension < 600) {
-            sizeMultiplier = 0.5 + (minDimension / 600) * 0.25
-        } else if (minDimension < 1000) {
-            sizeMultiplier = 0.75 + ((minDimension - 600) / 400) * 0.25
-        }
-
-        const baseRadius = 20 * sizeMultiplier
-        const radiusVariation = 25 * sizeMultiplier
-
-        const scaleFactor = Math.min(absChange / 20, 1.5)
-        return baseRadius + radiusVariation * scaleFactor
+        // Power of 1.2 makes the difference between 1% and 10% more dramatic than linear
+        return Math.pow(absChange + 2, 1.2)
     }
 
     private initializeBubbles() {
@@ -536,10 +526,25 @@ export class BubblePhysics {
             }))
         }
 
+        // 1. Calculate scores
+        const scores = data.map(item => this.calculateScore(item.change))
+        const totalScore = scores.reduce((a, b) => a + b, 0)
+
+        // 2. Calculate available area (60% of canvas)
+        const totalArea = this.canvasWidth * this.canvasHeight
+        const targetArea = totalArea * 0.60
+
+        // 3. Area per score unit
+        const areaPerScore = targetArea / totalScore
+
         data.forEach((item, index) => {
             const angle = (index / data.length) * Math.PI * 2
             const distance = 250 + Math.random() * 450
-            const radius = this.calculateRadius(item.change)
+
+            // 4. Calculate radius from score
+            const score = scores[index] ?? 0
+            const bubbleArea = score * areaPerScore
+            const radius = Math.sqrt(bubbleArea / Math.PI)
 
             const velocityScale = 1.5 / (1 + radius / 30)
             const initialAngle = Math.random() * Math.PI * 2
@@ -550,7 +555,7 @@ export class BubblePhysics {
                 y: centerY + Math.sin(angle) * distance,
                 vx: Math.cos(initialAngle) * initialSpeed,
                 vy: Math.sin(initialAngle) * initialSpeed,
-                radius: radius,
+                radius: radius, // Start at full size
                 targetRadius: radius,
                 symbol: item.symbol,
                 name: item.name,
@@ -581,19 +586,6 @@ export class BubblePhysics {
     updateTickerData(newData: TickerData[]) {
         this.tickerData = newData
 
-        // Update existing bubbles with new data
-        newData.forEach(ticker => {
-            const bubble = this.bubbles.find(b => b.symbol === ticker.symbol)
-            if (bubble) {
-                const newChange = this.getChangeForPeriod(ticker)
-                bubble.change = newChange
-                bubble.price = ticker.price
-                bubble.name = ticker.name
-                bubble.changes = { h: ticker.h, d: ticker.d, w: ticker.w, m: ticker.m, y: ticker.y }
-                bubble.targetRadius = this.calculateRadius(newChange)
-            }
-        })
-
         // Add new bubbles for stocks that don't exist yet
         const existingSymbols = new Set(this.bubbles.map(b => b.symbol))
         const centerX = this.canvas.width / 2
@@ -602,7 +594,8 @@ export class BubblePhysics {
         newData.forEach((ticker, index) => {
             if (!existingSymbols.has(ticker.symbol)) {
                 const change = this.getChangeForPeriod(ticker)
-                const radius = this.calculateRadius(change)
+                // Initial radius will be fixed by recalculateTargetRadii immediately after
+                const radius = 10
                 const angle = Math.random() * Math.PI * 2
                 const distance = 250 + Math.random() * 450
                 const velocityScale = 1.5 / (1 + radius / 30)
@@ -629,6 +622,41 @@ export class BubblePhysics {
                     targetVy: Math.sin(initialAngle) * initialSpeed,
                 })
             }
+        })
+
+        this.recalculateTargetRadii()
+    }
+
+    // New method to recalculate all radii based on current canvas size and data
+    private recalculateTargetRadii() {
+        if (this.bubbles.length === 0) return
+
+        // 1. Re-calculate scores for all bubbles (in case data changed)
+        // Also map bubbles to their scores to avoid re-finding them
+        const bubbleScores = this.bubbles.map(bubble => {
+            // Update the bubble's internal change value if new data is available
+            // (This is partly redundant with updateTickerData loop below but ensures consistency)
+            const ticker = this.tickerData.find(t => t.symbol === bubble.symbol)
+            if (ticker) {
+                bubble.change = this.getChangeForPeriod(ticker)
+                bubble.price = ticker.price
+                bubble.changes = { h: ticker.h, d: ticker.d, w: ticker.w, m: ticker.m, y: ticker.y }
+            }
+            return this.calculateScore(bubble.change)
+        })
+
+        const totalScore = bubbleScores.reduce((a, b) => a + b, 0)
+
+        // 2. Target Area (60%)
+        const totalArea = this.canvasWidth * this.canvasHeight
+        const targetArea = totalArea * 0.60
+        const areaPerScore = targetArea / totalScore
+
+        // 3. Apply new target radii
+        this.bubbles.forEach((bubble, index) => {
+            const score = bubbleScores[index] ?? 0
+            const bubbleArea = score * areaPerScore
+            bubble.targetRadius = Math.sqrt(bubbleArea / Math.PI)
         })
     }
 
@@ -716,30 +744,12 @@ export class BubblePhysics {
         this.canvas.addEventListener("touchcancel", handleEnd)
     }
 
-    private calculateAvailableSpace() {
-        const canvasArea = this.canvasWidth * this.canvasHeight
-        const totalBubbleArea = this.bubbles.reduce((sum, bubble) => sum + Math.PI * bubble.radius * bubble.radius, 0)
-        const filledPercentage = totalBubbleArea / canvasArea
-        const targetFillPercentage = 0.75
-
-        if (filledPercentage < targetFillPercentage) {
-            const scaleNeeded = Math.sqrt(targetFillPercentage / Math.max(filledPercentage, 0.01))
-
-            this.bubbles.forEach((bubble) => {
-                const newRadius = bubble.radius * scaleNeeded
-                const maxPossible = Math.min(this.canvasWidth, this.canvasHeight) * 0.25
-                bubble.radius = Math.min(newRadius, maxPossible)
-            })
-        }
-    }
-
     update() {
         const friction = 0.993
         const minDimension = Math.min(this.canvasWidth, this.canvasHeight)
         const velocityDamping = minDimension < 600 ? 0.97 : 0.98
 
-        this.calculateAvailableSpace()
-
+        // Smoothly animate radius changes
         this.bubbles.forEach((bubble) => {
             const radiusDifference = bubble.targetRadius - bubble.radius
             if (Math.abs(radiusDifference) > 0.1) {
@@ -923,7 +933,6 @@ export class BubblePhysics {
                 if (ticker) {
                     const newChange = this.getChangeForPeriod(ticker)
                     bubble.change = newChange
-                    bubble.targetRadius = this.calculateRadius(newChange)
                 }
             })
         } else {
@@ -933,10 +942,11 @@ export class BubblePhysics {
                 const bubble = this.bubbles.find((b) => b.symbol === item.symbol)
                 if (bubble) {
                     bubble.change = item.change
-                    bubble.targetRadius = this.calculateRadius(item.change)
                 }
             })
         }
+
+        this.recalculateTargetRadii()
     }
 
     updateCanvasBounds(width: number, height: number) {
@@ -951,8 +961,9 @@ export class BubblePhysics {
         this.bubbles.forEach((bubble) => {
             bubble.x = newCenterX + (bubble.x - oldCenterX)
             bubble.y = newCenterY + (bubble.y - oldCenterY)
-            bubble.targetRadius = this.calculateRadius(bubble.change)
         })
+
+        this.recalculateTargetRadii()
     }
 
     setObstacle(x: number, y: number, width: number, height: number) {
