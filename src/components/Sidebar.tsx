@@ -106,8 +106,9 @@ export function Sidebar({
     const [editSearch, setEditSearch] = useState("")
     const [editSelectedStocks, setEditSelectedStocks] = useState<string[]>([])
 
-    // Available stocks for adding (mock for now, ideally fetch from API)
-    const [allStocks, setAllStocks] = useState<IndexData[]>([])
+    // Available stocks for adding (initially empty, results from search)
+    const [searchResults, setSearchResults] = useState<IndexData[]>([])
+    const [isSearching, setIsSearching] = useState(false)
 
     // Calendar State
     const [calendarData, setCalendarData] = useState<CalendarDay[]>([])
@@ -128,21 +129,35 @@ export function Sidebar({
     const [newsData, setNewsData] = useState<NewsItem[]>([])
     const [isLoadingNews, setIsLoadingNews] = useState(false)
 
-    // Fetch all stocks for the "Available" list in edit mode
+    // Debounced search for stocks when editing watchlist
     useEffect(() => {
-        if (editingWatchlist) {
-            // Using indices API as a source of stocks for now
-            fetch("/api/indices/IDX80") // Just fetching one index to get some stocks
+        if (!editingWatchlist || !editSearch || editSearch.length < 2) {
+            setSearchResults([])
+            return
+        }
+
+        const delayDebounceFn = setTimeout(() => {
+            setIsSearching(true)
+            fetch(`/api/search?q=${editSearch}`)
                 .then(res => res.json())
                 .then(data => {
-                    if (data.symbols) {
-                        // Map simply to { code, nama } format if possible, or just use strings
-                        setAllStocks(data.symbols.map((s: string) => ({ id: 0, kode: s, nama: "" })))
-                    }
+                    // Map API result to IndexData shape expected by rendering
+                    const mapped = data.map((item: any) => ({
+                        id: 0,
+                        kode: item.symbol,
+                        nama: item.name
+                    }))
+                    setSearchResults(mapped)
                 })
-                .catch(e => console.error("Error fetching stocks for edit:", e))
-        }
-    }, [editingWatchlist])
+                .catch(err => {
+                    console.error("Search failed:", err)
+                    setSearchResults([])
+                })
+                .finally(() => setIsSearching(false))
+        }, 300)
+
+        return () => clearTimeout(delayDebounceFn)
+    }, [editSearch, editingWatchlist])
 
     // Save scroll position before re-render
     const saveScrollPosition = useCallback(() => {
@@ -366,13 +381,6 @@ export function Sidebar({
         if (type === "watchlist" && editingWatchlist) {
             const isNew = editingWatchlist.id === 0
 
-            // Filter available stocks based on search and exclude selected
-            const filteredAvailable = allStocks.filter(s =>
-                !editSelectedStocks.includes(s.kode) &&
-                (s.kode.toLowerCase().includes(editSearch.toLowerCase()) ||
-                    s.nama.toLowerCase().includes(editSearch.toLowerCase()))
-            ).slice(0, 50) // Limit results for perf
-
             return (
                 <div className="flex flex-col h-full">
                     {/* Edit Header */}
@@ -432,8 +440,11 @@ export function Sidebar({
                                         color: theme.textPrimary,
                                         "--placeholder-color": theme.textSecondary
                                     } as React.CSSProperties}
-                                    placeholder="Search details..."
+                                    placeholder="Search to add..."
                                 />
+                                {isSearching && (
+                                    <div className="absolute right-3 top-2.5 w-4 h-4 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: theme.textSecondary, borderTopColor: theme.accent }} />
+                                )}
                             </div>
                         </div>
 
@@ -467,23 +478,34 @@ export function Sidebar({
                         {editSearch && (
                             <div>
                                 <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>
-                                    Available
+                                    Search Results
                                 </label>
                                 <div className="space-y-1">
-                                    {filteredAvailable.map(stock => (
-                                        <button
-                                            key={stock.kode}
-                                            onClick={() => toggleEditStock(stock.kode)}
-                                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left hover:opacity-80 transition-all"
-                                            style={{ border: `1px solid ${theme.headerBorder}` }}
-                                        >
-                                            <div>
-                                                <div style={{ color: theme.textPrimary }}>{stock.kode}</div>
-                                                {stock.nama && <div className="text-xs opacity-60">{stock.nama}</div>}
+                                    {searchResults.length > 0 ? searchResults.map(stock => {
+                                        const isSelected = editSelectedStocks.includes(stock.kode)
+                                        if (isSelected) return null // Hide if already selected
+
+                                        return (
+                                            <button
+                                                key={stock.kode}
+                                                onClick={() => toggleEditStock(stock.kode)}
+                                                className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left hover:opacity-80 transition-all"
+                                                style={{ border: `1px solid ${theme.headerBorder}` }}
+                                            >
+                                                <div>
+                                                    <div style={{ color: theme.textPrimary }}>{stock.kode}</div>
+                                                    {stock.nama && <div className="text-xs opacity-60">{stock.nama}</div>}
+                                                </div>
+                                                <Plus size={14} style={{ color: theme.textSecondary }} />
+                                            </button>
+                                        )
+                                    }) : (
+                                        !isSearching && (
+                                            <div className="text-xs text-center py-2 opacity-50" style={{ color: theme.textSecondary }}>
+                                                No matches found
                                             </div>
-                                            <Plus size={14} style={{ color: theme.textSecondary }} />
-                                        </button>
-                                    ))}
+                                        )
+                                    )}
                                 </div>
                             </div>
                         )}
