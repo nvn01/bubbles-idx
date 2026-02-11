@@ -114,22 +114,34 @@ function IndexContent() {
 
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {
-        // Generate mock data (will be replaced with real DB data)
-        const mockChange = (Math.random() - 0.5) * 10
-        setSelectedStock({
-            symbol,
-            name,
-            price: Math.round(1000 + Math.random() * 50000),
-            change: mockChange,
-            changes: {
-                h: (Math.random() - 0.5) * 5,
-                d: mockChange,
-                w: (Math.random() - 0.5) * 20,
-                m: (Math.random() - 0.5) * 30,
-                y: (Math.random() - 0.5) * 100,
-            },
-        })
-        setIsDetailOpen(true)
+        // Set basic info to show immediately while loading details
+        // Or we could set `isLoading` state here if we want to show a spinner before opening
+
+        // Reset selected stock first to clear old data
+        setSelectedStock(null)
+        setIsDetailOpen(true) // Open immediately, modal will show loading state if data is null
+
+        fetch(`/api/stocks/${symbol}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Stock not found")
+                return res.json()
+            })
+            .then(data => {
+                setSelectedStock(data)
+            })
+            .catch(err => {
+                console.error("Error fetching stock details:", err)
+                // Optionally show error toast here
+                // For now, we'll close the modal or show error state in modal
+                // Since StockDetailModal handles null stock gracefully (it just doesn't show much), 
+                // we might want to set a specific error state or keep 'stock' null
+
+                // If we want to show an error inside the modal:
+                // We could set a special "error" stock object or handle validation in the modal
+                // For this iteration, let's just alert for visibility as requested "thrown database error"
+                alert(`Failed to fetch details for ${symbol}. Data might be missing in database.`)
+                setIsDetailOpen(false)
+            })
     }, [])
 
     // Handle index selection - also clears watchlist
