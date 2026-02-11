@@ -530,9 +530,11 @@ export class BubblePhysics {
         const scores = data.map(item => this.calculateScore(item.change))
         const totalScore = scores.reduce((a, b) => a + b, 0)
 
-        // 2. Calculate available area (60% of canvas)
+        // 2. Calculate available area (Adaptive: 1.75% per bubble, max 60% of canvas)
         const totalArea = this.canvasWidth * this.canvasHeight
-        const targetArea = totalArea * 0.60
+        // Reaches 60% coverage at ~34 bubbles
+        const coverageRatio = Math.min(0.60, Math.max(0.10, data.length * 0.0175))
+        const targetArea = totalArea * coverageRatio
 
         // 3. Area per score unit
         const areaPerScore = targetArea / totalScore
@@ -647,9 +649,11 @@ export class BubblePhysics {
 
         const totalScore = bubbleScores.reduce((a, b) => a + b, 0)
 
-        // 2. Target Area (60%)
+        // 2. Target Area (Adaptive: 1.75% per bubble, max 60% of canvas)
         const totalArea = this.canvasWidth * this.canvasHeight
-        const targetArea = totalArea * 0.60
+        // Reaches 60% coverage at ~34 bubbles
+        const coverageRatio = Math.min(0.60, Math.max(0.10, this.bubbles.length * 0.0175))
+        const targetArea = totalArea * coverageRatio
         const areaPerScore = targetArea / totalScore
 
         // 3. Apply new target radii
