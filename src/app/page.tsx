@@ -147,6 +147,9 @@ function IndexContent() {
     // Handle index selection - also clears watchlist
     const handleSelectIndex = useCallback((indexKode: string | null) => {
         console.log("[Page] handleSelectIndex called with:", indexKode)
+        // Set loading and clear symbols immediately to prevent flash of old content
+        setIsLoadingIndex(true)
+        setIndexSymbols([])
         setSelectedIndex(indexKode || "IDX80") // Default back to IDX80 if null
         setSelectedWatchlistId(null)
     }, [])
