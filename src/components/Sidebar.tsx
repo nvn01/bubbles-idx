@@ -455,21 +455,28 @@ export function Sidebar({
                                     Selected ({editSelectedStocks.length})
                                 </label>
                                 <div className="space-y-1">
-                                    {editSelectedStocks.map(symbol => (
-                                        <div
-                                            key={symbol}
-                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-sm group"
-                                            style={{ backgroundColor: `${theme.accent}10` }}
-                                        >
-                                            <span style={{ color: theme.textPrimary }}>{symbol}</span>
-                                            <button
-                                                onClick={() => toggleEditStock(symbol)}
-                                                className="opacity-60 hover:opacity-100 hover:text-red-400"
+                                    {editSelectedStocks
+                                        .filter(symbol => !editSearch || symbol.includes(editSearch))
+                                        .map(symbol => (
+                                            <div
+                                                key={symbol}
+                                                className="flex items-center justify-between px-3 py-2 rounded-lg text-sm group"
+                                                style={{ backgroundColor: `${theme.accent}10` }}
                                             >
-                                                <X size={14} />
-                                            </button>
+                                                <span style={{ color: theme.textPrimary }}>{symbol}</span>
+                                                <button
+                                                    onClick={() => toggleEditStock(symbol)}
+                                                    className="opacity-60 hover:opacity-100 hover:text-red-400"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    {editSearch && editSelectedStocks.filter(s => s.includes(editSearch)).length === 0 && editSelectedStocks.length > 0 && (
+                                        <div className="text-xs italic opacity-50 px-2" style={{ color: theme.textSecondary }}>
+                                            {editSelectedStocks.length} selected stocks hidden (don't match search)
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -494,7 +501,7 @@ export function Sidebar({
                                             >
                                                 <div>
                                                     <div style={{ color: theme.textPrimary }}>{stock.kode}</div>
-                                                    {stock.nama && <div className="text-xs opacity-60">{stock.nama}</div>}
+                                                    {stock.nama && <div className="text-xs opacity-60" style={{ color: theme.textSecondary }}>{stock.nama}</div>}
                                                 </div>
                                                 <Plus size={14} style={{ color: theme.textSecondary }} />
                                             </button>
