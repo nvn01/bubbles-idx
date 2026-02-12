@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
 
+// Cache for calendar events — 5 minutes
+let calendarCache: { data: unknown; timestamp: number } | null = null;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get("limit") || "50")
     const upcoming = searchParams.get("upcoming") === "true"
+
+    // Use cache for default requests (upcoming, limit 50)
+    const isDefaultRequest = limit === 50;
+    if (isDefaultRequest && calendarCache && Date.now() - calendarCache.timestamp < CACHE_TTL) {
+        return NextResponse.json(calendarCache.data, {
+            headers: {
+                "Cache-Control": "s-maxage=300, stale-while-revalidate=60",
+            }
+        });
+    }
 
     try {
         const today = new Date()
@@ -48,7 +62,16 @@ export async function GET(request: Request) {
             events
         }))
 
-        return NextResponse.json(result)
+        // Cache default requests
+        if (isDefaultRequest) {
+            calendarCache = { data: result, timestamp: Date.now() };
+        }
+
+        return NextResponse.json(result, {
+            headers: {
+                "Cache-Control": "s-maxage=300, stale-while-revalidate=60",
+            }
+        })
     } catch (error) {
         console.error("Calendar API Error:", error)
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })

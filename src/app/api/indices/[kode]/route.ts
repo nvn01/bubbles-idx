@@ -5,10 +5,20 @@ interface RouteParams {
     params: Promise<{ kode: string }>;
 }
 
+// Cache per index kode — membership rarely changes
+const indexCache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export async function GET(request: Request, { params }: RouteParams) {
     try {
         const { kode } = await params;
         const indexKode = kode.toUpperCase();
+
+        // Check cache
+        const cached = indexCache.get(indexKode);
+        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+            return NextResponse.json(cached.data);
+        }
 
         // Find the index by kode and include its stocks (many-to-many relation)
         const stockIndex = await prisma.stockIndex.findFirst({
@@ -38,11 +48,16 @@ export async function GET(request: Request, { params }: RouteParams) {
             .filter(Boolean)
             .sort();
 
-        return NextResponse.json({
+        const data = {
             kode: stockIndex.kode,
             nama: stockIndex.nama,
             symbols: symbols,
-        });
+        };
+
+        // Cache result
+        indexCache.set(indexKode, { data, timestamp: Date.now() });
+
+        return NextResponse.json(data);
     } catch (error) {
         console.error("Error fetching index stocks:", error);
         return NextResponse.json(

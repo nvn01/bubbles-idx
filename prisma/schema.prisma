@@ -62,6 +62,7 @@ model Ticker {
 
   @@unique([stocks_id, ts]) // Composite Key
   @@index([ts])
+  @@index([stocks_id, ts(sort: Desc)]) // Optimized for "latest ticker per stock" queries
   @@map("ticker")
 }
 
@@ -89,6 +90,7 @@ model MarketNews {
   @@map("market_news")
   @@index([published_at(sort: Desc)])
   @@index([source])
+  @@index([stock_symbols], type: Gin) // GIN index for array containment queries
 }
 
 // Table Top Brokerage (Broker Summary)
@@ -104,6 +106,7 @@ model BrokerSummary {
   created_at DateTime @default(now())
 
   @@unique([date, kode])
+  @@index([date, value(sort: Desc)]) // Optimized for date filter + value sort
   @@map("broker_summary")
 }
 
@@ -117,5 +120,6 @@ model CorporateCalendar {
   
   created_at  DateTime @default(now())
 
+  @@index([date(sort: Asc)]) // Optimized for upcoming events query
   @@map("corporate_calendar")
 }

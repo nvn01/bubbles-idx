@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
 
+// In-memory cache keyed by date+sort combo
+const brokerCache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 60000; // 60 seconds
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const startDate = searchParams.get("startDate")
@@ -15,6 +19,15 @@ export async function GET(request: Request) {
 
         const start = startDate ? new Date(startDate) : today
         const end = endDate ? new Date(endDate) : today
+
+        // Check cache
+        const cacheKey = `${start.toISOString()}-${end.toISOString()}-${sortBy}-${limit}`;
+        const cached = brokerCache.get(cacheKey);
+        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+            return NextResponse.json(cached.data);
+        }
+
+        let responseData;
 
         // If date range, aggregate the data; otherwise just fetch single day
         if (start.getTime() === end.getTime()) {
@@ -38,12 +51,12 @@ export async function GET(request: Request) {
                 frequency: b.frequency
             }))
 
-            return NextResponse.json({
+            responseData = {
                 startDate: start.toISOString().split('T')[0],
                 endDate: end.toISOString().split('T')[0],
                 sortBy,
                 brokers: result
-            })
+            };
         } else {
             // Date range - aggregate with raw SQL
             const sortColumn = sortBy === "value" ? "total_value"
@@ -79,13 +92,28 @@ export async function GET(request: Request) {
                 frequency: Number(b.total_frequency)
             }))
 
-            return NextResponse.json({
+            responseData = {
                 startDate: start.toISOString().split('T')[0],
                 endDate: end.toISOString().split('T')[0],
                 sortBy,
                 brokers: result
-            })
+            };
         }
+
+        // Cache result
+        brokerCache.set(cacheKey, { data: responseData, timestamp: Date.now() });
+
+        // Cleanup old entries
+        if (brokerCache.size > 50) {
+            const now = Date.now();
+            for (const [key, value] of brokerCache.entries()) {
+                if (now - value.timestamp > CACHE_TTL) {
+                    brokerCache.delete(key);
+                }
+            }
+        }
+
+        return NextResponse.json(responseData);
     } catch (error) {
         console.error("Brokers API Error:", error)
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })

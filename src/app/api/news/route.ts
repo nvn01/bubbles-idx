@@ -8,7 +8,9 @@ const CACHE_TTL = 5 * 60 * 1000
 export async function GET() {
     // Return cached data if fresh
     if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
-        return NextResponse.json(cache.data)
+        return NextResponse.json(cache.data, {
+            headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
+        })
     }
 
     try {
@@ -43,7 +45,9 @@ export async function GET() {
         // Update cache
         cache = { data: formattedNews, timestamp: Date.now() }
 
-        return NextResponse.json(formattedNews)
+        return NextResponse.json(formattedNews, {
+            headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
+        })
     } catch (error) {
         console.error("Market News API Error:", error)
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })

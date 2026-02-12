@@ -26,10 +26,7 @@ export async function GET(request: Request) {
         const likeTerm = `%${searchTerm}%`
         const startsWithTerm = `${searchTerm}%`
 
-        // Optimized query: 
-        // 1. Uses LIMIT to cap results
-        // 2. Uses subquery for latest ticker instead of JOIN+DISTINCT ON
-        // 3. Prioritizes matches in ORDER BY directly in SQL
+        // Optimized query: Uses LATERAL JOIN instead of 2 correlated subqueries
         const stocks = await prisma.$queryRaw<Array<{
             kode_emiten: string
             nama_emiten: string
@@ -40,20 +37,21 @@ export async function GET(request: Request) {
             SELECT 
                 s.kode_emiten,
                 s.nama_emiten,
-                COALESCE(
-                    (SELECT t.d FROM ticker t WHERE t.stocks_id = s.id ORDER BY t.ts DESC LIMIT 1),
-                    0
-                ) as d,
-                COALESCE(
-                    (SELECT t.price FROM ticker t WHERE t.stocks_id = s.id ORDER BY t.ts DESC LIMIT 1),
-                    0
-                ) as price,
+                COALESCE(lt.d, 0) as d,
+                COALESCE(lt.price, 0) as price,
                 CASE 
                     WHEN s.kode_emiten ILIKE ${startsWithTerm} THEN 1
                     WHEN s.kode_emiten ILIKE ${likeTerm} THEN 2
                     ELSE 3
                 END as priority
             FROM stocks s
+            LEFT JOIN LATERAL (
+                SELECT t.price, t.d
+                FROM ticker t
+                WHERE t.stocks_id = s.id
+                ORDER BY t.ts DESC
+                LIMIT 1
+            ) lt ON true
             WHERE 
                 s.kode_emiten ILIKE ${likeTerm}
                 OR s.nama_emiten ILIKE ${likeTerm}

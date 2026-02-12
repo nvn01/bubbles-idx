@@ -13,9 +13,19 @@ interface TickerRow {
     y: number | null;
 }
 
+// Shared cache for SSE stream — avoids hammering DB every poll
+let cachedTickers: { data: TickerRow[]; timestamp: number } | null = null;
+const CACHE_TTL = 60000; // 60 seconds (data only changes every ~10 minutes from scraper)
+
 async function getLatestTickers(): Promise<TickerRow[]> {
-    return await prisma.$queryRaw<TickerRow[]>`
-        SELECT 
+    // Return cached data if fresh
+    if (cachedTickers && Date.now() - cachedTickers.timestamp < CACHE_TTL) {
+        return cachedTickers.data;
+    }
+
+    // Optimized: DISTINCT ON instead of correlated subquery
+    const data = await prisma.$queryRaw<TickerRow[]>`
+        SELECT DISTINCT ON (s.id)
             s.kode_emiten,
             s.nama_emiten,
             t.price,
@@ -26,13 +36,11 @@ async function getLatestTickers(): Promise<TickerRow[]> {
             t.y
         FROM stocks s
         INNER JOIN ticker t ON s.id = t.stocks_id
-        WHERE t.ts = (
-            SELECT MAX(t2.ts) 
-            FROM ticker t2 
-            WHERE t2.stocks_id = s.id
-        )
-        ORDER BY s.kode_emiten
+        ORDER BY s.id, t.ts DESC
     `;
+
+    cachedTickers = { data, timestamp: Date.now() };
+    return data;
 }
 
 export async function GET() {
