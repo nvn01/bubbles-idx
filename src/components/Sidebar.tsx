@@ -1091,7 +1091,7 @@ export function Sidebar({
 
                     {/* Legal */}
                     <a
-                        href="/legal"
+                        href="/documentation"
                         className="flex items-center gap-1.5 text-sm hover:opacity-80 transition-opacity"
                         style={{ color: theme.textSecondary }}
                     >

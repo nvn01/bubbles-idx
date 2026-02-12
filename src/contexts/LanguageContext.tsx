@@ -69,7 +69,7 @@ const translations: Record<Language, Record<string, string>> = {
         "settings.contactUs": "Contact Us",
         "settings.contactUsDesc": "Ask information or collaboration",
         "settings.contact": "Contact",
-        "settings.legal": "Terms of Service & Privacy Policy",
+        "settings.legal": "Documentation",
 
         // Header
         "header.search": "Search",
@@ -161,7 +161,7 @@ const translations: Record<Language, Record<string, string>> = {
         "settings.contactUs": "Hubungi Kami",
         "settings.contactUsDesc": "Tanya informasi atau kolaborasi",
         "settings.contact": "Hubungi",
-        "settings.legal": "Syarat Layanan & Kebijakan Privasi",
+        "settings.legal": "Dokumentasi",
 
         // Header
         "header.search": "Cari",
