@@ -12,12 +12,12 @@ const darkerGrotesque = Darker_Grotesque({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://bubbles.novn.my.id";
 const SITE_NAME = "Bubbles IDX";
 const SITE_DESCRIPTION =
-    "Real-time Indonesian stock market visualization with interactive bubbles. Track IDX stocks, indices, price changes, and market trends at a glance.";
+    "Indonesian stock market visualization with interactive bubbles. Track IDX stocks, indices, price changes, and market trends at a glance.";
 
 export const metadata: Metadata = {
     // Basic Meta
     title: {
-        default: `${SITE_NAME} — Real-Time IDX Stock Market Visualizer`,
+        default: `${SITE_NAME} — IDX Stock Market Visualizer`,
         template: `%s | ${SITE_NAME}`,
     },
     description: SITE_DESCRIPTION,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         alternateLocale: "id_ID",
         url: SITE_URL,
         siteName: SITE_NAME,
-        title: `${SITE_NAME} — Real-Time IDX Stock Market Visualizer`,
+        title: `${SITE_NAME} — IDX Stock Market Visualizer`,
         description: SITE_DESCRIPTION,
         images: [
             {
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     // Twitter Card
     twitter: {
         card: "summary_large_image",
-        title: `${SITE_NAME} — Real-Time IDX Stock Market Visualizer`,
+        title: `${SITE_NAME} — IDX Stock Market Visualizer`,
         description: SITE_DESCRIPTION,
         images: ["/og-image.png"],
     },
