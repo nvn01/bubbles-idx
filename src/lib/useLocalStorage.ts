@@ -52,4 +52,5 @@ export const STORAGE_KEYS = {
     WATCHLISTS: "bubble-watchlists",
     FAVORITES: "bubble-favorites",
     HIDDEN_STOCKS: "bubble-hidden-stocks",
+    LANGUAGE: "bubble-language",
 } as const

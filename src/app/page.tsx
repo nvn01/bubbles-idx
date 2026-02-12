@@ -6,6 +6,7 @@ import { BubbleCanvas } from "~/components/BubbleCanvas"
 import { Sidebar } from "~/components/Sidebar"
 import { StockDetailModal } from "~/components/StockDetailModal"
 import { ThemeProvider } from "~/contexts/ThemeContext"
+import { LanguageProvider } from "~/contexts/LanguageContext"
 import { useLocalStorage, STORAGE_KEYS } from "~/lib/useLocalStorage"
 import type { TimePeriod } from "~/lib/bubble-physics"
 
@@ -317,7 +318,9 @@ function IndexContent() {
 export default function Home() {
     return (
         <ThemeProvider>
-            <IndexContent />
+            <LanguageProvider>
+                <IndexContent />
+            </LanguageProvider>
         </ThemeProvider>
     )
 }

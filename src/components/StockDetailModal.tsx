@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react"
 import { X, Star, ExternalLink, TrendingUp, TrendingDown, Heart, Eye, EyeOff, Plus, Check, List } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
+import { useLanguage } from "~/contexts/LanguageContext"
 
 // Skeleton shimmer component for loading states
 const Skeleton = ({ className = "", style = {} }: { className?: string; style?: React.CSSProperties }) => {
@@ -113,6 +114,7 @@ export function StockDetailModal({
     onToggleWatchlistStock
 }: StockDetailModalProps) {
     const { theme } = useTheme()
+    const { t } = useLanguage()
     const [chartTimeframe, setChartTimeframe] = useState<string>("1D")
     const [fetchedDetails, setFetchedDetails] = useState<StockData | null>(null)
     const [chartData, setChartData] = useState<ChartPoint[]>([])
@@ -366,7 +368,7 @@ export function StockDetailModal({
                                                     fill={favorites.includes(activeStock.symbol) ? theme.bubble.negativeColor : 'none'}
                                                     style={{ color: theme.bubble.negativeColor }}
                                                 />
-                                                {favorites.includes(activeStock.symbol) ? 'Remove from Favorites' : 'Add to Favorites'}
+                                                {favorites.includes(activeStock.symbol) ? t('modal.removeFromFavorites') : t('modal.addToFavorites')}
                                             </button>
 
                                             {/* Hide/Unhide Symbol */}
@@ -384,12 +386,12 @@ export function StockDetailModal({
                                                 {hiddenStocks.includes(activeStock.symbol) ? (
                                                     <>
                                                         <Eye size={18} style={{ color: theme.accent }} />
-                                                        Unhide Symbol
+                                                        {t('modal.unhideSymbol')}
                                                     </>
                                                 ) : (
                                                     <>
                                                         <EyeOff size={18} style={{ color: theme.textSecondary }} />
-                                                        Hide from Bubbles
+                                                        {t('modal.hideFromBubbles')}
                                                     </>
                                                 )}
                                             </button>
@@ -403,7 +405,7 @@ export function StockDetailModal({
                                                     >
                                                         <div className="flex items-center gap-2">
                                                             <List size={14} />
-                                                            Watchlists
+                                                            {t('modal.watchlists')}
                                                         </div>
                                                     </div>
                                                     {watchlists.map(wl => {
@@ -483,24 +485,24 @@ export function StockDetailModal({
                     {/* Stock Details */}
                     <div className="p-4">
                         <h3 className="font-semibold text-sm mb-3" style={{ color: theme.textPrimary }}>
-                            Stock Details
+                            {t('modal.stockDetails')}
                         </h3>
                         <div className="space-y-2.5">
                             <div className="flex justify-between text-sm">
-                                <span style={{ color: theme.textSecondary }}>Company</span>
+                                <span style={{ color: theme.textSecondary }}>{t('modal.company')}</span>
                                 <span className="font-medium text-right max-w-[160px] truncate" style={{ color: theme.textPrimary }}>
                                     {activeStock.name}
                                 </span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span style={{ color: theme.textSecondary }}>Indices</span>
+                                <span style={{ color: theme.textSecondary }}>{t('modal.indices')}</span>
                                 <span className="font-medium text-right max-w-[160px] truncate" style={{ color: theme.textPrimary }}>
                                     {activeStock.indices?.join(", ") || "-"}
                                 </span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span style={{ color: theme.textSecondary }}>Market Status</span>
-                                <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>Open</span>
+                                <span style={{ color: theme.textSecondary }}>{t('modal.marketStatus')}</span>
+                                <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>{t('modal.open')}</span>
                             </div>
                         </div>
 
@@ -514,7 +516,7 @@ export function StockDetailModal({
                                 color: theme.headerBg,
                             }}
                         >
-                            View on IDX
+                            {t('modal.viewOnIdx')}
                             <ExternalLink size={14} />
                         </a>
                     </div>
@@ -528,7 +530,7 @@ export function StockDetailModal({
                         style={{ borderColor: theme.headerBorder }}
                     >
                         <h3 className="font-semibold" style={{ color: theme.textPrimary }}>
-                            {activeStock.symbol} Chart
+                            {activeStock.symbol} {t('modal.chart')}
                         </h3>
                         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
                             {chartTimeframes.map((tf) => (
@@ -578,7 +580,7 @@ export function StockDetailModal({
                                             border: `1px solid ${theme.headerBorder}`
                                         }}
                                     >
-                                        High: Rp {chartPath.max.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
+                                        {t('modal.high')}: Rp {chartPath.max.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
                                     </div>
                                     <div
                                         className="text-xs px-2 py-1 rounded flex items-center gap-1"
@@ -625,7 +627,7 @@ export function StockDetailModal({
                             </>
                         ) : (
                             <div className="absolute inset-0 flex items-center justify-center">
-                                <span style={{ color: theme.textSecondary }}>No Chart Data Available</span>
+                                <span style={{ color: theme.textSecondary }}>{t('modal.noChartData')}</span>
                             </div>
                         )}
                     </div>
@@ -636,7 +638,7 @@ export function StockDetailModal({
                         style={{ borderColor: theme.headerBorder }}
                     >
                         <h3 className="font-semibold text-sm mb-3" style={{ color: theme.textPrimary }}>
-                            Latest News
+                            {t('modal.latestNews')}
                         </h3>
                         {news.length > 0 ? (
                             <div className="space-y-3">
@@ -695,7 +697,7 @@ export function StockDetailModal({
                             </div>
                         ) : (
                             <div className="text-sm text-center py-4" style={{ color: theme.textSecondary }}>
-                                No news available.
+                                {t('modal.noNewsAvailable')}
                             </div>
                         )}
                     </div>

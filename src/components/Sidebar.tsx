@@ -21,6 +21,7 @@ import {
     Briefcase,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
+import { useLanguage } from "~/contexts/LanguageContext"
 
 interface IndexData {
     id: number
@@ -92,6 +93,7 @@ export function Sidebar({
     onDeleteWatchlist,
 }: SidebarProps) {
     const { theme } = useTheme()
+    const { language, setLanguage, t } = useLanguage()
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
     const indicesScrollRef = useRef<HTMLDivElement>(null)
@@ -345,12 +347,12 @@ export function Sidebar({
     }
 
     const navItems: { id: DrawerType; icon: typeof Layers; label: string }[] = [
-        { id: "indices", icon: Layers, label: "Indices" },
-        { id: "watchlist", icon: Star, label: "Watchlist" },
-        { id: "news", icon: Newspaper, label: "News" },
-        { id: "calendar", icon: Calendar, label: "Calendar" },
-        { id: "brokers", icon: Briefcase, label: "Brokers" },
-        { id: "settings", icon: Settings, label: "Settings" },
+        { id: "indices", icon: Layers, label: t("nav.indices") },
+        { id: "watchlist", icon: Star, label: t("nav.watchlist") },
+        { id: "news", icon: Newspaper, label: t("nav.news") },
+        { id: "calendar", icon: Calendar, label: t("nav.calendar") },
+        { id: "brokers", icon: Briefcase, label: t("nav.brokers") },
+        { id: "settings", icon: Settings, label: t("nav.settings") },
     ]
 
     // Mobile toggle button - positioned below header on mobile
@@ -393,7 +395,7 @@ export function Sidebar({
                                 <ArrowLeft size={16} style={{ color: theme.textSecondary }} />
                             </button>
                             <span className="font-semibold text-sm" style={{ color: theme.textPrimary }}>
-                                {isNew ? "Create Watchlist" : "Edit Watchlist"}
+                                {isNew ? t("watchlist.newTitle") : t("watchlist.editTitle")}
                             </span>
                         </div>
                         {/* Save button removed - using auto-save */}
@@ -420,7 +422,7 @@ export function Sidebar({
                                     border: `1px solid ${theme.inputBorder}`,
                                     color: theme.textPrimary
                                 }}
-                                placeholder="Watchlist Name"
+                                placeholder={t("watchlist.namePlaceholder")}
                             />
                         </div>
 
@@ -440,7 +442,7 @@ export function Sidebar({
                                         color: theme.textPrimary,
                                         "--placeholder-color": theme.textSecondary
                                     } as React.CSSProperties}
-                                    placeholder="Search to add..."
+                                    placeholder={t("watchlist.searchStocks")}
                                 />
                                 {isSearching && (
                                     <div className="absolute right-3 top-2.5 w-4 h-4 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: theme.textSecondary, borderTopColor: theme.accent }} />
@@ -474,7 +476,7 @@ export function Sidebar({
                                         ))}
                                     {editSearch && editSelectedStocks.filter(s => s.includes(editSearch)).length === 0 && editSelectedStocks.length > 0 && (
                                         <div className="text-xs italic opacity-50 px-2" style={{ color: theme.textSecondary }}>
-                                            {editSelectedStocks.length} selected stocks hidden (don't match search)
+                                            {editSelectedStocks.length} {t("watchlist.selectedHidden")}
                                         </div>
                                     )}
                                 </div>
@@ -485,7 +487,7 @@ export function Sidebar({
                         {editSearch && (
                             <div>
                                 <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>
-                                    Search Results
+                                    {t("watchlist.searchResults")}
                                 </label>
                                 <div className="space-y-1">
                                     {searchResults.length > 0 ? searchResults.map(stock => {
@@ -509,7 +511,7 @@ export function Sidebar({
                                     }) : (
                                         !isSearching && (
                                             <div className="text-xs text-center py-2 opacity-50" style={{ color: theme.textSecondary }}>
-                                                No matches found
+                                                {t("watchlist.noMatches")}
                                             </div>
                                         )
                                     )}
@@ -521,14 +523,14 @@ export function Sidebar({
                             <div className="pt-4 border-t" style={{ borderColor: theme.headerBorder }}>
                                 <button
                                     onClick={() => {
-                                        if (confirm("Delete this watchlist?")) {
+                                        if (confirm(t("watchlist.deleteConfirm"))) {
                                             onDeleteWatchlist(editingWatchlist.id)
                                             setEditingWatchlist(null)
                                         }
                                     }}
                                     className="w-full py-2 flex items-center justify-center gap-2 text-red-400 hover:bg-red-400/10 rounded-lg text-xs transition-colors"
                                 >
-                                    <Trash2 size={14} /> Delete Watchlist
+                                    <Trash2 size={14} /> {t("watchlist.delete")}
                                 </button>
                             </div>
                         )}
@@ -552,7 +554,7 @@ export function Sidebar({
                     <Search size={14} style={{ color: theme.textSecondary }} />
                     <input
                         type="text"
-                        placeholder="Search indices..."
+                        placeholder={t("indices.search")}
                         value={indicesSearch}
                         onChange={(e) => setIndicesSearch(e.target.value.toUpperCase())}
                         onKeyDown={(e) => e.stopPropagation()}
@@ -568,11 +570,11 @@ export function Sidebar({
                 <div ref={indicesScrollRef} className="space-y-1 flex-1 overflow-y-auto custom-scrollbar min-h-0">
                     {isLoadingIndices ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
-                            Loading indices...
+                            {t("indices.loading")}
                         </div>
                     ) : filteredIndices.length === 0 ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
-                            No indices found
+                            {t("indices.noResults")}
                         </div>
                     ) : (
                         filteredIndices.map((idx) => (
@@ -622,7 +624,7 @@ export function Sidebar({
                                     {wl.name}
                                 </div>
                                 <div className="text-xs" style={{ color: theme.textSecondary }}>
-                                    {wl.stocks.length} stocks
+                                    {wl.stocks.length} {t("watchlist.stocks")}
                                 </div>
                             </button>
 
@@ -651,7 +653,7 @@ export function Sidebar({
                         }}
                     >
                         <Plus size={14} />
-                        Create Watchlist
+                        {t("watchlist.create")}
                     </button>
                 </div>
             </div>
@@ -678,9 +680,9 @@ export function Sidebar({
                 const diffHours = Math.floor(diffMs / 3600000)
                 const diffDays = Math.floor(diffMs / 86400000)
 
-                if (diffMins < 60) return `${diffMins}m ago`
-                if (diffHours < 24) return `${diffHours}h ago`
-                if (diffDays < 7) return `${diffDays}d ago`
+                if (diffMins < 60) return `${diffMins}${t("news.minutesAgo")}`
+                if (diffHours < 24) return `${diffHours}${t("news.hoursAgo")}`
+                if (diffDays < 7) return `${diffDays}${t("news.daysAgo")}`
                 return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             }
 
@@ -688,13 +690,13 @@ export function Sidebar({
                 <div className="p-3 h-full flex flex-col">
                     {isLoadingNews ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
-                            Loading news...
+                            {t("news.loading")}
                         </div>
                     ) : newsData.length === 0 ? (
                         <div className="text-center py-4">
                             <Newspaper size={32} className="mx-auto mb-2 opacity-50" style={{ color: theme.textSecondary }} />
                             <p className="text-sm" style={{ color: theme.textSecondary }}>
-                                No news available
+                                {t("news.noNews")}
                             </p>
                         </div>
                     ) : (
@@ -803,11 +805,11 @@ export function Sidebar({
                 tomorrow.setDate(tomorrow.getDate() + 1)
 
                 if (date.toDateString() === today.toDateString()) {
-                    return "Today"
+                    return t("calendar.today")
                 } else if (date.toDateString() === tomorrow.toDateString()) {
-                    return "Tomorrow"
+                    return t("calendar.tomorrow")
                 } else {
-                    return date.toLocaleDateString('en-US', {
+                    return date.toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
                         weekday: 'short',
                         month: 'short',
                         day: 'numeric'
@@ -819,13 +821,13 @@ export function Sidebar({
                 <div className="p-3 h-full flex flex-col">
                     {isLoadingCalendar ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
-                            Loading events...
+                            {t("calendar.loading")}
                         </div>
                     ) : calendarData.length === 0 ? (
                         <div className="text-center py-4">
                             <Calendar size={32} className="mx-auto mb-2 opacity-50" style={{ color: theme.textSecondary }} />
                             <p className="text-sm" style={{ color: theme.textSecondary }}>
-                                No upcoming events
+                                {t("calendar.noEvents")}
                             </p>
                         </div>
                     ) : (
@@ -897,7 +899,7 @@ export function Sidebar({
             // Format date for display
             const formatDisplayDate = (dateStr: string) => {
                 const date = new Date(dateStr)
-                return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+                return date.toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', { month: 'short', day: '2-digit', year: 'numeric' })
             }
 
             const SortButton = ({ field, label }: { field: 'value' | 'volume' | 'frequency', label: string }) => (
@@ -960,22 +962,22 @@ export function Sidebar({
                             borderColor: theme.headerBorder
                         }}
                     >
-                        <div className="col-span-1">#</div>
-                        <div className="col-span-2">Code</div>
-                        <div className="col-span-3 text-right"><SortButton field="value" label="Val" /></div>
-                        <div className="col-span-3 text-right"><SortButton field="volume" label="Vol" /></div>
-                        <div className="col-span-3 text-right"><SortButton field="frequency" label="Freq" /></div>
+                        <div className="col-span-1">{t("brokers.rank")}</div>
+                        <div className="col-span-2">{t("brokers.code")}</div>
+                        <div className="col-span-3 text-right"><SortButton field="value" label={t("brokers.value")} /></div>
+                        <div className="col-span-3 text-right"><SortButton field="volume" label={t("brokers.volume")} /></div>
+                        <div className="col-span-3 text-right"><SortButton field="frequency" label={t("brokers.frequency")} /></div>
                     </div>
 
                     {/* Broker List */}
                     {isLoadingBrokers ? (
                         <div className="text-center py-4 text-sm" style={{ color: theme.textSecondary }}>
-                            Loading brokers...
+                            {t("brokers.loading")}
                         </div>
                     ) : brokersData.length === 0 ? (
                         <div className="text-center py-4">
                             <p className="text-sm" style={{ color: theme.textSecondary }}>
-                                No data for selected dates
+                                {t("brokers.noData")}
                             </p>
                         </div>
                     ) : (
@@ -1024,7 +1026,7 @@ export function Sidebar({
                 {/* Language */}
                 <div>
                     <label className="block text-sm font-medium mb-1.5" style={{ color: theme.textPrimary }}>
-                        Language
+                        {t("settings.language")}
                     </label>
                     <select
                         className="w-full px-3 py-2 rounded-lg text-sm outline-none"
@@ -1033,33 +1035,14 @@ export function Sidebar({
                             border: `1px solid ${theme.inputBorder}`,
                             color: theme.textPrimary,
                         }}
-                        defaultValue={typeof navigator !== 'undefined' && navigator.language?.startsWith('id') ? 'id' : 'en'}
+                        value={language}
+                        onChange={(e) => setLanguage(e.target.value as 'en' | 'id')}
                     >
-                        <option value="en">English</option>
-                        <option value="id">Bahasa Indonesia</option>
+                        <option value="en">{t("settings.langEnglish")}</option>
+                        <option value="id">{t("settings.langIndonesian")}</option>
                     </select>
                     <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
-                        Change the default language
-                    </p>
-                </div>
-
-                {/* Show Icons Toggle */}
-                <div>
-                    <div className="flex items-center justify-between">
-                        <label className="text-sm font-medium" style={{ color: theme.textPrimary }}>
-                            Show Icons
-                        </label>
-                        <button
-                            className="relative w-10 h-5 rounded-full transition-colors"
-                            style={{ backgroundColor: theme.accent }}
-                        >
-                            <div
-                                className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-white transition-transform"
-                            />
-                        </button>
-                    </div>
-                    <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
-                        Show/hide icons on the bubble
+                        {t("settings.languageDesc")}
                     </p>
                 </div>
 
@@ -1068,10 +1051,10 @@ export function Sidebar({
                     <div className="flex items-center justify-between mb-3">
                         <div>
                             <p className="text-sm font-medium" style={{ color: theme.textPrimary }}>
-                                Report an Issue
+                                {t("settings.reportIssue")}
                             </p>
                             <p className="text-xs" style={{ color: theme.textSecondary }}>
-                                Report a bug or missing symbol
+                                {t("settings.reportIssueDesc")}
                             </p>
                         </div>
                         <button
@@ -1081,7 +1064,7 @@ export function Sidebar({
                                 color: theme.accent,
                             }}
                         >
-                            Report
+                            {t("settings.report")}
                         </button>
                     </div>
 
@@ -1089,10 +1072,10 @@ export function Sidebar({
                     <div className="flex items-center justify-between mb-3">
                         <div>
                             <p className="text-sm font-medium" style={{ color: theme.textPrimary }}>
-                                Contact Us
+                                {t("settings.contactUs")}
                             </p>
                             <p className="text-xs" style={{ color: theme.textSecondary }}>
-                                Ask information or collaboration
+                                {t("settings.contactUsDesc")}
                             </p>
                         </div>
                         <button
@@ -1102,7 +1085,7 @@ export function Sidebar({
                                 color: theme.accent,
                             }}
                         >
-                            Contact
+                            {t("settings.contact")}
                         </button>
                     </div>
 
@@ -1112,7 +1095,7 @@ export function Sidebar({
                         className="flex items-center gap-1.5 text-sm hover:opacity-80 transition-opacity"
                         style={{ color: theme.textSecondary }}
                     >
-                        Terms of Service & Privacy Policy
+                        {t("settings.legal")}
                         <ExternalLink size={14} />
                     </a>
                 </div>

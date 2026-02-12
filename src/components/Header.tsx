@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { ChevronLeft, ChevronRight, X, Search } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
+import { useLanguage } from "~/contexts/LanguageContext"
 import { Logo } from "~/components/Logo"
 import type { TimePeriod } from "~/lib/bubble-physics"
 import { isMarketOpen } from "~/lib/utils"
@@ -24,6 +25,7 @@ export function Header({
     setIsSearchOpen?: (open: boolean) => void
 }) {
     const { theme, nextTheme, prevTheme } = useTheme()
+    const { t } = useLanguage()
     const [searchQuery, setSearchQuery] = useState("")
     const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
     const [isMarketActive, setIsMarketActive] = useState(false)
@@ -150,7 +152,7 @@ export function Header({
 
                 {/* LIVE text on desktop, just blinking dot on mobile */}
                 {/* Market Status */}
-                <div className="flex items-center gap-2 flex-shrink-0" title={isMarketActive ? "Market Open (10m delay)" : "Market Closed"}>
+                <div className="flex items-center gap-2 flex-shrink-0" title={isMarketActive ? t("header.marketOpen") : t("header.marketClosed")}>
                     <div
                         className={`w-2 h-2 rounded-full ${isMarketActive ? 'live-indicator' : ''}`}
                         style={{ backgroundColor: isMarketActive ? "#ef4444" : theme.textSecondary }}
@@ -185,7 +187,7 @@ export function Header({
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder="Search"
+                        placeholder={t("header.search")}
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value.toUpperCase())
@@ -224,10 +226,10 @@ export function Header({
                         {/* Tickers Section */}
                         <div className="p-3 border-b" style={{ borderColor: theme.headerBorder }}>
                             <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: theme.textSecondary }}>
-                                Tickers
+                                {t("header.tickers")}
                             </h4>
                             {isSearching ? (
-                                <div className="p-4 text-center text-sm" style={{ color: theme.textSecondary }}>Searching...</div>
+                                <div className="p-4 text-center text-sm" style={{ color: theme.textSecondary }}>{t("header.searching")}</div>
                             ) : searchResults.length > 0 ? (
                                 <div className="space-y-1 max-h-80 overflow-y-auto custom-scrollbar">
                                     {searchResults.map((stock) => (
@@ -260,7 +262,7 @@ export function Header({
                                 </div>
                             ) : (
                                 <p className="text-sm text-center py-2" style={{ color: theme.textSecondary }}>
-                                    No tickers found for &quot;{searchQuery}&quot;
+                                    {t("header.noTickers")} &quot;{searchQuery}&quot;
                                 </p>
                             )}
                         </div>
@@ -268,10 +270,10 @@ export function Header({
                         {/* News Section */}
                         <div className="p-3">
                             <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: theme.textSecondary }}>
-                                News
+                                {t("header.news")}
                             </h4>
                             <p className="text-sm text-center py-4" style={{ color: theme.textSecondary }}>
-                                No news found.
+                                {t("header.noNews")}
                             </p>
                         </div>
                     </div>
