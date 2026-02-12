@@ -115,6 +115,9 @@ function IndexContent() {
 
     // Handle stock selection from search
     const handleSelectStock = useCallback((symbol: string, name: string) => {
+        // Update URL to /stock/[symbol] without reload (SEO/Sharing friendly)
+        window.history.pushState({ stock: symbol }, "", `/stock/${symbol}`)
+
         // Set basic info to show immediately while loading details
         // Or we could set `isLoading` state here if we want to show a spinner before opening
 
@@ -142,6 +145,7 @@ function IndexContent() {
                 // For this iteration, let's just alert for visibility as requested "thrown database error"
                 alert(`Failed to fetch details for ${symbol}. Data might be missing in database.`)
                 setIsDetailOpen(false)
+                window.history.pushState({}, "", "/")
             })
     }, [])
 
@@ -303,7 +307,10 @@ function IndexContent() {
             <StockDetailModal
                 stock={selectedStock}
                 isOpen={isDetailOpen}
-                onClose={() => setIsDetailOpen(false)}
+                onClose={() => {
+                    setIsDetailOpen(false)
+                    window.history.pushState({}, "", "/")
+                }}
                 watchlists={watchlists}
                 favorites={favorites}
                 hiddenStocks={hiddenStocks}
