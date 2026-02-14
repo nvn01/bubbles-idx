@@ -20,7 +20,6 @@ import {
     Search,
     ExternalLink,
     Briefcase,
-    MapPin,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useLanguage } from "~/contexts/LanguageContext"
