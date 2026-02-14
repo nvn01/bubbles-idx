@@ -315,11 +315,6 @@ export const themes: Theme[] = [
             borderWidth: 2,
             glowIntensity: 0.18,
         },
-        inputBg: "#f6f8fc",
-        inputBorder: "#b0c4de",
-        inputFocus: "#4a7cf5",
-    },
-    {
         id: "terminal",
         name: "Terminal",
         background: "#0c0c0c",
