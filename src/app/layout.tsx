@@ -9,7 +9,7 @@ const darkerGrotesque = Darker_Grotesque({
     variable: "--font-logo"
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://bubbles.novn.my.id";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://bubblesidx.repixel1.com";
 const SITE_NAME = "Bubbles IDX";
 const SITE_DESCRIPTION =
     "Indonesian stock market visualization with interactive bubbles. Track IDX stocks, indices, price changes, and market trends at a glance.";
