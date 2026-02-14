@@ -6,6 +6,7 @@ import {
     Star,
     Newspaper,
     Calendar,
+    MapPin,
     BarChart3,
     Settings,
     X,
@@ -19,6 +20,7 @@ import {
     Search,
     ExternalLink,
     Briefcase,
+    MapPin,
 } from "lucide-react"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useLanguage } from "~/contexts/LanguageContext"
@@ -871,9 +873,10 @@ export function Sidebar({
                                                     {event.description}
                                                 </p>
                                                 {event.location && (
-                                                    <p className="text-xs mt-1" style={{ color: theme.textSecondary }}>
-                                                        📍 {event.location}
-                                                    </p>
+                                                    <div className="flex items-start gap-2 text-xs mt-1" style={{ color: theme.textSecondary }}>
+                                                        <MapPin size={12} className="mt-0.5 flex-shrink-0" />
+                                                        <span>{event.location}</span>
+                                                    </div>
                                                 )}
                                             </div>
                                         ))}
@@ -938,7 +941,8 @@ export function Sidebar({
                             style={{
                                 backgroundColor: theme.inputBg,
                                 border: `1px solid ${theme.inputBorder}`,
-                                color: theme.textPrimary
+                                color: theme.textPrimary,
+                                colorScheme: ['bubbles-light', 'mint-breeze', 'cloud-nine', 'lavender-mist'].includes(theme.id) ? 'light' : 'dark'
                             }}
                         />
                         <input
@@ -949,7 +953,8 @@ export function Sidebar({
                             style={{
                                 backgroundColor: theme.inputBg,
                                 border: `1px solid ${theme.inputBorder}`,
-                                color: theme.textPrimary
+                                color: theme.textPrimary,
+                                colorScheme: ['bubbles-light', 'mint-breeze', 'cloud-nine', 'lavender-mist'].includes(theme.id) ? 'light' : 'dark'
                             }}
                         />
                     </div>
