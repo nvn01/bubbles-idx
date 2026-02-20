@@ -12,7 +12,8 @@ interface Props {
 export async function generateMetadata(
   { params }: Props,
 ): Promise<Metadata> {
-  const { symbol } = await params
+  const { symbol: rawSymbol } = await params
+  const symbol = rawSymbol.toUpperCase()
   const stock = await prisma.stock.findUnique({
     where: { kode_emiten: symbol },
     include: {
@@ -48,7 +49,8 @@ export async function generateMetadata(
 
 // Server Component
 export default async function StockPage({ params }: Props) {
-  const { symbol } = await params
+  const { symbol: rawSymbol } = await params
+  const symbol = rawSymbol.toUpperCase()
 
   // Fetch stock data
   const stock = await prisma.stock.findUnique({
