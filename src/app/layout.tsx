@@ -117,8 +117,17 @@ export const viewport: Viewport = {
     maximumScale: 5,
 };
 
-// JSON-LD Structured Data for Google Rich Results
-const jsonLd = {
+// JSON-LD: WebSite schema — controls the "Site Name" shown in Google search results
+const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    alternateName: ["BubblesIDX", "Bubbles IDX Stock", "IDX Bubbles"],
+    url: SITE_URL,
+};
+
+// JSON-LD: WebApplication schema — for Google Rich Results
+const appJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: SITE_NAME,
@@ -147,7 +156,11 @@ export default function RootLayout({
             <head>
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
                 />
             </head>
             <body className={`${inter.className} ${darkerGrotesque.variable}`}>{children}</body>
