@@ -118,12 +118,15 @@ export const viewport: Viewport = {
 };
 
 // JSON-LD: WebSite schema — controls the "Site Name" shown in Google search results
+// Per https://developers.google.com/search/docs/appearance/site-names:
+// - url must end with trailing slash
+// - alternateName should include subdomain as lowercase fallback
 const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
-    alternateName: ["BubblesIDX", "Bubbles IDX Stock", "IDX Bubbles"],
-    url: SITE_URL,
+    alternateName: ["BubblesIDX", "Bubbles IDX Stock", "bubblesidx.repixel1.com"],
+    url: `${SITE_URL}/`,
 };
 
 // JSON-LD: WebApplication schema — for Google Rich Results
