@@ -27,6 +27,7 @@ interface StockData {
     name: string
     price: number
     change: number
+    is_suspended?: boolean
     changes: {
         h: number
         d: number
@@ -259,6 +260,7 @@ export function StockDetailContent({
     }
 
     const isPositive = activeStock.change >= 0
+    const isSuspended = (activeStock as StockData & { is_suspended?: boolean }).is_suspended
 
     return (
         <div
@@ -277,6 +279,22 @@ export function StockDetailContent({
             >
                 {/* Header */}
                 <div className="p-4 border-b" style={{ borderColor: theme.headerBorder }}>
+
+                    {/* Suspended Banner */}
+                    {isSuspended && (
+                        <div
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3 text-xs font-bold uppercase tracking-wider"
+                            style={{
+                                backgroundColor: `${theme.bubble.negativeColor}15`,
+                                border: `1px solid ${theme.bubble.negativeColor}40`,
+                                color: theme.bubble.negativeColor,
+                            }}
+                        >
+                            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: theme.bubble.negativeColor }} />
+                            Trading Suspended
+                        </div>
+                    )}
+
                     <div className="flex items-center justify-between mb-3">
                         {/* If not modal, add back button */}
                         {!isModal && (
@@ -476,7 +494,19 @@ export function StockDetailContent({
                         </div>
                         <div className="flex justify-between text-sm">
                             <span style={{ color: theme.textSecondary }}>{t('modal.marketStatus')}</span>
-                            <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>{t('modal.open')}</span>
+                            {isSuspended ? (
+                                <span
+                                    className="font-bold text-xs uppercase tracking-wide px-1.5 py-0.5 rounded"
+                                    style={{
+                                        color: theme.bubble.negativeColor,
+                                        backgroundColor: `${theme.bubble.negativeColor}20`,
+                                    }}
+                                >
+                                    Suspended
+                                </span>
+                            ) : (
+                                <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>{t('modal.open')}</span>
+                            )}
                         </div>
                     </div>
 

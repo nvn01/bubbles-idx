@@ -27,9 +27,11 @@ export async function GET(request: Request) {
         const startsWithTerm = `${searchTerm}%`
 
         // Optimized query: Uses LATERAL JOIN instead of 2 correlated subqueries
+        // Includes is_suspended so the frontend can label suspended stocks
         const stocks = await prisma.$queryRaw<Array<{
             kode_emiten: string
             nama_emiten: string
+            is_suspended: boolean
             d: number | null
             price: number | null
             priority: number
@@ -37,6 +39,7 @@ export async function GET(request: Request) {
             SELECT 
                 s.kode_emiten,
                 s.nama_emiten,
+                s.is_suspended,
                 COALESCE(lt.d, 0) as d,
                 COALESCE(lt.price, 0) as price,
                 CASE 
@@ -62,8 +65,10 @@ export async function GET(request: Request) {
         const results = stocks.map(stock => ({
             symbol: stock.kode_emiten,
             name: stock.nama_emiten,
-            change: Number(stock.d) || 0,
-            price: Number(stock.price) || 0
+            // Suspended stocks have no active price; force change to 0
+            change: stock.is_suspended ? 0 : (Number(stock.d) || 0),
+            price: stock.is_suspended ? 0 : (Number(stock.price) || 0),
+            is_suspended: stock.is_suspended,
         }))
 
         // Cache the results

@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 interface TickerRow {
     kode_emiten: string;
     nama_emiten: string;
+    is_suspended: boolean;
     price: number;
     h: number | null;
     d: number | null;
@@ -24,10 +25,12 @@ async function getLatestTickers(): Promise<TickerRow[]> {
     }
 
     // Optimized: DISTINCT ON instead of correlated subquery
+    // Exclude suspended stocks — they have no current price so change % would be stale
     const data = await prisma.$queryRaw<TickerRow[]>`
         SELECT DISTINCT ON (s.id)
             s.kode_emiten,
             s.nama_emiten,
+            s.is_suspended,
             t.price,
             t.h,
             t.d,
@@ -36,6 +39,7 @@ async function getLatestTickers(): Promise<TickerRow[]> {
             t.y
         FROM stocks s
         INNER JOIN ticker t ON s.id = t.stocks_id
+        WHERE s.is_suspended = false
         ORDER BY s.id, t.ts DESC
     `;
 

@@ -29,7 +29,7 @@ export function Header({
     const [searchQuery, setSearchQuery] = useState("")
     const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
     const [isMarketActive, setIsMarketActive] = useState(false)
-    const [searchResults, setSearchResults] = useState<{ symbol: string; name: string; change: number }[]>([])
+    const [searchResults, setSearchResults] = useState<{ symbol: string; name: string; change: number; is_suspended?: boolean }[]>([])
     const [isSearching, setIsSearching] = useState(false)
 
     // Check market status periodically
@@ -244,19 +244,32 @@ export function Header({
                                                     handleStockClick(stock.symbol, stock.name)
                                                 }
                                             }}
-                                            style={{ backgroundColor: `${theme.textSecondary}10` }}
+                                            style={{ backgroundColor: stock.is_suspended ? `${theme.bubble.negativeColor}15` : `${theme.textSecondary}10` }}
                                         >
-                                            <div className="flex items-center gap-3">
-                                                <span className="font-bold text-sm" style={{ color: theme.accent }}>
+                                            <div className="flex items-center gap-3 min-w-0">
+                                                <span className="font-bold text-sm flex-shrink-0" style={{ color: stock.is_suspended ? theme.textSecondary : theme.accent }}>
                                                     {stock.symbol}
                                                 </span>
-                                                <span className="text-sm truncate" style={{ color: theme.textSecondary }}>
+                                                <span className="text-sm truncate" style={{ color: theme.textSecondary, opacity: stock.is_suspended ? 0.6 : 1 }}>
                                                     {stock.name}
                                                 </span>
                                             </div>
-                                            <span className="text-sm font-medium flex-shrink-0" style={{ color: getChangeColor(stock.change) }}>
-                                                {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
-                                            </span>
+                                            {stock.is_suspended ? (
+                                                <span
+                                                    className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded flex-shrink-0"
+                                                    style={{
+                                                        color: theme.bubble.negativeColor,
+                                                        backgroundColor: `${theme.bubble.negativeColor}20`,
+                                                        border: `1px solid ${theme.bubble.negativeColor}40`,
+                                                    }}
+                                                >
+                                                    SUSPENDED
+                                                </span>
+                                            ) : (
+                                                <span className="text-sm font-medium flex-shrink-0" style={{ color: getChangeColor(stock.change) }}>
+                                                    {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
+                                                </span>
+                                            )}
                                         </div>
                                     ))}
                                 </div>

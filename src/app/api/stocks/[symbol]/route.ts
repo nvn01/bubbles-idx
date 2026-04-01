@@ -35,22 +35,25 @@ export async function GET(
         }
 
         const latestTicker = stock.tickers[0]
+        const isSuspended = stock.is_suspended
 
         // Format data for frontend
         const data = {
             symbol: stock.kode_emiten,
             name: stock.nama_emiten,
-            price: latestTicker?.price || 0,
-            change: latestTicker?.d || 0, // Daily change as primary
+            // Suspended stocks have no active trading — zero out price/change
+            price: isSuspended ? 0 : (latestTicker?.price || 0),
+            change: isSuspended ? 0 : (latestTicker?.d || 0), // Daily change as primary
+            is_suspended: isSuspended,
             listingDate: stock.tanggal_pencatatan,
             indices: stock.indices.map(i => i.nama),
-            // Performance metrics
+            // Performance metrics — all zero for suspended stocks
             changes: {
-                h: latestTicker?.h || 0,
-                d: latestTicker?.d || 0,
-                w: latestTicker?.w || 0,
-                m: latestTicker?.m || 0,
-                y: latestTicker?.y || 0,
+                h: isSuspended ? 0 : (latestTicker?.h || 0),
+                d: isSuspended ? 0 : (latestTicker?.d || 0),
+                w: isSuspended ? 0 : (latestTicker?.w || 0),
+                m: isSuspended ? 0 : (latestTicker?.m || 0),
+                y: isSuspended ? 0 : (latestTicker?.y || 0),
             }
         }
 

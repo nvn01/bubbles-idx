@@ -51,6 +51,7 @@ export async function GET() {
                 t.y
             FROM stocks s
             INNER JOIN ticker t ON s.id = t.stocks_id
+            WHERE s.is_suspended = false
             ORDER BY s.id, t.ts DESC
         `;
 
