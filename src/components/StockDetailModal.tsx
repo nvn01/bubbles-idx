@@ -15,7 +15,7 @@ interface StockData {
         m: number
         y: number
     }
-    indices?: string[]
+    indices?: { kode: string; nama: string }[]
 }
 
 interface Watchlist {

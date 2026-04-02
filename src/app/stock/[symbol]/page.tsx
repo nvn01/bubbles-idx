@@ -90,7 +90,7 @@ export default async function StockPage({ params }: Props) {
       m: ticker?.m || 0,
       y: ticker?.y || 0,
     },
-    indices: stock.indices.map(i => i.kode)
+    indices: stock.indices.map(i => ({ kode: i.kode, nama: i.nama }))
   }
 
   return (
