@@ -22,6 +22,23 @@ const Skeleton = ({ className = "", style = {} }: { className?: string; style?: 
     )
 }
 
+const NOTATION_DESCRIPTIONS: Record<string, string> = {
+    A: "Adanya Opini Tidak Wajar (Adverse) dari Akuntan Publik",
+    B: "Adanya permohonan Pernyataan Pailit",
+    C: "Kejadian perkara hukum terhadap Perusahaan Tercatat",
+    D: "Adanya Opini 'Tidak Menyatakan Pendapat (Disclaimer)' dari Akuntan Publik",
+    E: "Laporan keuangan terakhir menunjukkan ekuitas negatif",
+    F: "Sanksi administratif dan/atau perintah tertulis dari OJK yang dikenakan terhadap Perusahaan Tercatat",
+    G: "Sanksi administratif dan/atau perintah tertulis dari OJK yang dikenakan terhadap Perusahaan Grup",
+    K: "Menerapkan Saham Dengan Hak Suara Multipel",
+    L: "Perusahaan Tercatat yang belum menyampaikan laporan keuangan",
+    M: "Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)",
+    Q: "Pembatasan kegiatan usaha Perusahaan Tercatat dan/atau anak perusahaan oleh regulator",
+    S: "Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha",
+    V: "Perusahaan Tercatat yang dimohonkan Pailit atau Penundaan Kewajiban Pembayaran Utang (PKPU)",
+    X: "Efek Bersifat Ekuitas Dalam Pemantauan Khusus"
+}
+
 interface StockData {
     symbol: string
     name: string
@@ -36,6 +53,7 @@ interface StockData {
         y: number
     }
     indices?: string[]
+    notations?: string[]
 }
 
 interface ChartPoint {
@@ -492,6 +510,27 @@ export function StockDetailContent({
                                 {activeStock.indices?.join(", ") || "-"}
                             </span>
                         </div>
+                        {(activeStock.notations && activeStock.notations.length > 0) && (
+                            <div className="flex justify-between items-start text-sm">
+                                <span style={{ color: theme.textSecondary }}>Notasi Khusus</span>
+                                <div className="flex flex-wrap gap-1 justify-end max-w-[160px]">
+                                    {activeStock.notations.map((kode) => (
+                                        <div
+                                            key={kode}
+                                            className="px-1.5 py-0.5 text-xs font-bold rounded cursor-help transition-opacity hover:opacity-80"
+                                            title={NOTATION_DESCRIPTIONS[kode] || "Notasi Khusus"}
+                                            style={{
+                                                backgroundColor: `${theme.bubble.negativeColor}15`,
+                                                color: theme.bubble.negativeColor,
+                                                border: `1px solid ${theme.bubble.negativeColor}60`
+                                            }}
+                                        >
+                                            {kode}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <div className="flex justify-between text-sm">
                             <span style={{ color: theme.textSecondary }}>{t('modal.marketStatus')}</span>
                             {isSuspended ? (

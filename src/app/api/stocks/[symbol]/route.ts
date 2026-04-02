@@ -22,6 +22,7 @@ export async function GET(
         const stock = await prisma.stock.findUnique({
             where: { kode_emiten: symbol },
             include: {
+                notations: { select: { kode: true } },
                 indices: true,
                 tickers: {
                     orderBy: { ts: "desc" },
@@ -46,6 +47,7 @@ export async function GET(
             change: isSuspended ? 0 : (latestTicker?.d || 0), // Daily change as primary
             is_suspended: isSuspended,
             listingDate: stock.tanggal_pencatatan,
+            notations: stock.notations.map(n => n.kode),
             indices: stock.indices.map(i => i.nama),
             // Performance metrics — all zero for suspended stocks
             changes: {
