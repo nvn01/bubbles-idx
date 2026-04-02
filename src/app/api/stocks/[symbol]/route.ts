@@ -48,7 +48,7 @@ export async function GET(
             is_suspended: isSuspended,
             listingDate: stock.tanggal_pencatatan,
             notations: stock.notations.map(n => n.kode),
-            indices: stock.indices.map(i => i.nama),
+            indices: stock.indices.map(i => ({ kode: i.kode, nama: i.nama })),
             // Performance metrics — all zero for suspended stocks
             changes: {
                 h: isSuspended ? 0 : (latestTicker?.h || 0),

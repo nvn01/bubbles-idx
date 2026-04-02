@@ -52,7 +52,7 @@ interface StockData {
         m: number
         y: number
     }
-    indices?: string[]
+    indices?: { kode: string; nama: string }[]
     notations?: string[]
 }
 
@@ -280,6 +280,20 @@ export function StockDetailContent({
     const isPositive = activeStock.change >= 0
     const isSuspended = (activeStock as StockData & { is_suspended?: boolean }).is_suspended
 
+    const isMarketOpen = useMemo(() => {
+        const d = new Date()
+        const utc = d.getTime() + (d.getTimezoneOffset() * 60000)
+        const wibTime = new Date(utc + (3600000 * 7)) // UTC+7 (Jakarta)
+        
+        const day = wibTime.getDay()
+        if (day === 0 || day === 6) return false // Weekend
+        
+        const time = wibTime.getHours() + (wibTime.getMinutes() / 60)
+        if (time < 9 || time >= 16.25) return false // Outside 09:00 - 16:15
+        
+        return true
+    }, [])
+
     return (
         <div
             className={`relative w-full ${isModal ? 'max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl' : 'max-w-5xl rounded-xl shadow-lg border border-opacity-10'} overflow-hidden flex flex-col md:flex-row overflow-y-auto md:overflow-hidden bg-opacity-95`}
@@ -504,11 +518,26 @@ export function StockDetailContent({
                                 {activeStock.name}
                             </span>
                         </div>
-                        <div className="flex justify-between text-sm">
-                            <span style={{ color: theme.textSecondary }}>{t('modal.indices')}</span>
-                            <span className="font-medium text-right max-w-[160px] truncate" style={{ color: theme.textPrimary }}>
-                                {activeStock.indices?.join(", ") || "-"}
-                            </span>
+                        <div className="flex justify-between items-start text-sm pt-1">
+                            <span className="flex-shrink-0 mr-4" style={{ color: theme.textSecondary, marginTop: "2px" }}>{t('modal.indices')}</span>
+                            <div className="flex flex-wrap gap-1 justify-end max-w-[200px]">
+                                {activeStock.indices?.length ? activeStock.indices.map((idx) => (
+                                    <div
+                                        key={idx.kode}
+                                        className="px-1.5 py-0.5 text-xs font-bold rounded cursor-help transition-opacity hover:opacity-80"
+                                        title={idx.nama}
+                                        style={{
+                                            backgroundColor: `${theme.textSecondary}15`,
+                                            color: theme.textPrimary,
+                                            border: `1px solid ${theme.textSecondary}30`
+                                        }}
+                                    >
+                                        {idx.kode === 'COMPOSITE' ? 'IHSG' : idx.kode}
+                                    </div>
+                                )) : (
+                                    <span className="font-medium text-right" style={{ color: theme.textPrimary }}>-</span>
+                                )}
+                            </div>
                         </div>
                         {(activeStock.notations && activeStock.notations.length > 0) && (
                             <div className="flex justify-between items-start text-sm">
@@ -531,7 +560,7 @@ export function StockDetailContent({
                                 </div>
                             </div>
                         )}
-                        <div className="flex justify-between text-sm">
+                        <div className="flex justify-between text-sm py-1">
                             <span style={{ color: theme.textSecondary }}>{t('modal.marketStatus')}</span>
                             {isSuspended ? (
                                 <span
@@ -543,8 +572,10 @@ export function StockDetailContent({
                                 >
                                     Suspended
                                 </span>
-                            ) : (
+                            ) : isMarketOpen ? (
                                 <span className="font-medium" style={{ color: theme.bubble.positiveColor }}>{t('modal.open')}</span>
+                            ) : (
+                                <span className="font-medium" style={{ color: theme.textSecondary }}>{t('modal.closed')}</span>
                             )}
                         </div>
                     </div>
