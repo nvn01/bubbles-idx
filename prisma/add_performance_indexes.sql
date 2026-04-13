@@ -24,3 +24,7 @@ ON "corporate_calendar" ("date" ASC);
 
 -- Verify indexes were created:
 -- SELECT indexname, tablename FROM pg_indexes WHERE schemaname = 'public' ORDER BY tablename;
+
+-- Refresh planner statistics after large ticker imports or after creating indexes:
+-- ANALYZE "stocks";
+-- ANALYZE "ticker";
