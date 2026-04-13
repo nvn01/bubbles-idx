@@ -1,24 +1,71 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { z } from "zod"
 
 // In-memory cache keyed by date+sort combo
 const brokerCache = new Map<string, { data: unknown; timestamp: number }>();
 const CACHE_TTL = 60000; // 60 seconds
 
+const ALLOWED_SORT_FIELDS = ["value", "volume", "frequency"] as const;
+const MAX_LIMIT = 100;
+
+const brokerQuerySchema = z.object({
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    sortBy: z.enum(ALLOWED_SORT_FIELDS).default("value"),
+    limit: z.coerce.number().int().min(1).max(MAX_LIMIT).default(20),
+});
+
+function parseDateInput(value: string | undefined, fallback: Date): Date | null {
+    if (!value) return fallback;
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+        return null;
+    }
+
+    return parsed;
+}
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
-    const startDate = searchParams.get("startDate")
-    const endDate = searchParams.get("endDate")
-    const sortBy = searchParams.get("sortBy") || "value" // value, volume, frequency
-    const limit = parseInt(searchParams.get("limit") || "20")
+    const parsedQuery = brokerQuerySchema.safeParse({
+        startDate: searchParams.get("startDate") ?? undefined,
+        endDate: searchParams.get("endDate") ?? undefined,
+        sortBy: searchParams.get("sortBy") ?? undefined,
+        limit: searchParams.get("limit") ?? undefined,
+    })
+
+    if (!parsedQuery.success) {
+        return NextResponse.json(
+            { error: "Invalid query parameters" },
+            { status: 400 }
+        )
+    }
+
+    const { startDate, endDate, sortBy, limit } = parsedQuery.data
 
     try {
         // Default to today if no dates provided
         const today = new Date()
         today.setHours(0, 0, 0, 0)
 
-        const start = startDate ? new Date(startDate) : today
-        const end = endDate ? new Date(endDate) : today
+        const start = parseDateInput(startDate, today)
+        const end = parseDateInput(endDate, today)
+
+        if (!start || !end) {
+            return NextResponse.json(
+                { error: "Invalid date format" },
+                { status: 400 }
+            )
+        }
+
+        if (start > end) {
+            return NextResponse.json(
+                { error: "startDate must be before or equal to endDate" },
+                { status: 400 }
+            )
+        }
 
         // Check cache
         const cacheKey = `${start.toISOString()}-${end.toISOString()}-${sortBy}-${limit}`;

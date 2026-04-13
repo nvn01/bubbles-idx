@@ -7,11 +7,21 @@ const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const RATE_LIMIT_MAX = 120; // 120 requests per minute per IP
 
 function getRateLimitKey(request: NextRequest): string {
-    // Use X-Forwarded-For from Traefik/Cloudflare, fallback to generic
-    const forwarded = request.headers.get("x-forwarded-for");
-    const realIp = request.headers.get("x-real-ip");
+    // Trust Cloudflare's canonical client IP header in production.
+    // Avoid using generic forwarded headers there because they are easier to spoof.
     const cfIp = request.headers.get("cf-connecting-ip");
-    return cfIp || realIp || forwarded?.split(",")[0]?.trim() || "unknown";
+
+    if (cfIp) {
+        return cfIp;
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+        const forwarded = request.headers.get("x-forwarded-for");
+        const realIp = request.headers.get("x-real-ip");
+        return realIp || forwarded?.split(",")[0]?.trim() || "local-dev";
+    }
+
+    return "unknown";
 }
 
 export function middleware(request: NextRequest) {
