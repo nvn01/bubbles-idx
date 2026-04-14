@@ -77,7 +77,7 @@ interface SidebarProps {
     onSelectWatchlist: (watchlistId: number | null) => void
     isSearchOpen?: boolean
     watchlists: Watchlist[]
-    onCreateWatchlist: (name: string, stocks: string[]) => void
+    onCreateWatchlist: (name: string, stocks: string[]) => Watchlist
     onUpdateWatchlist: (id: number, name: string, stocks: string[]) => void
     onDeleteWatchlist: (id: number) => void
 }
@@ -325,19 +325,17 @@ export function Sidebar({
         // Auto-save immediately
         if (editingWatchlist.id !== 0) {
             // Existing watchlist: Update
-            const finalName = editName.trim() || editingWatchlist.name || "Untitled Watchlist"
+            const finalName = editName.trim() || editingWatchlist.name || t("watchlist.untitled")
             onUpdateWatchlist(editingWatchlist.id, finalName, newStocks)
         } else {
             // New watchlist: Create if adding a stock (not if removing and empty)
             // Only create if we are adding a stock (newStocks length > 0)
             if (newStocks.length > 0) {
-                const finalName = editName.trim() || "Untitled Watchlist"
-                onCreateWatchlist(finalName, newStocks)
-                // We can't easily switch to the new ID here because we don't know it,
-                // but onCreateWatchlist in page.tsx selects the new watchlist.
-                // We'll trust that flow. The user can continue editing.
-                setEditingWatchlist(null) // Close sidebar or maybe keep it?
-                // Closing is safer to avoid "creating multiple" if they keep clicking.
+                const finalName = editName.trim() || t("watchlist.untitled")
+                const newWatchlist = onCreateWatchlist(finalName, newStocks)
+
+                setEditingWatchlist(newWatchlist)
+                setEditName(newWatchlist.name)
             }
         }
     }
@@ -405,7 +403,7 @@ export function Sidebar({
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
                         {/* Name Input */}
                         <div>
-                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>Name</label>
+                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>{t("watchlist.nameLabel")}</label>
                             <input
                                 type="text"
                                 value={editName}
@@ -429,7 +427,7 @@ export function Sidebar({
 
                         {/* Search Add */}
                         <div>
-                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>Add Stocks</label>
+                            <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>{t("watchlist.addStocks")}</label>
                             <div className="relative">
                                 <Search className="absolute left-2.5 top-2.5" size={14} style={{ color: theme.textSecondary }} />
                                 <input
@@ -455,7 +453,7 @@ export function Sidebar({
                         {editSelectedStocks.length > 0 && (
                             <div>
                                 <label className="text-xs font-medium mb-1 block" style={{ color: theme.textSecondary }}>
-                                    Selected ({editSelectedStocks.length})
+                                    {t("watchlist.selectedStocks")} ({editSelectedStocks.length})
                                 </label>
                                 <div className="space-y-1">
                                     {editSelectedStocks
@@ -637,7 +635,7 @@ export function Sidebar({
                                 }}
                                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/10"
                                 style={{ color: theme.textSecondary }}
-                                title="Edit Watchlist"
+                                title={t("watchlist.editAction")}
                             >
                                 <Edit2 size={12} />
                             </button>

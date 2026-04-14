@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { BubblePhysics, type TimePeriod, type Bubble, type TickerData } from "~/lib/bubble-physics"
+import { useLanguage } from "~/contexts/LanguageContext"
 import { useTheme } from "~/contexts/ThemeContext"
 import { StockDetailModal } from "./StockDetailModal"
 
@@ -51,6 +52,7 @@ export function BubbleCanvas({
     const obstacleRef = useRef<HTMLDivElement>(null)
     const physicsRef = useRef<BubblePhysics | null>(null)
     const eventSourceRef = useRef<EventSource | null>(null)
+    const { t } = useLanguage()
     const { theme } = useTheme()
 
     const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
@@ -238,7 +240,22 @@ export function BubbleCanvas({
                         className="absolute inset-0 flex items-center justify-center z-10"
                         style={{ backgroundColor: theme.background }}
                     >
-                        <div className="text-lg animate-pulse" style={{ color: theme.textPrimary }}>Loading...</div>
+                        <div className="flex flex-col items-center gap-3 px-4 text-center">
+                            <div className="text-lg animate-pulse" style={{ color: theme.textPrimary }}>
+                                {t("loading.main")}
+                            </div>
+                            <div className="text-sm" style={{ color: theme.textSecondary }}>
+                                {t("loading.reloadHint")}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => window.location.reload()}
+                                className="text-sm underline underline-offset-4 transition-opacity hover:opacity-80"
+                                style={{ color: theme.textSecondary }}
+                            >
+                                {t("loading.reloadAction")}
+                            </button>
+                        </div>
                     </div>
                 )}
 

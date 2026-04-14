@@ -26,7 +26,10 @@ const translations: Record<Language, Record<string, string>> = {
         "watchlist.create": "Create Watchlist",
         "watchlist.editTitle": "Edit Watchlist",
         "watchlist.newTitle": "New Watchlist",
+        "watchlist.editAction": "Edit Watchlist",
+        "watchlist.nameLabel": "Name",
         "watchlist.namePlaceholder": "Watchlist name",
+        "watchlist.addStocks": "Add Stocks",
         "watchlist.searchStocks": "Search stocks to add...",
         "watchlist.selectedStocks": "Selected Stocks",
         "watchlist.selectedHidden": "selected stocks hidden (don't match search)",
@@ -34,6 +37,7 @@ const translations: Record<Language, Record<string, string>> = {
         "watchlist.noMatches": "No matches found",
         "watchlist.delete": "Delete Watchlist",
         "watchlist.deleteConfirm": "Delete this watchlist?",
+        "watchlist.untitled": "Untitled Watchlist",
         "watchlist.save": "Save",
 
         // Sidebar - News
@@ -99,6 +103,9 @@ const translations: Record<Language, Record<string, string>> = {
         "modal.unhideSymbol": "Unhide Symbol",
         "modal.hideFromBubbles": "Hide from Bubbles",
         "modal.watchlists": "Watchlists",
+        "loading.main": "Loading...",
+        "loading.reloadHint": "Still waiting? Try reloading the page.",
+        "loading.reloadAction": "Reload page",
     },
     id: {
         // Sidebar nav labels
@@ -119,7 +126,10 @@ const translations: Record<Language, Record<string, string>> = {
         "watchlist.create": "Buat Watchlist",
         "watchlist.editTitle": "Edit Watchlist",
         "watchlist.newTitle": "Watchlist Baru",
+        "watchlist.editAction": "Edit Watchlist",
+        "watchlist.nameLabel": "Nama",
         "watchlist.namePlaceholder": "Nama watchlist",
+        "watchlist.addStocks": "Tambah Saham",
         "watchlist.searchStocks": "Cari saham untuk ditambahkan...",
         "watchlist.selectedStocks": "Saham Terpilih",
         "watchlist.selectedHidden": "saham terpilih tersembunyi (tidak cocok pencarian)",
@@ -127,6 +137,7 @@ const translations: Record<Language, Record<string, string>> = {
         "watchlist.noMatches": "Tidak ada hasil",
         "watchlist.delete": "Hapus Watchlist",
         "watchlist.deleteConfirm": "Hapus watchlist ini?",
+        "watchlist.untitled": "Watchlist Tanpa Nama",
         "watchlist.save": "Simpan",
 
         // Sidebar - News
@@ -192,6 +203,9 @@ const translations: Record<Language, Record<string, string>> = {
         "modal.unhideSymbol": "Tampilkan Simbol",
         "modal.hideFromBubbles": "Sembunyikan dari Bubble",
         "modal.watchlists": "Watchlist",
+        "loading.main": "Memuat...",
+        "loading.reloadHint": "Masih lama? Coba muat ulang halaman.",
+        "loading.reloadAction": "Muat ulang halaman",
     },
 }
 

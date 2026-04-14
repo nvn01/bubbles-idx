@@ -184,9 +184,13 @@ function IndexContent() {
     // CRUD Handlers for Watchlists
     const handleCreateWatchlist = (name: string, stocks: string[]) => {
         const newId = Math.max(0, ...watchlists.map(w => w.id)) + 1
-        setWatchlists([...watchlists, { id: newId, name, stocks }])
+        const newWatchlist = { id: newId, name, stocks }
+
+        setWatchlists([...watchlists, newWatchlist])
         // Automatically select the new watchlist
         handleSelectWatchlist(newId)
+
+        return newWatchlist
     }
 
     const handleUpdateWatchlist = (id: number, name: string, stocks: string[]) => {
