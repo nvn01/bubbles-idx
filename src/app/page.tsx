@@ -95,22 +95,33 @@ function IndexContent() {
             return
         }
 
+        let cancelled = false
         setIsLoadingIndex(true)
-        fetch(`/api/indices/${selectedIndex}`)
-            .then(res => {
+
+        const fetchIndexSymbols = async (retries = 1) => {
+            try {
+                const res = await fetch(`/api/indices/${selectedIndex}`)
                 if (!res.ok) throw new Error("Failed to fetch")
-                return res.json()
-            })
-            .then(data => {
-                console.log("[Page] Fetched symbols for", selectedIndex, ":", data.symbols?.length || 0, "symbols")
-                setIndexSymbols(data.symbols || [])
-                setIsLoadingIndex(false)
-            })
-            .catch(err => {
+                const data = await res.json()
+                if (!cancelled) {
+                    console.log("[Page] Fetched symbols for", selectedIndex, ":", data.symbols?.length || 0, "symbols")
+                    setIndexSymbols(data.symbols || [])
+                    setIsLoadingIndex(false)
+                }
+            } catch (err) {
                 console.error("Error fetching index symbols:", err)
-                setIndexSymbols([])
-                setIsLoadingIndex(false)
-            })
+                if (retries > 0 && !cancelled) {
+                    // Retry once after a short delay (handles server cold starts)
+                    setTimeout(() => { if (!cancelled) fetchIndexSymbols(retries - 1) }, 2000)
+                } else if (!cancelled) {
+                    setIndexSymbols([])
+                    setIsLoadingIndex(false)
+                }
+            }
+        }
+
+        fetchIndexSymbols()
+        return () => { cancelled = true }
     }, [selectedIndex, isIndexLoaded])
 
     // Handle stock selection from search

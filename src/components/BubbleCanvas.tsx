@@ -62,11 +62,12 @@ export function BubbleCanvas({
 
     // Filter ticker data by selected symbols and exclude hidden stocks
     const filteredTickerData = useMemo(() => {
+        // Empty selectedSymbols means index/watchlist hasn't loaded yet — show nothing
+        // This prevents the "all stocks spawn" bug during loading race conditions
+        if (selectedSymbols.length === 0) return []
         let data = allTickerData
-        if (selectedSymbols.length > 0) {
-            const symbolSet = new Set(selectedSymbols.map(s => s.toUpperCase()))
-            data = data.filter(t => symbolSet.has(t.symbol.toUpperCase()))
-        }
+        const symbolSet = new Set(selectedSymbols.map(s => s.toUpperCase()))
+        data = data.filter(t => symbolSet.has(t.symbol.toUpperCase()))
         // Filter out hidden stocks
         if (hiddenStocks.length > 0) {
             const hiddenSet = new Set(hiddenStocks.map(s => s.toUpperCase()))
