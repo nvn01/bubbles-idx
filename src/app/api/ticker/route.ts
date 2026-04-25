@@ -10,7 +10,7 @@ export async function GET() {
     if (tickerCache && Date.now() - tickerCache.timestamp < CACHE_TTL) {
         return NextResponse.json(tickerCache.data, {
             headers: {
-                "Cache-Control": "s-maxage=60, stale-while-revalidate=30",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
             }
         });
     }
@@ -23,7 +23,7 @@ export async function GET() {
 
         return NextResponse.json(data, {
             headers: {
-                "Cache-Control": "s-maxage=60, stale-while-revalidate=30",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
             }
         });
     } catch (error) {

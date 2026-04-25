@@ -89,40 +89,112 @@ export function BubbleCanvas({
         setIsModalOpen(true)
     }, [])
 
-    // Connect to SSE stream for real-time updates
+    // Connect to SSE stream for real-time updates with auto-reconnection
     useEffect(() => {
-        // Connect to SSE stream
-        const eventSource = new EventSource("/api/ticker/stream")
-        eventSourceRef.current = eventSource
+        let reconnectTimer: ReturnType<typeof setTimeout> | null = null
+        let heartbeatTimer: ReturnType<typeof setInterval> | null = null
+        let reconnectAttempts = 0
+        let lastDataTimestamp = 0
+        let isMounted = true
 
-        eventSource.onmessage = (event) => {
+        // Fetch fresh data via REST (used as fallback & heartbeat)
+        const fetchViaRest = async () => {
             try {
-                const data: TickerData[] = JSON.parse(event.data)
-                setAllTickerData(data)
-                setIsDataLoading(false)
-            } catch (error) {
-                console.error("Error parsing SSE data:", error)
+                const res = await fetch("/api/ticker", { cache: "no-store" })
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                const data: TickerData[] = await res.json()
+                if (isMounted) {
+                    setAllTickerData(data)
+                    setIsDataLoading(false)
+                    lastDataTimestamp = Date.now()
+                }
+            } catch (err) {
+                console.error("REST ticker fetch failed:", err)
             }
         }
 
-        eventSource.onerror = (error) => {
-            console.error("SSE connection error:", error)
-            // Fallback: try REST API if SSE fails
-            fetch("/api/ticker")
-                .then(res => res.json())
-                .then((data: TickerData[]) => {
-                    setAllTickerData(data)
-                    setIsDataLoading(false)
-                })
-                .catch(err => {
-                    console.error("REST API fallback failed:", err)
-                    setIsDataLoading(false) // Show fallback hardcoded data
-                })
+        const connectSSE = () => {
+            // Clean up previous connection
+            if (eventSourceRef.current) {
+                eventSourceRef.current.close()
+                eventSourceRef.current = null
+            }
+
+            const eventSource = new EventSource("/api/ticker/stream")
+            eventSourceRef.current = eventSource
+
+            eventSource.onopen = () => {
+                reconnectAttempts = 0 // Reset backoff on successful connection
+            }
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data: TickerData[] = JSON.parse(event.data)
+                    if (isMounted) {
+                        setAllTickerData(data)
+                        setIsDataLoading(false)
+                        lastDataTimestamp = Date.now()
+                    }
+                } catch (error) {
+                    console.error("Error parsing SSE data:", error)
+                }
+            }
+
+            eventSource.onerror = () => {
+                eventSource.close()
+                eventSourceRef.current = null
+
+                if (!isMounted) return
+
+                // Immediate REST fallback to get fresh data now
+                fetchViaRest()
+
+                // Reconnect with exponential backoff (max 60s)
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 60000)
+                reconnectAttempts++
+                console.warn(`SSE disconnected. Reconnecting in ${delay / 1000}s (attempt ${reconnectAttempts})`)
+                reconnectTimer = setTimeout(() => {
+                    if (isMounted) connectSSE()
+                }, delay)
+            }
         }
 
+        // Initial connection
+        connectSSE()
+
+        // Heartbeat: poll REST every 5 minutes to catch silent SSE failures
+        heartbeatTimer = setInterval(() => {
+            const staleDuration = Date.now() - lastDataTimestamp
+            // If no data received for over 3 minutes, SSE is likely dead — reconnect
+            if (staleDuration > 180000) {
+                console.warn("SSE heartbeat: no data for 3+ minutes, reconnecting...")
+                connectSSE()
+            }
+        }, 300000) // Check every 5 minutes
+
+        // Reconnect when user returns to the tab after being away
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                const staleDuration = Date.now() - lastDataTimestamp
+                // If tab was hidden for more than 2 minutes, force reconnect + immediate fetch
+                if (staleDuration > 120000) {
+                    console.log("Tab became visible after inactivity, refreshing data...")
+                    fetchViaRest() // Immediate fresh data
+                    connectSSE()  // Re-establish SSE
+                }
+            }
+        }
+        document.addEventListener("visibilitychange", handleVisibilityChange)
+
         return () => {
-            eventSource.close()
-            eventSourceRef.current = null
+            isMounted = false
+            if (reconnectTimer) clearTimeout(reconnectTimer)
+            if (heartbeatTimer) clearInterval(heartbeatTimer)
+            if (eventSourceRef.current) {
+                eventSourceRef.current.close()
+                eventSourceRef.current = null
+            }
+            document.removeEventListener("visibilitychange", handleVisibilityChange)
         }
     }, [])
 

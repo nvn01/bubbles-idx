@@ -1,0 +1,136 @@
+
+> bubble-idx@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:3000
+   - Network:      http://100.126.6.58:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.5s
+ ○ Compiling / ...
+ ✓ Compiled / in 6.1s (756 modules)
+ GET / 200 in 6764ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 596ms (114 modules)
+ ○ Compiling /api/indices ...
+ ✓ Compiled /api/indices in 684ms (760 modules)
+prisma:query SELECT "public"."stock_indices"."id", "public"."stock_indices"."kode", "public"."stock_indices"."nama" FROM "public"."stock_indices" WHERE "public"."stock_indices"."kode" <> $1 ORDER BY "public"."stock_indices"."kode" ASC OFFSET $2
+ GET /api/indices 200 in 980ms
+ GET / 200 in 359ms
+ GET /api/indices 200 in 38ms
+ ○ Compiling /api/indices/[kode] ...
+ ✓ Compiled /api/indices/[kode] in 705ms (751 modules)
+prisma:query SELECT 1
+prisma:query 
+        SELECT
+            s.kode_emiten,
+            s.nama_emiten,
+            t.price,
+            t.h,
+            t.d,
+            t.w,
+            t.m,
+            t.y
+        FROM stocks s
+        JOIN LATERAL (
+            SELECT
+                ticker.price,
+                ticker.h,
+                ticker.d,
+                ticker.w,
+                ticker.m,
+                ticker.y
+            FROM ticker
+            WHERE ticker.stocks_id = s.id
+            ORDER BY ticker.ts DESC
+            LIMIT 1
+        ) t ON true
+        WHERE s.is_suspended = false
+    
+prisma:query SELECT "public"."stock_indices"."id", "public"."stock_indices"."kode", "public"."stock_indices"."nama", "public"."stock_indices"."deskripsi" FROM "public"."stock_indices" WHERE "public"."stock_indices"."kode" = $1 LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."_StockToStockIndex"."B", "public"."_StockToStockIndex"."A" FROM "public"."_StockToStockIndex" WHERE "public"."_StockToStockIndex"."B" IN ($1)
+prisma:query SELECT "public"."stocks"."id", "public"."stocks"."kode_emiten", "public"."stocks"."nama_emiten" FROM "public"."stocks" WHERE "public"."stocks"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$80) OFFSET $81
+ GET /api/indices/IDX80 200 in 1667ms
+prisma:query SELECT 1
+prisma:query 
+        SELECT
+            s.kode_emiten,
+            s.nama_emiten,
+            t.price,
+            t.h,
+            t.d,
+            t.w,
+            t.m,
+            t.y
+        FROM stocks s
+        JOIN LATERAL (
+            SELECT
+                ticker.price,
+                ticker.h,
+                ticker.d,
+                ticker.w,
+                ticker.m,
+                ticker.y
+            FROM ticker
+            WHERE ticker.stocks_id = s.id
+            ORDER BY ticker.ts DESC
+            LIMIT 1
+        ) t ON true
+        WHERE s.is_suspended = false
+    
+prisma:query SELECT 1
+prisma:query 
+        SELECT
+            s.kode_emiten,
+            s.nama_emiten,
+            t.price,
+            t.h,
+            t.d,
+            t.w,
+            t.m,
+            t.y
+        FROM stocks s
+        JOIN LATERAL (
+            SELECT
+                ticker.price,
+                ticker.h,
+                ticker.d,
+                ticker.w,
+                ticker.m,
+                ticker.y
+            FROM ticker
+            WHERE ticker.stocks_id = s.id
+            ORDER BY ticker.ts DESC
+            LIMIT 1
+        ) t ON true
+        WHERE s.is_suspended = false
+    
+prisma:query 
+        SELECT
+            s.kode_emiten,
+            s.nama_emiten,
+            t.price,
+            t.h,
+            t.d,
+            t.w,
+            t.m,
+            t.y
+        FROM stocks s
+        JOIN LATERAL (
+            SELECT
+                ticker.price,
+                ticker.h,
+                ticker.d,
+                ticker.w,
+                ticker.m,
+                ticker.y
+            FROM ticker
+            WHERE ticker.stocks_id = s.id
+            ORDER BY ticker.ts DESC
+            LIMIT 1
+        ) t ON true
+        WHERE s.is_suspended = false
+    
+ GET /api/ticker/stream 200 in 321827ms
