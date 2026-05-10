@@ -11,6 +11,24 @@ import { isMarketOpen } from "~/lib/utils"
 // Sample stock data for search results
 // Sample stock data removed
 
+interface SearchStockResult {
+    symbol: string
+    name: string
+    change: number
+    is_suspended?: boolean
+}
+
+interface NewsSearchResult {
+    id: number
+    title: string
+    excerpt: string | null
+    source: string
+    time: string
+    url: string
+    imageUrl: string | null
+    symbols: string[]
+}
+
 export function Header({
     timePeriod,
     setTimePeriod,
@@ -29,8 +47,10 @@ export function Header({
     const [searchQuery, setSearchQuery] = useState("")
     const [isDropdownOpen, setIsDropdownOpenInternal] = useState(false)
     const [isMarketActive, setIsMarketActive] = useState(false)
-    const [searchResults, setSearchResults] = useState<{ symbol: string; name: string; change: number; is_suspended?: boolean }[]>([])
+    const [searchResults, setSearchResults] = useState<SearchStockResult[]>([])
+    const [newsResults, setNewsResults] = useState<NewsSearchResult[]>([])
     const [isSearching, setIsSearching] = useState(false)
+    const [isNewsSearching, setIsNewsSearching] = useState(false)
 
     // Check market status periodically
     useEffect(() => {
@@ -45,25 +65,46 @@ export function Header({
     useEffect(() => {
         if (!searchQuery || searchQuery.length < 2) {
             setSearchResults([])
+            setNewsResults([])
+            setIsSearching(false)
+            setIsNewsSearching(false)
             return
         }
 
+        let cancelled = false
+
         const timeoutId = setTimeout(async () => {
             setIsSearching(true)
+            setIsNewsSearching(true)
             try {
-                const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`)
-                if (res.ok) {
-                    const data = await res.json()
-                    setSearchResults(data)
-                }
+                const query = encodeURIComponent(searchQuery)
+                const [stocks, news] = await Promise.all([
+                    fetch(`/api/search?q=${query}`).then(res => res.ok ? res.json() : []),
+                    fetch(`/api/news?q=${query}&limit=5`).then(res => res.ok ? res.json() : []),
+                ])
+
+                if (cancelled) return
+
+                setSearchResults(Array.isArray(stocks) ? stocks : [])
+                setNewsResults(Array.isArray(news) ? news : [])
             } catch (err) {
                 console.error("Search failed:", err)
+                if (!cancelled) {
+                    setSearchResults([])
+                    setNewsResults([])
+                }
             } finally {
-                setIsSearching(false)
+                if (!cancelled) {
+                    setIsSearching(false)
+                    setIsNewsSearching(false)
+                }
             }
         }, 300)
 
-        return () => clearTimeout(timeoutId)
+        return () => {
+            cancelled = true
+            clearTimeout(timeoutId)
+        }
     }, [searchQuery])
 
     // Sync dropdown state with parent
@@ -285,9 +326,57 @@ export function Header({
                             <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: theme.textSecondary }}>
                                 {t("header.news")}
                             </h4>
-                            <p className="text-sm text-center py-4" style={{ color: theme.textSecondary }}>
-                                {t("header.noNews")}
-                            </p>
+                            {isNewsSearching ? (
+                                <div className="p-4 text-center text-sm" style={{ color: theme.textSecondary }}>{t("header.searching")}</div>
+                            ) : newsResults.length > 0 ? (
+                                <div className="space-y-1 max-h-56 overflow-y-auto custom-scrollbar">
+                                    {newsResults.map((item) => (
+                                        <a
+                                            key={item.id}
+                                            href={item.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={() => setIsDropdownOpen(false)}
+                                            className="flex gap-3 px-3 py-2 rounded-lg hover:opacity-80 transition-all"
+                                            style={{ backgroundColor: `${theme.textSecondary}10` }}
+                                        >
+                                            <div
+                                                className="w-12 h-10 rounded flex-shrink-0 overflow-hidden flex items-center justify-center text-[10px] font-bold"
+                                                style={{ backgroundColor: `${theme.textSecondary}20`, color: theme.textSecondary }}
+                                            >
+                                                {item.imageUrl ? (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img
+                                                        src={item.imageUrl}
+                                                        alt=""
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            const target = e.target as HTMLImageElement
+                                                            target.style.display = "none"
+                                                            const parent = target.parentElement
+                                                            if (parent) parent.textContent = "NEWS"
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    "NEWS"
+                                                )}
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-sm font-medium line-clamp-2" style={{ color: theme.textPrimary }}>
+                                                    {item.title}
+                                                </p>
+                                                <p className="text-xs mt-1 truncate" style={{ color: theme.textSecondary }}>
+                                                    {item.source} · {new Date(item.time).toLocaleDateString()} {item.symbols.length > 0 ? `· ${item.symbols.slice(0, 3).join(", ")}` : ""}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-center py-4" style={{ color: theme.textSecondary }}>
+                                    {t("header.noNews")}
+                                </p>
+                            )}
                         </div>
                     </div>
                 )}
