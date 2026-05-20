@@ -46,3 +46,9 @@ yarn-error.log*
 # idea files
 .idea
 /generated/prisma
+
+# docker-compose
+docker-compose.yml
+docker-compose.dev.yml
+docker-compose*.yml
+
