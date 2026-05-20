@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// Cache for 5 minutes
-let cache: { data: unknown; timestamp: number } | null = null
-const searchCache = new Map<string, { data: unknown; timestamp: number }>()
-const CACHE_TTL = 5 * 60 * 1000
+const CACHE_TTL = 60 // 60 seconds (1 minute in Redis)
 
 type NewsRecord = {
     id: number
@@ -42,6 +41,10 @@ function formatNews(news: NewsRecord[]) {
 }
 
 export async function GET(request: Request) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const { searchParams } = new URL(request.url)
     const q = searchParams.get("q")?.trim()
     const rawLimit = Number(searchParams.get("limit") || "50")
@@ -53,16 +56,17 @@ export async function GET(request: Request) {
         }
 
         const searchTerm = q.toUpperCase()
-        const cacheKey = `${searchTerm}-${limit}`
-        const cached = searchCache.get(cacheKey)
-
-        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-            return NextResponse.json(cached.data, {
-                headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
-            })
-        }
-
+        const cacheKey = `news:search:${searchTerm}-${limit}`
+        
         try {
+            // 2. Check Redis cache
+            const cached = await getCache<any[]>(cacheKey)
+            if (cached) {
+                return NextResponse.json(cached, {
+                    headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
+                })
+            }
+
             const news = await prisma.marketNews.findMany({
                 where: {
                     OR: [
@@ -80,16 +84,9 @@ export async function GET(request: Request) {
             })
 
             const formattedNews = formatNews(news)
-            searchCache.set(cacheKey, { data: formattedNews, timestamp: Date.now() })
-
-            if (searchCache.size > 100) {
-                const now = Date.now()
-                for (const [key, value] of searchCache.entries()) {
-                    if (now - value.timestamp > CACHE_TTL) {
-                        searchCache.delete(key)
-                    }
-                }
-            }
+            
+            // Cache result in Redis
+            await setCache(cacheKey, formattedNews, CACHE_TTL)
 
             return NextResponse.json(formattedNews, {
                 headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
@@ -100,14 +97,17 @@ export async function GET(request: Request) {
         }
     }
 
-    // Return cached data if fresh
-    if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
-        return NextResponse.json(cache.data, {
-            headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
-        })
-    }
+    const latestCacheKey = "news:latest"
 
     try {
+        // 3. Check Redis cache for latest news
+        const cached = await getCache<any[]>(latestCacheKey)
+        if (cached) {
+            return NextResponse.json(cached, {
+                headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }
+            })
+        }
+
         const news = await prisma.marketNews.findMany({
             take: 50,
             orderBy: {
@@ -118,8 +118,8 @@ export async function GET(request: Request) {
 
         const formattedNews = formatNews(news)
 
-        // Update cache
-        cache = { data: formattedNews, timestamp: Date.now() }
+        // Cache result in Redis
+        await setCache(latestCacheKey, formattedNews, CACHE_TTL)
 
         return NextResponse.json(formattedNews, {
             headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" }

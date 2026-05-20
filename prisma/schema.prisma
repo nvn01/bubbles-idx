@@ -23,6 +23,7 @@ model Stock {
   market_news MarketNews[]
 
   @@map("stocks")
+  @@index([nama_emiten])
 }
 
 model Notation {

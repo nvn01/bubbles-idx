@@ -1,27 +1,32 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// In-memory cache for chart data
-const chartCache = new Map<string, { data: unknown; timestamp: number }>()
-const CACHE_TTL = 30000 // 30 seconds for chart data
+const CACHE_TTL = 30; // 30 seconds for chart data
 
 export async function GET(
     request: Request,
     props: { params: Promise<{ symbol: string }> }
 ) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const params = await props.params
     const symbol = params.symbol.toUpperCase()
     const { searchParams } = new URL(request.url)
     const range = searchParams.get("range") || "1D"
 
-    // Check cache
-    const cacheKey = `${symbol}-${range}`
-    const cached = chartCache.get(cacheKey)
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return NextResponse.json(cached.data)
-    }
+    const cacheKey = `chart:${symbol}:${range}`
 
     try {
+        // 2. Check Redis cache
+        const cached = await getCache<any[]>(cacheKey)
+        if (cached) {
+            return NextResponse.json(cached)
+        }
+
         const now = new Date()
         let startDate = new Date()
 
@@ -69,18 +74,8 @@ export async function GET(
             value: t.price
         }))
 
-        // Cache result
-        chartCache.set(cacheKey, { data, timestamp: Date.now() })
-
-        // Cleanup old entries
-        if (chartCache.size > 500) {
-            const now = Date.now()
-            for (const [key, value] of chartCache.entries()) {
-                if (now - value.timestamp > CACHE_TTL) {
-                    chartCache.delete(key)
-                }
-            }
-        }
+        // 3. Cache result in Redis
+        await setCache(cacheKey, data, CACHE_TTL)
 
         return NextResponse.json(data)
     } catch (error) {

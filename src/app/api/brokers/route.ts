@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
 import { z } from "zod"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// In-memory cache keyed by date+sort combo
-const brokerCache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 60000; // 60 seconds
+const CACHE_TTL = 60; // 60 seconds
 
 const ALLOWED_SORT_FIELDS = ["value", "volume", "frequency"] as const;
 const MAX_LIMIT = 100;
@@ -28,6 +28,10 @@ function parseDateInput(value: string | undefined, fallback: Date): Date | null 
 }
 
 export async function GET(request: Request) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const { searchParams } = new URL(request.url)
     const parsedQuery = brokerQuerySchema.safeParse({
         startDate: searchParams.get("startDate") ?? undefined,
@@ -67,11 +71,11 @@ export async function GET(request: Request) {
             )
         }
 
-        // Check cache
-        const cacheKey = `${start.toISOString()}-${end.toISOString()}-${sortBy}-${limit}`;
-        const cached = brokerCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-            return NextResponse.json(cached.data);
+        // Check Redis cache
+        const cacheKey = `brokers:${start.toISOString()}-${end.toISOString()}-${sortBy}-${limit}`;
+        const cached = await getCache<any>(cacheKey);
+        if (cached) {
+            return NextResponse.json(cached);
         }
 
         let responseData;
@@ -147,18 +151,8 @@ export async function GET(request: Request) {
             };
         }
 
-        // Cache result
-        brokerCache.set(cacheKey, { data: responseData, timestamp: Date.now() });
-
-        // Cleanup old entries
-        if (brokerCache.size > 50) {
-            const now = Date.now();
-            for (const [key, value] of brokerCache.entries()) {
-                if (now - value.timestamp > CACHE_TTL) {
-                    brokerCache.delete(key);
-                }
-            }
-        }
+        // 3. Cache result in Redis
+        await setCache(cacheKey, responseData, CACHE_TTL);
 
         return NextResponse.json(responseData);
     } catch (error) {

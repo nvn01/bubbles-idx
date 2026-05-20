@@ -1,23 +1,28 @@
 import { NextResponse } from "next/server";
 import { prisma } from "~/lib/prisma";
+import { getCache, setCache } from "~/lib/redis";
+import { rateLimit } from "~/lib/rate-limiter";
 
 interface RouteParams {
     params: Promise<{ kode: string }>;
 }
 
-// Cache per index kode — membership rarely changes
-const indexCache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60; // 5 minutes in seconds
 
 export async function GET(request: Request, { params }: RouteParams) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     try {
         const { kode } = await params;
         const indexKode = kode.toUpperCase();
+        const cacheKey = `index:${indexKode}`;
 
-        // Check cache
-        const cached = indexCache.get(indexKode);
-        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-            return NextResponse.json(cached.data);
+        // 2. Check Redis cache
+        const cached = await getCache<any>(cacheKey);
+        if (cached) {
+            return NextResponse.json(cached);
         }
 
         // Find the index by kode and include its stocks (many-to-many relation)
@@ -54,8 +59,8 @@ export async function GET(request: Request, { params }: RouteParams) {
             symbols: symbols,
         };
 
-        // Cache result
-        indexCache.set(indexKode, { data, timestamp: Date.now() });
+        // 3. Cache result in Redis
+        await setCache(cacheKey, data, CACHE_TTL);
 
         return NextResponse.json(data);
     } catch (error) {

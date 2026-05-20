@@ -1,24 +1,29 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// In-memory cache for stock details
-const stockCache = new Map<string, { data: unknown; timestamp: number }>()
-const CACHE_TTL = 15000 // 15 seconds - shorter for real-time data
+const CACHE_TTL = 15; // 15 seconds - shorter for real-time data
 
 export async function GET(
     request: Request,
     props: { params: Promise<{ symbol: string }> }
 ) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const params = await props.params
     const symbol = params.symbol.toUpperCase()
-
-    // Check cache
-    const cached = stockCache.get(symbol)
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return NextResponse.json(cached.data)
-    }
+    const cacheKey = `stock:${symbol}`
 
     try {
+        // 2. Check Redis cache
+        const cached = await getCache<any>(cacheKey)
+        if (cached) {
+            return NextResponse.json(cached)
+        }
+
         const stock = await prisma.stock.findUnique({
             where: { kode_emiten: symbol },
             include: {
@@ -59,18 +64,8 @@ export async function GET(
             }
         }
 
-        // Cache result
-        stockCache.set(symbol, { data, timestamp: Date.now() })
-
-        // Cleanup old entries
-        if (stockCache.size > 200) {
-            const now = Date.now()
-            for (const [key, value] of stockCache.entries()) {
-                if (now - value.timestamp > CACHE_TTL) {
-                    stockCache.delete(key)
-                }
-            }
-        }
+        // 3. Cache result in Redis
+        await setCache(cacheKey, data, CACHE_TTL)
 
         return NextResponse.json(data)
     } catch (error) {

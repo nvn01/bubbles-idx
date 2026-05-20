@@ -1,26 +1,32 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// Cache for calendar events — 5 minutes
-let calendarCache: { data: unknown; timestamp: number } | null = null;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60; // 5 minutes in seconds
 
 export async function GET(request: Request) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get("limit") || "50")
     const upcoming = searchParams.get("upcoming") === "true"
 
-    // Use cache for default requests (upcoming, limit 50)
-    const isDefaultRequest = limit === 50;
-    if (isDefaultRequest && calendarCache && Date.now() - calendarCache.timestamp < CACHE_TTL) {
-        return NextResponse.json(calendarCache.data, {
-            headers: {
-                "Cache-Control": "s-maxage=300, stale-while-revalidate=60",
-            }
-        });
-    }
+    const cacheKey = `calendar:${limit}:${upcoming}`
 
     try {
+        // 2. Check Redis cache first
+        const cached = await getCache<any[]>(cacheKey);
+        if (cached) {
+            return NextResponse.json(cached, {
+                headers: {
+                    "Cache-Control": "s-maxage=300, stale-while-revalidate=60",
+                }
+            });
+        }
+
         const today = new Date()
         today.setHours(0, 0, 0, 0)
 
@@ -62,10 +68,8 @@ export async function GET(request: Request) {
             events
         }))
 
-        // Cache default requests
-        if (isDefaultRequest) {
-            calendarCache = { data: result, timestamp: Date.now() };
-        }
+        // 3. Cache results in Redis
+        await setCache(cacheKey, result, CACHE_TTL);
 
         return NextResponse.json(result, {
             headers: {

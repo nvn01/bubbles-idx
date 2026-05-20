@@ -1,25 +1,32 @@
 import { NextResponse } from "next/server";
 import { getLatestTickerData, type TickerData } from "~/lib/ticker";
+import { getCache, setCache } from "~/lib/redis";
+import { rateLimit } from "~/lib/rate-limiter";
 
-// In-memory cache for ticker data (data only changes every ~10 minutes)
-let tickerCache: { data: TickerData[]; timestamp: number } | null = null;
-const CACHE_TTL = 60000; // 60 seconds
+const CACHE_KEY = "ticker:latest";
+const CACHE_TTL = 60; // 60 seconds
 
-export async function GET() {
-    // Return cached data if fresh
-    if (tickerCache && Date.now() - tickerCache.timestamp < CACHE_TTL) {
-        return NextResponse.json(tickerCache.data, {
-            headers: {
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-            }
-        });
-    }
+export async function GET(request: Request) {
+    // 1. Apply General Rate Limiter (100 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "general");
+    if (rateLimitResponse) return rateLimitResponse;
 
     try {
+        // 2. Try to serve from Redis Cache
+        const cached = await getCache<TickerData[]>(CACHE_KEY);
+        if (cached) {
+            return NextResponse.json(cached, {
+                headers: {
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                }
+            });
+        }
+
+        // 3. Fetch from DB
         const data = await getLatestTickerData();
 
-        // Cache result
-        tickerCache = { data, timestamp: Date.now() };
+        // 4. Cache in Redis
+        await setCache(CACHE_KEY, data, CACHE_TTL);
 
         return NextResponse.json(data, {
             headers: {

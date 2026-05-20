@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server"
 import { prisma } from "~/lib/prisma"
+import { Prisma } from "@prisma/client"
+import { getCache, setCache } from "~/lib/redis"
+import { rateLimit } from "~/lib/rate-limiter"
 
-// Simple in-memory cache for search results
-const searchCache = new Map<string, { data: unknown; timestamp: number }>()
-const CACHE_TTL = 30000 // 30 seconds
+const CACHE_TTL = 30; // 30 seconds
 
 export async function GET(request: Request) {
+    // 1. Apply Search Rate Limiter (20 req/min/IP)
+    const rateLimitResponse = await rateLimit(request, "search");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const { searchParams } = new URL(request.url)
     const q = searchParams.get("q")
 
@@ -14,28 +19,20 @@ export async function GET(request: Request) {
     }
 
     const searchTerm = q.toUpperCase()
-
-    // Check cache first
-    const cacheKey = searchTerm
-    const cached = searchCache.get(cacheKey)
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return NextResponse.json(cached.data)
-    }
+    const cacheKey = `search:${searchTerm}`
 
     try {
+        // 2. Check Redis cache first
+        const cached = await getCache<any[]>(cacheKey)
+        if (cached) {
+            return NextResponse.json(cached)
+        }
+
         const likeTerm = `%${searchTerm}%`
         const startsWithTerm = `${searchTerm}%`
 
-        // Optimized query: Uses LATERAL JOIN instead of 2 correlated subqueries
-        // Includes is_suspended so the frontend can label suspended stocks
-        const stocks = await prisma.$queryRaw<Array<{
-            kode_emiten: string
-            nama_emiten: string
-            is_suspended: boolean
-            d: number | null
-            price: number | null
-            priority: number
-        }>>`
+        // 3. Explicitly hardened parameterized SQL using Prisma.sql
+        const query = Prisma.sql`
             SELECT 
                 s.kode_emiten,
                 s.nama_emiten,
@@ -62,27 +59,25 @@ export async function GET(request: Request) {
             LIMIT 50
         `
 
+        const stocks = await prisma.$queryRaw<Array<{
+            kode_emiten: string
+            nama_emiten: string
+            is_suspended: boolean
+            d: number | null
+            price: number | null
+            priority: number
+        }>>(query)
+
         const results = stocks.map(stock => ({
             symbol: stock.kode_emiten,
             name: stock.nama_emiten,
-            // Suspended stocks have no active price; force change to 0
             change: stock.is_suspended ? 0 : (Number(stock.d) || 0),
             price: stock.is_suspended ? 0 : (Number(stock.price) || 0),
             is_suspended: stock.is_suspended,
         }))
 
-        // Cache the results
-        searchCache.set(cacheKey, { data: results, timestamp: Date.now() })
-
-        // Clean old cache entries periodically
-        if (searchCache.size > 100) {
-            const now = Date.now()
-            for (const [key, value] of searchCache.entries()) {
-                if (now - value.timestamp > CACHE_TTL) {
-                    searchCache.delete(key)
-                }
-            }
-        }
+        // 4. Cache the results in Redis
+        await setCache(cacheKey, results, CACHE_TTL)
 
         return NextResponse.json(results)
     } catch (error) {
@@ -90,3 +85,4 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
     }
 }
+
