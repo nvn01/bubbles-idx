@@ -33,18 +33,28 @@ const searchLimiter = new RateLimiterRedis({
 export function getClientIp(request: Request): string {
     // 1. Trust Cloudflare client IP in production
     const cfIp = request.headers.get("cf-connecting-ip");
-    if (cfIp) return cfIp;
+    let ip = cfIp;
 
-    // 2. Fallbacks for local development / internal staging
-    const forwarded = request.headers.get("x-forwarded-for");
-    if (forwarded) {
-        return forwarded.split(",")[0]?.trim() || "127.0.0.1";
+    if (!ip) {
+        // 2. Fallbacks for local development / internal staging
+        const forwarded = request.headers.get("x-forwarded-for");
+        if (forwarded) {
+            ip = forwarded.split(",")[0]?.trim() || "127.0.0.1";
+        } else {
+            const realIp = request.headers.get("x-real-ip");
+            ip = realIp || "127.0.0.1";
+        }
     }
 
-    const realIp = request.headers.get("x-real-ip");
-    if (realIp) return realIp;
+    // Standardize IPv6 to its /64 prefix to prevent SLAAC/privacy-extension rotation bypasses
+    if (ip && ip.includes(":")) {
+        const parts = ip.split(":");
+        if (parts.length >= 4) {
+            return `${parts[0]}:${parts[1]}:${parts[2]}:${parts[3]}::`;
+        }
+    }
 
-    return "127.0.0.1";
+    return ip || "127.0.0.1";
 }
 
 /**
