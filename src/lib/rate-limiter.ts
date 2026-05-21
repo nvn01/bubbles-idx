@@ -64,6 +64,13 @@ export async function rateLimit(
     }
 
     try {
+        // Check if this IP has successfully solved Turnstile recently
+        const isWhitelisted = await redisClient.get(`turnstile_passed:${ip}`);
+        if (isWhitelisted) {
+            console.log(`[Rate Limiter] IP ${ip} is whitelisted via Turnstile. Bypassing check.`);
+            return null; // Allowed!
+        }
+
         if (type === "general") {
             const res = await generalLimiter.consume(ip, 1);
             return null; // Allowed
@@ -88,7 +95,10 @@ export async function rateLimit(
                 
                 console.warn(`[Rate Limiter] Blocked SSE connection for ${ip} (concurrent limit: ${activeConnections}/${MAX_SSE_CONNS_PER_IP})`);
                 return new NextResponse(
-                    JSON.stringify({ error: "Too many concurrent stream connections. Capped at 3." }),
+                    JSON.stringify({ 
+                        error: "Too many concurrent stream connections. Capped at 3.",
+                        turnstileRequired: true
+                    }),
                     {
                         status: 429,
                         headers: {
@@ -110,7 +120,10 @@ export async function rateLimit(
             const retryAfter = Math.ceil(error.msBeforeNext / 1000);
 
             return new NextResponse(
-                JSON.stringify({ error: "Too many requests. Please try again later." }),
+                JSON.stringify({ 
+                    error: "Too many requests. Please verify you are human.",
+                    turnstileRequired: true
+                }),
                 {
                     status: 429,
                     headers: {

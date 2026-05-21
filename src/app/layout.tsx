@@ -149,6 +149,8 @@ const appJsonLd = {
     },
 };
 
+import { TurnstileProvider } from "~/components/TurnstileProvider";
+
 export default function RootLayout({
     children,
 }: {
@@ -166,7 +168,11 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
                 />
             </head>
-            <body className={`${inter.className} ${darkerGrotesque.variable}`}>{children}</body>
+            <body className={`${inter.className} ${darkerGrotesque.variable}`}>
+                <TurnstileProvider>
+                    {children}
+                </TurnstileProvider>
+            </body>
         </html>
     );
 }
