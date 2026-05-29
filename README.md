@@ -2,52 +2,57 @@
 
 A real-time bubble chart visualization for IDX stocks.
 
+---
+
 ## 🚀 Quick Start (Development)
 
 ### Prerequisites
-*   Node.js 18+
-*   Docker Desktop (for local database)
+* **Node.js** (v18+)
+* **Docker Desktop** (to run local database and caching instances)
 
-### 1. Database Setup
-Start a local PostgreSQL instance:
+### 1. Spin Up Local Services
+From the **root workspace directory** (where `docker-compose.yml` is located), spin up the local PostgreSQL and Redis containers:
 ```bash
-# In project root
-docker compose up -d postgres
+docker compose up -d postgres redis
 ```
 
-### 2. Install Dependencies
+### 2. Configure Environment Variables
+Inside the `bubble-idx` directory, create a `.env` or `.env.local` file (it is automatically ignored by Git):
+```env
+DATABASE_URL="postgresql://postgres:root@localhost:5433/bubble_db?schema=public"
+REDIS_URL="redis://localhost:6379"
+NODE_ENV=development
+```
+
+### 3. Install Dependencies
+Navigate into the `bubble-idx` directory and install the packages:
 ```bash
 npm install
 ```
 
-### 3. Initialize Database
-This will create the schema and populate it with **150 sample historical records** so you can see data immediately properly without needing the scraper.
+### 4. Initialize & Seed Database
+Reset your local database to a clean state, apply schemas, and populate it with **150 sample historical records** so you can test features instantly without running the scraper:
 ```bash
-# Push schema to DB
+# Push Prisma schema to DB
 npx prisma db push --force-reset
 
 # Seed Master Data + Sample History
 npx prisma db seed
 ```
 
-### 4. Run App
+### 5. Start Development Server
 ```bash
 npm run dev
 ```
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-
 ## 🤝 Contribution Guidelines
 
-### Schema Updates
-If you change `schema.prisma`:
-1.  Run `npx prisma migrate dev --name <change_description>`.
-2.  Commit the migration folder.
-3.  **DO NOT** manually edit migration SQLs unless necessary.
-
-### Data Sync (Optional)
-If you want **real production data** instead of the sample seed:
-1.  Ask the maintainer for access (VPN required).
-2.  Run `.\sync_db.ps1` (Windows PowerShell) to dump/restore prod data to your localhost.
+### Prisma Schema & Migrations
+If you modify `prisma/schema.prisma`:
+1. Generate and run a migration locally:
+   ```bash
+   npx prisma migrate dev --name <change_description>
+   ```
