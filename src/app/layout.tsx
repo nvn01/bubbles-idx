@@ -150,6 +150,7 @@ const appJsonLd = {
 };
 
 import { TurnstileProvider } from "~/components/TurnstileProvider";
+import GoogleAnalytics from "~/components/GoogleAnalytics";
 
 export default function RootLayout({
     children,
@@ -159,6 +160,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
+                <GoogleAnalytics />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
