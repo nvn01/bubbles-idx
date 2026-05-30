@@ -19,6 +19,7 @@ RUN npx prisma generate
 
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_SITE_URL=https://bubblesidx.repixel1.com
 RUN npm run build
 
 # Production image
